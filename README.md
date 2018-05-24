@@ -19,10 +19,10 @@ load "usage.m";
 
 ## Authors
 
-* **Michael Musty**
-* **Sam Schiavone**
-* **Jeroen Sijsling**
-* **John Voight**
+* **[Michael Musty](https://github.com/michaelmusty)**
+* **[Sam Schiavone](https://github.com/SamSchiavone)**
+* **[Jeroen Sijsling](https://github.com/JRSijsling)**
+* **[John Voight](https://github.com/jvoight)**
 
 ## License
 
