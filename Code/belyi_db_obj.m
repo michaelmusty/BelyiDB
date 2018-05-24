@@ -22,15 +22,9 @@ declare attributes BelyiDB:
 // belyimap attrs
   BelyiDBBelyiCurves,
   BelyiDBBelyiMaps,
-// exact attrs
-  BelyiDBExactCurveInvariants,
-  BelyiDBExactCurveCoefficients,
-  BelyiDBExactBelyiMapLeadingCoefficients,
-  BelyiDBExactBelyiMapNumeratorCoefficients,
-  BelyiDBExactBelyiMapDenominatorCoefficients,
 // numerical attrs
   BelyiDBRescalingFactors, // list of complex numbers
-  BelyiDBPowserIndat, // how bout dat indat
+  BelyiDBPowserIndat,
   BelyiDBPowserBases; // fout_ech in Gamma`TrianglePowserBases = [* indat, [* fout_ech, minsing, fout *] *]
 
 intrinsic BelyiDBInitialize() -> BelyiDB
@@ -63,36 +57,118 @@ intrinsic Print(s::BelyiDB)
   end if;
   if assigned s`BelyiDBBelyiCurves and assigned s`BelyiDBBelyiMaps then
     if #s`BelyiDBBelyiCurves eq #s`BelyiDBPointedPassport and #s`BelyiDBBelyiMaps eq #s`BelyiDBPointedPassport then
-      printf "  BelyiMaps computed :)\n";
+      printf "  BelyiMaps computed\n";
     else
       printf "  BelyiMaps assigned but numbers don't match up! Check this BelyiDBObject!\n";
     end if;
   else
-    printf "  BelyiMaps NOT computed :(\n";
+    printf "  BelyiMaps NOT computed\n";
   end if;
 end intrinsic;
 
-/*
-  // TODO make equality take precision into account?
-  intrinsic 'eq'(s::BelyiDBObject, t::BelyiDBObject) -> BoolElt
-    {Return whether s is equal to t.}
-    for attr in GetAttributes(Type(s)) do
-      if assigned s``attr then
-        if assigned t``attr then
-          if Type(s``attr) ne Type(t``attr) then
-            return false;
-          elif s``attr ne t``attr then
-            return false;
-          end if;
-        else
-          return false;
-        end if;
-      else
-        if assigned t``attr then
-          return false;
-        end if;
-      end if;
-    end for;
-    return true;
-  end intrinsic;
-*/
+/* user convenience */
+
+intrinsic Name(s::BelyiDB) -> MonStgElt
+  {}
+  return s`BelyiDBName;
+end intrinsic;
+
+intrinsic Filename(s::BelyiDB) -> MonStgElt
+  {}
+  return s`BelyiDBFilename;
+end intrinsic;
+
+intrinsic Degree(s::BelyiDB) -> RngIntElt
+  {}
+  return s`BelyiDBDegree;
+end intrinsic;
+
+intrinsic Orders(s::BelyiDB) -> SeqEnum[RngIntElt]
+  {}
+  return s`BelyiDBOrders;
+end intrinsic;
+
+intrinsic TriangleType(s::BelyiDB) -> MonStgElt
+  {}
+  return s`BelyiDBType;
+end intrinsic;
+
+intrinsic Genus(s::BelyiDB) -> RngIntElt
+  {}
+  return s`BelyiDBGenus;
+end intrinsic;
+
+intrinsic Size(s::BelyiDB) -> RngIntElt
+  {}
+  return s`BelyiDBSize;
+end intrinsic;
+
+intrinsic PointedSize(s::BelyiDB) -> RngIntElt
+  {}
+  return s`BelyiDBPointedSize;
+end intrinsic;
+
+intrinsic PermutationTriple(s::BelyiDB) -> SeqEnum[SeqEnum[GrpPermElt]]
+  {}
+  return s`BelyiDBPermutationTriple;
+end intrinsic;
+
+intrinsic MonodromyGroup(s::BelyiDB) -> GrpPerm
+  {}
+  return s`BelyiDBMonodromyGroup;
+end intrinsic;
+
+intrinsic AutomorphismGroup(s::BelyiDB) -> GrpPerm
+  {}
+  return s`BelyiDBAutomorphismGroup;
+end intrinsic;
+
+intrinsic PointedAutomorphismGroup(s::BelyiDB) -> GrpPerm
+  {}
+  return s`BelyiDBPointedAutomorphismGroup;
+end intrinsic;
+
+intrinsic Passport(s::BelyiDB) -> SeqEnum
+  {}
+  return s`BelyiDBPassport;
+end intrinsic;
+
+intrinsic PointedPassport(s::BelyiDB) -> SeqEnum
+  {}
+  return s`BelyiDBPointedPassport;
+end intrinsic;
+
+intrinsic GaloisOrbits(s::BelyiDB) -> SeqEnum
+  {}
+  return s`BelyiDBGaloisOrbits;
+end intrinsic;
+
+intrinsic BaseFieldData(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBBaseFieldData; // [* [* K, Kv, conj, complex embeddding *],... *]
+end intrinsic;
+
+intrinsic BelyiCurves(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBBelyiCurves;
+end intrinsic;
+
+intrinsic BelyiMaps(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBBelyiMaps;
+end intrinsic;
+
+intrinsic RescalingFactors(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBRescalingFactors;
+end intrinsic;
+
+intrinsic PowserIndat(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBPowserIndat;
+end intrinsic;
+
+intrinsic PowserBases(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBPowserBases; // fout_ech in Gamma`TrianglePowserBases = [* indat, [* fout_ech, minsing, fout *] *]
+end intrinsic;
