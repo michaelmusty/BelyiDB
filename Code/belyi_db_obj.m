@@ -19,6 +19,12 @@ declare attributes BelyiDB:
   BelyiDBGaloisOrbits,
 // field attrs
   BelyiDBBaseFieldData, // [* [* K, Kv, conj, complex embeddding *],... *]
+// exact attrs
+  BelyiDBExactCurveInvariants,
+  BelyiDBExactCurveCoefficients,
+  BelyiDBExactBelyiMapLeadingCoefficients,
+  BelyiDBExactBelyiMapNumeratorCoefficients,
+  BelyiDBExactBelyiMapDenominatorCoefficients,
 // belyimap attrs
   BelyiDBBelyiCurves,
   BelyiDBBelyiMaps,

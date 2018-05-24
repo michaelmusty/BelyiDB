@@ -98,6 +98,19 @@ intrinsic BelyiDBGetGroup(filename::MonStgElt) -> RngIntElt
   end if;
 end intrinsic;
 
+intrinsic BelyiDBIsHyperbolic(filename::MonStgElt) -> BoolElt
+  {determine if hyperbolic from filename.}
+  l := BelyiDBGetInfo(filename);
+  orders := l[4];
+  assert #orders eq 3;
+  a,b,c := Explode(orders);
+  if (1/a+1/b+1/c) lt 1 then
+    return true;
+  else
+    return false;
+  end if;
+end intrinsic;
+
 intrinsic BelyiDBFilenames(d::RngIntElt) -> SeqEnum[MonStgElt]
   {Returns the filenames (MonStgElts) in BelyiDB/d as a SeqEnum.}
   // directory stuff
@@ -120,41 +133,47 @@ intrinsic BelyiDBFilenames(d::RngIntElt) -> SeqEnum[MonStgElt]
   return filenames;
 end intrinsic;
 
-intrinsic BelyiDBGet(d::RngIntElt, genus::RngIntElt : only_hyperbolic := false, only_nonhyperbolic := false) -> Any
-  {returns all BelyiDBobjects with given degree, group, and genus, setting hyperbolic (resp. nonhyperbolic) returns only those that are hyperbolic (resp. nonhyperbolic), returns both hyperbolic and nonhyperbolic by default.}
+intrinsic BelyiDBGetFilenames(d::RngIntElt, genus::RngIntElt : only_hyperbolic := false, only_nonhyperbolic := false) -> Any
+  {sort through filenames of a given degree and genus. the optional arguments further restrict which filenames get returned.}
   // directory stuff
   dir := GetCurrentDirectory();
   parentdir := Pipe(Sprintf("basename 'dirname %o'", dir), "");
   if parentdir ne "BelyiDB\n" then
     error "make sure your working directory is the BelyiDB repository.";
   end if;
-
-  assert not (hyperbolic and nonhyperbolic);
-  // get filenames and read in
-  names := BelyiDBGetFilenames(d, group, genus : ignore_group := ignore_group);
-  objs := [BelyiDBRead(name) : name in names];
-  // hyperbolic only
-  hyp := [];
-  if hyperbolic then
-    for s in objs do
-      if s`BelyiDBType eq "Hyperbolic" then
-        Append(~hyp, s);
-      end if;
-    end for;
-    objs := hyp;
+  // silly case
+  if only_hyperbolic and only_nonhyperbolic then
+    error "empty intersection.";
   end if;
-  // nonhyperbolic only
-  nonhyp:= [];
-  if nonhyperbolic then
-    for s in objs do
-      if not s`BelyiDBType eq "Hyperbolic" then
-        Append(~nonhyp, s);
+  // get filenames
+  filenames := BelyiDBFilenames(d);
+  // sort through
+  return_filenames := [];
+  for filename in filenames do
+    d_test := BelyiDBGetDegree(filename);
+    genus_test := BelyiDBGetGenus(filename);
+    is_hyperbolic := BelyiDBIsHyperbolic(filename);
+    if d eq d_test and genus eq genus_test then
+      if only_hyperbolic then
+        // only return it if it is hyperbolic
+        if is_hyperbolic then
+          Append(~return_filenames, filename);
+        end if;
+      else
+        if only_nonhyperbolic then
+          // only return it if it is NOT hyperbolic
+          if not is_hyperbolic then
+            Append(~return_filenames, filename);
+          end if;
+        else
+          // return regardless
+          Append(~return_filenames, filename);
+        end if;
       end if;
-    end for;
-    objs := nonhyp;
-  end if;
+    end if;
+  end for;
   // return
-  return objs;
+  return return_filenames;
 end intrinsic;
 
 /* reading in files */
@@ -176,4 +195,10 @@ intrinsic BelyiDBRead(filename::MonStgElt) -> BelyiDB
   s := eval str;
   assert Type(s) eq BelyiDB;
   return s;
+end intrinsic;
+
+intrinsic BelyiDBGet(d::RngIntElt, genus::RngIntElt : only_hyperbolic := false, only_nonhyperbolic := false) -> Any
+  {}
+  return_filenames := BelyiDBGetFilenames(d, genus : only_hyperbolic := only_hyperbolic, only_nonhyperbolic := only_nonhyperbolic);
+  return [ BelyiDBRead(f) : f in return_filenames ];
 end intrinsic;

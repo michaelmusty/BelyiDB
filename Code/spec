@@ -1,7 +1,4 @@
 {
   belyi_db_obj.m
 	read.m
-	query.m
-	modify.m
-	write.m
 }
