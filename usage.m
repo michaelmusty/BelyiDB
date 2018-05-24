@@ -1,6 +1,7 @@
 /* load this file to see some basic examples of how to use BelyiDB */
 
 // attach BelyiDB intrinsics
+SetColumns(0);
 AttachSpec("code/spec");
 
 // get filenames for all degree 6, genus 1 passports
