@@ -17,8 +17,6 @@ load "usage.m";
 
 * [Magma](http://magma.maths.usyd.edu.au/magma/)
 
-## Contributing
-
 ## Authors
 
 * **Michael Musty**
