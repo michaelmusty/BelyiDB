@@ -11,20 +11,14 @@ declare attributes BelyiDB:
   BelyiDBPointedSize,
 // permutation attrs
   BelyiDBPermutationTriple,
-  BelyiDBMonodromyGroup,
   BelyiDBAutomorphismGroup,
   BelyiDBPointedAutomorphismGroup,
+  BelyiDBMonodromyGroup,
   BelyiDBPassport,
   BelyiDBPointedPassport,
   BelyiDBGaloisOrbits,
 // field attrs
   BelyiDBBaseFieldData, // [* [* K, Kv, conj, complex embeddding *],... *]
-// exact attrs
-  BelyiDBExactCurveInvariants,
-  BelyiDBExactCurveCoefficients,
-  BelyiDBExactBelyiMapLeadingCoefficients,
-  BelyiDBExactBelyiMapNumeratorCoefficients,
-  BelyiDBExactBelyiMapDenominatorCoefficients,
 // belyimap attrs
   BelyiDBBelyiCurves,
   BelyiDBBelyiMaps,
