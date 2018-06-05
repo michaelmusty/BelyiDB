@@ -1,3 +1,5 @@
+/* BelyiDB without maps computed */
+
 intrinsic BelyiDBGenerateName(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
   {Generate a unique string identifying the passport corresponding to sigma.}
   assert #sigma eq 3;
@@ -87,6 +89,12 @@ intrinsic BelyiDBGenerateName(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
   return name;
 end intrinsic;
 
+intrinsic BelyiDBExample(sigma::SeqEnum[GrpPermElt]) -> BelyiDB
+  {overloaded to take a single triple.}
+  ppass := PassportRepresentatives(sigma : Pointed := true);
+  return BelyiDBExample(ppass);
+end intrinsic;
+
 intrinsic BelyiDBExample(ppass::SeqEnum[SeqEnum[GrpPermElt]]) -> BelyiDB
   {Creates a BelyiDB object corresponding to pointed passport ppass.}
   // some sanity checks
@@ -98,13 +106,11 @@ intrinsic BelyiDBExample(ppass::SeqEnum[SeqEnum[GrpPermElt]]) -> BelyiDB
     d := Degree(Parent(sigma[1]));
     G := sub< Sym(d) | sigma >;
     assert IsTransitive(G);
-    assert Parent(ppass[1][1]) eq G;
-  // BelyiDBName
-    if Degree(sigma[1]) gt TransitiveGroupDatabaseLimit() then
-      error "group not in transitive database!";
-    else
-      newname := BelyiDBGenerateName(sigma);
-    end if;
+    for triple in ppass do
+      assert sub<Sym(d)|triple> eq G;
+    end for;
+  // BelyiDBName : there will be an error if SmallGroupDatabaseLimit() is exceeded
+    newname := BelyiDBGenerateName(sigma);
   // create one BelyiDB per passport
     s := BelyiDBInitialize();
   // easy attrs
@@ -141,6 +147,33 @@ intrinsic BelyiDBExample(ppass::SeqEnum[SeqEnum[GrpPermElt]]) -> BelyiDB
   return s;
 end intrinsic;
 
+intrinsic BelyiDBGenerate(d::RngIntElt) -> MonStgElt
+  {Creates the folder /d in BelyiDB with all BelyiDB files for degree d. This assumes the current directory is /BelyiDB.}
+  // directory stuff
+  dir := GetCurrentDirectory();
+  parentdir := Pipe(Sprintf("basename 'dirname %o'", dir), "");
+  if parentdir ne "BelyiDB\n" then
+    error "make sure your working directory is the BelyiDB repository.";
+  end if;
+  directory := dir cat Sprintf("/belyi_db/%o/", d);
+  System(Sprintf("mkdir belyi_db/%o", d)); // if directory already exists this throws a system error but all good
+  // generate all degree d passports
+  db := TransitiveGroups(d);
+  for G in db do
+    ppassesG := PassportRepresentatives(G : Pointed := true);
+    for j in {1..#ppassesG} do // j indexes the passports of a group
+      ppass := ppassesG[j][2]; // this is a single passport
+      s := BelyiDBExample(ppass);
+      // write the object to file
+      BelyiDBWrite(s);
+    end for;
+  end for;
+  returnText := Sprintf("BelyiDB for degree %o constructed in directory %o/%o\n", d, directory, d);
+  return returnText;
+end intrinsic;
+
+/* BelyiDB with maps computed */
+
 intrinsic BelyiDBPlaceIndex(base_field_data::List) -> RngIntElt
   {returns integer that records the infinite place of a number field.}
   K := base_field_data[1];
@@ -153,36 +186,6 @@ intrinsic BelyiDBPlaceIndex(base_field_data::List) -> RngIntElt
   end for;
   error "Didn't find a place!";
 end intrinsic;
-
-intrinsic BelyiDBGenerate(d::RngIntElt) -> MonStgElt
-  {Creates the folder /d in BelyiDB with all BelyiDB files for degree d. This assumes the current directory is /BelyiDB.}
-  // directory stuff
-    dir := GetCurrentDirectory();
-    parentdir := Pipe(Sprintf("basename 'dirname %o'", dir), "");
-    if parentdir eq "BelyiDB\n" then
-      dbdirectory := dir;
-    else
-      error "make sure your working directory is /BelyiDB";
-    end if;
-    directory := dbdirectory cat Sprintf("/%o/", d);
-    System(Sprintf("mkdir %o", d)); // if directory already exists this throws a system error but all good
-    System(Sprintf("chmod 777 %o", d)); // set permissions for directory
-  // generate all degree d passports
-  db := TransitiveGroups(d);
-  for G in db do
-    ppassesG := PassportRepresentatives(G : Pointed := true);
-    for j in {1..#ppassesG} do // j indexes the passports of a group
-      ppass := ppassesG[j][2]; // this is a single passport
-      s := BelyiDBExample(ppass);
-      // write the object to file
-      BelyiDBWrite(s);
-    end for;
-  end for;
-  returnText := Sprintf("BelyiDB for degree %o constructed in directory %o/%o\n", d, dbdirectory, d);
-  return returnText;
-end intrinsic;
-
-/* */
 
 intrinsic MakeBaseFieldData(sigma::SeqEnum[GrpPermElt], X::Crv, phi::FldFunFracSchElt : conj := false, plc_index := 1, prec := 20, field_index := 1) -> Any
   {returns [* K, Kv, conj, zCC *] with zCC = 0 for use with BelyiDBWrite.}
