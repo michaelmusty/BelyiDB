@@ -50,6 +50,8 @@ intrinsic HomText(var::MonStgElt, lower::RngIntElt, upper::RngIntElt) -> MonStgE
   return var_text;
 end intrinsic;
 
+/* more auxiliary functions */
+
 intrinsic BelyiDBDeleteLineBreaks(str::MonStgElt) -> MonStgElt
   {Given a string str possibly with line breaks return a string without the line breaks.}
   str_new := "";
@@ -59,91 +61,6 @@ intrinsic BelyiDBDeleteLineBreaks(str::MonStgElt) -> MonStgElt
     end if;
   end for;
   return str_new;
-end intrinsic;
-
-intrinsic BelyiDBGenerateName(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
-  {Generate a unique string identifying the passport corresponding to sigma.}
-  assert #sigma eq 3;
-  H := Parent(sigma[1]);
-  d := Degree(H);
-  G := sub<Sym(d)|sigma>;
-  assert IsTransitive(G);
-  if d le 31 then
-    g,d := TransitiveGroupIdentification(G);
-  else
-    error "over transitive limit";
-  end if;
-  a,b,c := Explode([Order(sigma[1]), Order(sigma[2]), Order(sigma[3])]);
-  if d lt 10 then // JV naming convention
-    name := Sprintf("%oT%o-[%o,%o,%o]-", d, g, a, b, c);
-    cs0, cs1, csoo := Explode([CycleStructure(sigma[i]) : i in {1..3}]);
-    for i in {1..#cs0-1} do
-      for j in {1..cs0[i][2]} do
-        name *:= Sprintf("%o", cs0[i][1]);
-      end for;
-    end for;
-    for j in {1..cs0[#cs0][2]} do
-      name *:= Sprintf("%o", cs0[#cs0][1]);
-    end for;
-    name *:= "-";
-    for i in {1..#cs1-1} do
-      for j in {1..cs1[i][2]} do
-        name *:= Sprintf("%o", cs1[i][1]);
-      end for;
-    end for;
-    for j in {1..cs1[#cs1][2]} do
-      name *:= Sprintf("%o", cs1[#cs1][1]);
-    end for;
-    name *:= "-";
-    for i in {1..#csoo} do
-      for j in {1..csoo[i][2]} do
-        name *:= Sprintf("%o", csoo[i][1]);
-      end for;
-    end for;
-    c0 := #CycleDecomposition(sigma[1]);
-    c1 := #CycleDecomposition(sigma[2]);
-    coo := #CycleDecomposition(sigma[3]);
-    genus := (d+2-c0-c1-coo)/2;
-    name *:= Sprintf("-g%o", genus);
-  else // JV d>9 naming convention
-    name := Sprintf("%oT%o-[%o,%o,%o]-", d, g, a, b, c);
-    cs0, cs1, csoo := Explode([CycleStructure(sigma[i]) : i in {1..3}]);
-    for i in {1..#cs0-1} do
-      for j in {1..cs0[i][2]} do
-        name *:= Sprintf("%o,", cs0[i][1]);
-      end for;
-    end for;
-    for j in {1..cs0[#cs0][2]-1} do
-      name *:= Sprintf("%o,", cs0[#cs0][1]);
-    end for;
-    name *:= Sprintf("%o", cs0[#cs0][1]);
-    name *:= "-";
-    for i in {1..#cs1-1} do
-      for j in {1..cs1[i][2]} do
-        name *:= Sprintf("%o,", cs1[i][1]);
-      end for;
-    end for;
-    for j in {1..cs1[#cs1][2]-1} do
-      name *:= Sprintf("%o,", cs1[#cs1][1]);
-    end for;
-    name *:= Sprintf("%o", cs1[#cs1][1]);
-    name *:= "-";
-    for i in {1..#csoo-1} do
-      for j in {1..csoo[i][2]} do
-        name *:= Sprintf("%o,", csoo[i][1]);
-      end for;
-    end for;
-    for j in {1..csoo[#csoo][2]-1} do
-      name *:= Sprintf("%o,", csoo[#csoo][1]);
-    end for;
-    name *:= Sprintf("%o", csoo[#csoo][1]);
-    c0 := #CycleDecomposition(sigma[1]);
-    c1 := #CycleDecomposition(sigma[2]);
-    coo := #CycleDecomposition(sigma[3]);
-    genus := (d+2-c0-c1-coo)/2;
-    name *:= Sprintf("-g%o", genus);
-  end if;
-  return name;
 end intrinsic;
 
 intrinsic BelyiDBPlaceIndex(base_field_data::List) -> RngIntElt
@@ -161,7 +78,7 @@ end intrinsic;
 
 intrinsic BelyiDBBaseFieldDataWriter(base_field_data::List, i::RngIntElt) -> MonStgElt
   {text to load base field data.}
-  K := base_field_data[1];
+  K<nu> := base_field_data[1];
   Kv := base_field_data[2];
   conj := base_field_data[3];
   z := base_field_data[4];
@@ -192,81 +109,72 @@ end intrinsic;
 
 intrinsic BelyiDBBelyiMapWriter(base_field_data::List, X::Crv, phi::FldFunFracSchElt, i::RngIntElt) -> MonStgElt
   {text to load curve and Belyi map.}
-  // base field data
-    K := base_field_data[1];
-    Kv := base_field_data[2];
-    conj := base_field_data[3];
-    z := base_field_data[4];
+  // base field
+  K := base_field_data[1];
+  nu_text := Sprintf("nu%o", i);
+  AssignNames(~K, [nu_text]);
+  Kv := base_field_data[2];
+  conj := base_field_data[3];
+  z := base_field_data[4];
   // assertions
-    curve_field := BaseField(X);
-    map_field := BaseField(Curve(Parent(phi)));
-    assert curve_field eq map_field;
-    if Type(curve_field) eq FldNum then
-      assert GeneratorsSequence(curve_field) eq GeneratorsSequence(map_field);
-      assert #GeneratorsSequence(curve_field) eq #GeneratorsSequence(K);
-    end if;
-    assert ISA(Type(K), FldNum) or ISA(Type(K), FldRat);
-    assert ISA(Type(Kv), PlcNumElt);
-    assert ISA(Type(conj), BoolElt);
-    KX := FunctionField(X);
-    assert Parent(phi) eq KX;
-  // text to make Xi and phii cases by genus
+  curve_field := BaseField(X);
+  map_field := BaseField(Curve(Parent(phi)));
+  assert curve_field eq map_field;
+  if Type(curve_field) eq FldNum then
+    assert GeneratorsSequence(curve_field) eq GeneratorsSequence(map_field);
+    assert #GeneratorsSequence(curve_field) eq #GeneratorsSequence(K);
+  end if;
+  assert ISA(Type(K), FldNum) or ISA(Type(K), FldRat);
+  assert ISA(Type(Kv), PlcNumElt);
+  assert ISA(Type(conj), BoolElt);
+  KX := FunctionField(X);
+  assert Parent(phi) eq KX;
+  // make the string
   str := "";
   if Genus(X) eq 0 then
-    // Genus 0 case
+    X<x> := X;
     assert Sprintf("%o", KX.1) eq "x";
     str *:= Sprintf("X%o := Curve(ProjectiveSpace(PolynomialRing(K%o, 2)));\n", i, i);
     str *:= Sprintf("KX%o<x> := FunctionField(X%o);\n", i, i);
     str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
+  elif Type(X) eq CrvEll then
+    X<x,y,z> := X;
+    aInvs := aInvariants(X);
+    str *:= BelyiDBDeleteLineBreaks(Sprintf("aInvs%o := %o;\n", i, aInvs)) cat "\n";
+    str *:= Sprintf("E%o := EllipticCurve(aInvs%o);\n", i, i);
+    str *:= Sprintf("X%o := BaseChange(E%o, K%o);\n", i, i, i);
+    assert Sprintf("%o", KX.1) eq "x";
+    assert Sprintf("%o", KX.2) eq "y";
+    str *:= Sprintf("KX%o<%o,%o> := FunctionField(X%o);\n", i, KX.1, KX.2, i);
+    str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
+  elif Type(X) eq CrvHyp then
+    X<x,y,z> := X;
+    f, h := HyperellipticPolynomials(X);
+    P := Parent(f);
+    AssignNames(~P, ["t"]);
+    str *:= Sprintf("P<t> := PolynomialRing(K%o);\n", i);
+    str *:= Sprintf("X%o := HyperellipticCurve(%o, %o);\n", i, f, h);
+    assert Sprintf("%o", KX.1) eq "x";
+    assert Sprintf("%o", KX.2) eq "y";
+    str *:= Sprintf("KX%o<%o,%o> := FunctionField(X%o);\n", i, KX.1, KX.2, i);
+    str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
   else
-    if Type(X) in [CrvHyp, CrvEll] then
-      if Type(X) eq CrvEll then
-        // EllipticCurve case
-        aInvs := aInvariants(X);
-        str *:= BelyiDBDeleteLineBreaks(Sprintf("aInvs%o := %o;\n", i, aInvs)) cat "\n";
-        str *:= Sprintf("E%o := EllipticCurve(aInvs%o);\n", i, i);
-        str *:= Sprintf("X%o := BaseChange(E%o, K%o);\n", i, i, i);
-        assert Sprintf("%o", KX.1) eq "x";
-        assert Sprintf("%o", KX.2) eq "y";
-        str *:= Sprintf("KX%o<%o,%o> := FunctionField(X%o);\n", i, KX.1, KX.2, i);
-        str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
-      else
-        // Hyperelliptic case (non Elliptic)
-        f, h := HyperellipticPolynomials(X);
-        P := Parent(f);
-        AssignNames(~P, ["x"]);
-        str *:= Sprintf("P<x> := PolynomialRing(K%o);\n", i);
-        str *:= Sprintf("X%o := HyperellipticCurve(%o, %o);\n", i, f, h);
-        assert Sprintf("%o", KX.1) eq "x";
-        assert Sprintf("%o", KX.2) eq "y";
-        str *:= Sprintf("KX%o<%o,%o> := FunctionField(X%o);\n", i, KX.1, KX.2, i);
-        str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
-      end if;
+    X<[x]> := X;
+    I<[x]> := Ideal(X);
+    P<[x]> := Generic(I);
+    num_vars := Rank(P);
+    str *:= Sprintf("P<[x]> := PolynomialRing(K%o, %o);\n", i, num_vars);
+    str *:= Sprintf("I<[x]> := ideal< P | %o >;\n", Basis(I));
+    if IsAffine(X) then
+      str *:= Sprintf("X%o<[x]> := Curve(AffineSpace(P), I);\n", i);
     else
-      // make ambient for Xi
-      ambient := Ambient(X);
-      num_vars := Dimension(ambient);
-      vars := eval Sprintf("[%o]", BelyiDBVarText("x", 1, num_vars+1));
-      AssignNames(~ambient, vars);
-      str *:= Sprintf("ambient%o<%o> := ProjectiveSpace(K%o, %o);\n", i, VarText("x", 1, num_vars+1), i, num_vars);
-      str *:= Sprintf("AssignNames(~ambient%o, [%o]);\n", i, BelyiDBVarText("x", 1, num_vars+1));
-      // Xi
-      str *:= Sprintf("X%o<%o> := Curve(ambient%o, %o);\n", i, VarText("x", 1, num_vars+1), i, DefiningEquations(X));
-      // phii
-      error "for general curves, writing BelyiMap to file not implemented yet.";
+      assert IsProjective(X);
+      str *:= Sprintf("X%o<[x]> := Curve(ProjectiveSpace(P), I);\n", i);
     end if;
+    KX<[x]> := Parent(phi);
+    str *:= Sprintf("KX%o<[x]> := FunctionField(X%o);\n", i, i);
+    str *:= Sprintf("phi%o := KX!(%o);\n", phi);
   end if;
-  // return
-  return str;
-end intrinsic;
-
-intrinsic BelyiDBExactWriter(l::SeqEnum, index::RngIntElt) -> MonStgElt
-  {returns text to load a sequence l of elements of Kindex.}
-  str := Sprintf("[K%o | \n", index);
-  for i in [1..#l-1] do
-    str *:= Sprintf("%o,\n", Eltseq(l[i]));
-  end for;
-  str *:= Sprintf("%o\n]", Eltseq(l[#l]));
   return str;
 end intrinsic;
 
@@ -319,7 +227,8 @@ intrinsic BelyiDBText(s::BelyiDB) -> MonStgElt
       str *:= "maps := [* *];\n";
       for i := 1 to #s`BelyiDBBelyiMaps do
         base_field_data := s`BelyiDBBaseFieldData[i];
-        str *:= Sprintf("K := K%o;\n", i);
+        // str *:= Sprintf("K := K%o;\n", i);
+        str *:= Sprintf("K%o<nu%o> := K%o;\n", i, i, i);
         X := s`BelyiDBBelyiCurves[i];
         phi := s`BelyiDBBelyiMaps[i];
         str *:= BelyiDBBelyiMapWriter(base_field_data, X, phi, i);
@@ -380,7 +289,7 @@ intrinsic BelyiDBWrite(s::BelyiDB) -> MonStgElt
   end if;
   // makes sure the object has some basic information
   if assigned s`BelyiDBDegree and assigned s`BelyiDBName then
-    savedir := Sprintf("%o/%o/%o", dir, Degree(s), Filename(s));
+    savedir := Sprintf("%o/belyi_db/%o/%o", dir, Degree(s), Filename(s));
   else
     error "this BelyiDB object does not have enough information worth saving!";
   end if;

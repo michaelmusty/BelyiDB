@@ -1,8 +1,17 @@
 s := BelyiDBInitialize();
 
+/*
+Base Field Data
+*/
+
 
 /*
-Basic Information about the Passport
+Belyi Maps
+*/
+
+
+/*
+auto printing
 */
 
 s`BelyiDBName := "1T1-[1,1,1]-1-1-1-g0";
@@ -24,7 +33,8 @@ s`BelyiDBAutomorphismGroup := PermutationGroup<1 |
 \[ 1 ]:
  Order := 1 >;
 s`BelyiDBPointedAutomorphismGroup := PermutationGroup<1 |  
-\[ 1, 1 ]:
+\[ 1 ],
+\[ 1 ]:
  Order := 1 >;
 s`BelyiDBMonodromyGroup := PermutationGroup<1 |  
 \[ 1 ],
@@ -36,7 +46,7 @@ s`BelyiDBPassport := [ PowerSequence(PermutationGroup<1 |
 \[ 1 ],
 \[ 1 ]:
  Order := 1 >) |
-[ PermutationGroup<2 |  
+[ PermutationGroup<1 |  
 \[ 1 ],
 \[ 1 ],
 \[ 1 ]:
@@ -50,7 +60,7 @@ s`BelyiDBPointedPassport := [ PowerSequence(PermutationGroup<1 |
 \[ 1 ]:
  Order := 1 >) |
 [ PermutationGroup<1 |  
-\[ 1, 1 ]:
+\[ 1 ]:
  Order := 1 > |
 [ 1 ],
 [ 1 ],
@@ -59,12 +69,7 @@ s`BelyiDBPointedPassport := [ PowerSequence(PermutationGroup<1 |
 ];
 
 /*
-Base Field Data
-*/
-
-
-/*
-Belyi Maps
+Numerical Data
 */
 
 
