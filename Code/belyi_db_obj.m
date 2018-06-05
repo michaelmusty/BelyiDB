@@ -19,7 +19,7 @@ declare attributes BelyiDB:
   BelyiDBGaloisOrbits,
 // field attrs
   BelyiDBBaseFieldData, // [* [* K, Kv, conj, complex embeddding *],... *]
-// exact attrs
+// exact attrs: scheduled for deletion
   BelyiDBExactCurveInvariants,
   BelyiDBExactCurveCoefficients,
   BelyiDBExactBelyiMapLeadingCoefficients,
@@ -28,6 +28,10 @@ declare attributes BelyiDB:
 // belyimap attrs
   BelyiDBBelyiCurves,
   BelyiDBBelyiMaps,
+// timing
+  BelyiDBSanityCheckTiming,
+  BelyiDBLocalSanityCheckTiming,
+  BelyiDBLocalSanityCheckPrime,
 // numerical attrs
   BelyiDBRescalingFactors, // list of complex numbers
   BelyiDBPowserIndat,
@@ -162,6 +166,21 @@ end intrinsic;
 intrinsic BelyiMaps(s::BelyiDB) -> Any
   {}
   return s`BelyiDBBelyiMaps;
+end intrinsic;
+
+intrinsic SanityCheckTiming(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBSanityCheckTiming;
+end intrinsic;
+
+intrinsic LocalSanityCheckTiming(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBLocalSanityCheckTiming;
+end intrinsic;
+
+intrinsic LocalSanityCheckPrime(s::BelyiDB) -> Any
+  {}
+  return s`BelyiDBLocalSanityCheckPrime;
 end intrinsic;
 
 intrinsic RescalingFactors(s::BelyiDB) -> Any

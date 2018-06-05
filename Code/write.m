@@ -200,6 +200,9 @@ intrinsic BelyiDBText(s::BelyiDB) -> MonStgElt
   Append(~automatic_attrs, "BelyiDBPassport");
   Append(~automatic_attrs, "BelyiDBPointedPassport");
   Append(~automatic_attrs, "BelyiDBGaloisOrbits");
+  Append(~automatic_attrs, "BelyiDBSanityCheckTiming");
+  Append(~automatic_attrs, "BelyiDBLocalSanityCheckTiming");
+  Append(~automatic_attrs, "BelyiDBLocalSanityCheckPrime");
   // BelyiDBBaseFieldData, [* [* K, Kv, conj, complex embeddding *],... *]
   str *:= "\n/*\nBase Field Data\n*/\n\n";
   if assigned s`BelyiDBBaseFieldData then
