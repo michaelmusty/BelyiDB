@@ -1,7 +1,8 @@
 /* load this file to see some basic examples of how to use BelyiDB */
 
-// attach BelyiDB intrinsics
+// attach BelyiDB intrinsics and set verbose flag
 AttachSpec("code/spec");
+SetVerbose("BelyiDB", 1);
 
 // get filenames for all degree 6, genus 1 passports
 filenames := BelyiDBGetFilenames(6,1);

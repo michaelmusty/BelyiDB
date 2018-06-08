@@ -90,18 +90,18 @@ intrinsic Polredabs(mp::Map, K::FldNum, vK::PlcNumElt, is_conjugated::BoolElt) -
   assert DefiningPolynomial(L) eq DefiningPolynomial(Polredabs(L));
   assert DefiningPolynomial(L) eq DefiningPolynomial(Polredabs(K));
   assert K eq Codomain(mp);
-  vprintf Shimura : "Starting field: \n%o\n", K;
+  vprintf BelyiDB : "Starting field: \n%o\n", K;
   if IsReal(vK) then
-    vprintf Shimura : "Real place : %o\n", vK;
+    vprintf BelyiDB : "Real place : %o\n", vK;
   else
-    vprintf Shimura : "Complex place : %o, %o\n", vK, is_conjugated;
+    vprintf BelyiDB : "Complex place : %o, %o\n", vK, is_conjugated;
   end if;
-  vprintf Shimura : "Isomorphism : ";
+  vprintf BelyiDB : "Isomorphism : ";
   if mp(L.1) eq K.1 then
-    vprintf Shimura : "identity : ";
+    vprintf BelyiDB : "identity : ";
   end if;
-  vprintf Shimura : "%o -> %o\n", L.1, mp(L.1);
-  vprintf Shimura : "\n";
+  vprintf BelyiDB : "%o -> %o\n", L.1, mp(L.1);
+  vprintf BelyiDB : "\n";
   places_K := InfinitePlaces(K);
   places_L := InfinitePlaces(L);
   assert #places_K eq #places_L;
@@ -248,13 +248,13 @@ intrinsic PolredabsSanityCheck(d::RngIntElt) -> BoolElt
   objs := [BelyiDBRead(f[i]) : i in [1..#f]];
   bools := [];
   for s in objs do
-    printf "%o : ", Name(s);
+    vprintf BelyiDB : "%o : ", Name(s);
     if BelyiMapIsComputed(s) then
       bool := IsPolredabsMatch(s);
       Append(~bools, bool);
-      printf "%o\n", bool;
+      vprintf BelyiDB : "%o\n", bool;
     else
-      printf "Belyi maps not computed\n";
+      vprintf BelyiDB : "Belyi maps not computed\n";
     end if;
   end for;
   bools_set := SequenceToSet(bools);

@@ -7,4 +7,5 @@
   generate.m
   sanity_checks.m
   polredabs.m
+	modify.m
 }

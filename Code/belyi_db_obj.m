@@ -1,3 +1,4 @@
+declare verbose BelyiDB, 1;
 declare type BelyiDB;
 declare attributes BelyiDB:
 // easy attrs

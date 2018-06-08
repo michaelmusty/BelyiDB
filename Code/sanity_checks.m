@@ -21,8 +21,6 @@ intrinsic BelyiMapSanityCheck(sigma::SeqEnum[GrpPermElt], X::Crv, phi::FldFunFra
   {Does a basic check to see if the candidate is plausible. If lax is set to true, then work in the category of lax Belyi maps.}
   supp, ramdeg := Support(Divisor(phi));
   supp1, ramdeg1 := Support(Divisor(phi-1));
-  // print ramdeg;
-  // print ramdeg1;
   cyc := [];
   for i := 1 to 3 do
     if i eq 1 then
@@ -78,12 +76,12 @@ intrinsic BelyiMapSanityCheck(s::BelyiDB : lax := false) -> BoolElt
       assert BelyiCycleStructure(pass[i]) eq test_cycle_structure;
       // something is terribly wrong if this fails!
       if not BelyiMapSanityCheck(pass[i], curves[i], maps[i] : lax := lax) then
-        printf "Sanity Check Failed:\n";
-        printf "sigma = \n%o.\n", pass[1];
+        vprintf BelyiDB : "Sanity Check Failed:\n";
+        vprintf BelyiDB : "sigma = \n%o.\n", pass[1];
         supp, mult := Support(Divisor(maps[i]));
-        printf "supp(phi) = \n%o\n%o.\n", supp, mult;
+        vprintf BelyiDB : "supp(phi) = \n%o\n%o.\n", supp, mult;
         supp1, mult1 := Support(Divisor(maps[i]-1));
-        printf "supp(phi-1) = \n%o\n%o.\n", supp1, mult1;
+        vprintf BelyiDB : "supp(phi-1) = \n%o\n%o.\n", supp1, mult1;
         return false;
       end if;
     end for;
@@ -171,21 +169,21 @@ intrinsic BelyiLocalSanityCheck(s::BelyiDB, p::RngIntElt) -> BoolElt
       assert BelyiCycleStructure(pass[i]) eq test_cycle_structure;
       // something is terribly wrong if this fails!
       // reduce curve and Belyi map mod pp
-      printf "Reducing mod p = %o...", p;
+      vprintf BelyiDB : "Reducing mod p = %o...", p;
       C, mapp := BelyiReduceCurve(curves[i], maps[i], p);
-      printf "done.\n";
+      vprintf BelyiDB : "done.\n";
       // sanity check
       if not BelyiMapSanityCheck(pass[i], C, mapp) then
-        printf "Local Sanity Check Failed:\n";
-        printf "sigma = \n%o.\n", pass[1];
+        vprintf BelyiDB : "Local Sanity Check Failed:\n";
+        vprintf BelyiDB : "sigma = \n%o.\n", pass[1];
         supp, mult := Support(Divisor(mapp));
-        printf "supp(phi) = \n%o\n%o.\n", supp, mult;
+        vprintf BelyiDB : "supp(phi) = \n%o\n%o.\n", supp, mult;
         supp1, mult1 := Support(Divisor(mapp-1));
-        printf "supp(phi-1) = \n%o\n%o.\n", supp1, mult1;
+        vprintf BelyiDB : "supp(phi-1) = \n%o\n%o.\n", supp1, mult1;
         return false;
       end if;
     end for;
-    printf "Local sanity check setup done.\n";
+    vprintf BelyiDB : "Local sanity check setup done.\n";
     // if we make it here then we passed!
     t_end := Cputime();
     s`BelyiDBLocalSanityCheckTiming := t_end - t_start;
@@ -197,7 +195,7 @@ intrinsic BelyiLocalSanityCheck(s::BelyiDB, p::RngIntElt) -> BoolElt
 end intrinsic;
 
 
-/* database sanity checks */
+/* Galois orbits sanity checks */
 
 intrinsic GaloisOrbitsSanityCheck(s::BelyiDB) -> BoolElt
   {}
@@ -229,3 +227,11 @@ intrinsic GaloisOrbitsSanityCheck(s::BelyiDB) -> BoolElt
     error "Galois orbits not computed.\n";
   end if;
 end intrinsic;
+
+/* Database sanity checks */
+
+/*
+intrinsic BelyiDBSanityCheck(d::RngIntElt) -> BoolElt
+  {testing of entire database}
+end intrinsic;
+*/

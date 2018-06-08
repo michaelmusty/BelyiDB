@@ -133,12 +133,14 @@ intrinsic BelyiDBBelyiMapWriter(base_field_data::List, X::Crv, phi::FldFunFracSc
   str := "";
   if Genus(X) eq 0 then
     X<x> := X;
+    KX<x> := KX;
     assert Sprintf("%o", KX.1) eq "x";
     str *:= Sprintf("X%o := Curve(ProjectiveSpace(PolynomialRing(K%o, 2)));\n", i, i);
     str *:= Sprintf("KX%o<x> := FunctionField(X%o);\n", i, i);
     str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
   elif Type(X) eq CrvEll then
     X<x,y,z> := X;
+    KX<x,y> := KX;
     aInvs := aInvariants(X);
     str *:= BelyiDBDeleteLineBreaks(Sprintf("aInvs%o := %o;\n", i, aInvs)) cat "\n";
     str *:= Sprintf("E%o := EllipticCurve(aInvs%o);\n", i, i);
@@ -149,6 +151,7 @@ intrinsic BelyiDBBelyiMapWriter(base_field_data::List, X::Crv, phi::FldFunFracSc
     str *:= Sprintf("phi%o := KX%o!(%o);\n", i, i, phi);
   elif Type(X) eq CrvHyp then
     X<x,y,z> := X;
+    KX<x,y> := KX;
     f, h := HyperellipticPolynomials(X);
     P := Parent(f);
     AssignNames(~P, ["t"]);
