@@ -1,9 +1,10 @@
 {
-	auts.m
-	passports.m
+  auts.m
+  passports.m
   belyi_db_obj.m
-	read.m
-	write.m
-	generate.m
-	sanity_checks.m
+  read.m
+  write.m
+  generate.m
+  sanity_checks.m
+  polredabs.m
 }

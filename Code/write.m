@@ -262,6 +262,7 @@ intrinsic BelyiDBText(s::BelyiDB) -> MonStgElt
     if assigned s`BelyiDBPowserBases then
       indat := s`BelyiDBPowserIndat;
       pows := s`BelyiDBPowserBases;
+      // TODO
       pow := pows[1][1];
       str *:= Sprintf("CC<I> := ComplexField(%o);\n", Precision(BaseRing(Parent(pow))));
       str *:= Sprintf("Ser<w> := PowerSeriesRing(CC, %o);\n", Precision(Parent(pow)));
