@@ -159,6 +159,26 @@ intrinsic BaseFieldData(s::BelyiDB) -> Any
   return s`BelyiDBBaseFieldData; // [* [* K, Kv, conj, complex embeddding *],... *]
 end intrinsic;
 
+intrinsic BaseFieldDataShort(s::BelyiDB) -> Any
+  {}
+  base_field_data := BaseFieldData(s);
+  base_field_data_short := [* *];
+  for i := 1 to #base_field_data do
+    vprintf BelyiDB : "i=%o:\n", i;
+    l := [* *];
+    Append(~l, base_field_data[i][1]);
+    Append(~l, base_field_data[i][2]);
+    Append(~l, base_field_data[i][3]);
+    Append(~l, ComplexField(6)!base_field_data[i][4]);
+    Append(~base_field_data_short, l);
+    vprintf BelyiDB : "  %o\n", l[1];
+    vprintf BelyiDB : "  %o\n", l[2];
+    vprintf BelyiDB : "  %o\n", l[3];
+    vprintf BelyiDB : "  %o\n", l[4];
+  end for;
+  return base_field_data_short;
+end intrinsic;
+
 intrinsic BelyiCurves(s::BelyiDB) -> Any
   {}
   return s`BelyiDBBelyiCurves;

@@ -200,31 +200,61 @@ end intrinsic;
 intrinsic GaloisOrbitsSanityCheck(s::BelyiDB) -> BoolElt
   {}
   if assigned s`BelyiDBGaloisOrbits then
-    fields := [s`BelyiDBBaseFieldData[i][1] : i in [1..#s`BelyiDBBaseFieldData]];
-    distinct := [];
-    for i := 1 to #fields do
-      K := fields[i];
-      if Degree(K) eq 1 then
-        Append(~distinct, K);
-      else
-        is_new := true;
-        for F in distinct do
-          if IsIsomorphic(K,F) then
-            is_new := false;
-          end if;
-        end for;
-        if is_new then
-          Append(~distinct, K);
-        end if;
+    ppass := PointedPassport(s);
+    indices_used := [];
+    degree_sum := 0;
+    for orbit in GaloisOrbits(s) do
+      indices := [];
+      for sigma in orbit do
+        Append(~indices, Index(ppass, sigma));
+        Append(~indices_used, Index(ppass, sigma));
+      end for;
+      // check if all fields in orbit have same defining polynomial
+      min_polys := [DefiningPolynomial(BaseFieldData(s)[i][1]) : i in indices];
+      if #SequenceToSet(min_polys) ne 1 then
+        vprintf BelyiDB : "min polys do not agree in an orbit\n";
+        return false;
       end if;
+      // update degree_sum
+      degree_sum +:= Degree(min_polys[1]);
     end for;
-    if #distinct eq #s`BelyiDBGaloisOrbits then
-      return true;
-    else
+    if degree_sum ne PointedSize(s) then
+      vprintf BelyiDB : "degrees don't add up\n";
       return false;
+    else
+      vprintf BelyiDB : "story checks out\n";
+      return true;
     end if;
   else
     error "Galois orbits not computed.\n";
+  end if;
+end intrinsic;
+
+intrinsic GaloisOrbitsSanityCheck(d::RngIntElt) -> BoolElt
+  {Check every BelyiDB of degree d.}
+  f := BelyiDBFilenames(d);
+  objs := [BelyiDBRead(f[i]) : i in [1..#f]];
+  bools := [];
+  bad := [];
+  for s in objs do
+    vprintf BelyiDB : "%o : ", Name(s);
+    if BelyiMapIsComputed(s) then
+      bool := GaloisOrbitsSanityCheck(s);
+      Append(~bools, bool);
+      vprintf BelyiDB : "%o\n", bool;
+      if not bool then
+        Append(~bad, s);
+      end if;
+    else
+      vprintf BelyiDB : "Belyi maps not computed\n";
+    end if;
+  end for;
+  bools_set := SequenceToSet(bools);
+  if #bools_set in [0,1] then
+    return true;
+  else
+    assert #bools_set eq 2;
+    return false, bad;
   end if;
 end intrinsic;
 

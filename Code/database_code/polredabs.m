@@ -265,30 +265,3 @@ intrinsic PolredabsSanityCheck(d::RngIntElt) -> BoolElt
     return false;
   end if;
 end intrinsic;
-
-// don't need this now that we have polredabs?
-/*
-intrinsic CompareUpToBaseFieldIsomorphism(f1::FldFunFracSchElt, f2::FldFunFracSchElt) -> BoolElt
-  {True if f1 and f2 have isomorphic base fields and have the same coefficients after applying this isomorphism.}
-  K1 := BaseField(Curve(Parent(f1)));
-  K2 := BaseField(Curve(Parent(f2)));
-  is_iso, mp := IsIsomorphic(K1, K2);
-  if is_iso then
-    printf "%o\n",mp;
-    num_1 := Coefficients(Numerator(f1));
-    num_2 := Coefficients(Numerator(f2));
-    den_1 := Coefficients(Denominator(f1));
-    den_2 := Coefficients(Denominator(f2));
-    printf "alpha1     = %o\n", num_1[1];
-    printf "mp(alpha1) = %o\n", mp(num_1[1]);
-    printf "alpha2     = %o\n", num_2[1];
-    if mp(num_1) eq num_2 and mp(den_1) eq den_2 then
-      return true;
-    else
-      return false;
-    end if;
-  else
-    return false;
-  end if;
-end intrinsic;
-*/
