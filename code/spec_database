@@ -12,8 +12,4 @@
     galois_orbits.m
     modify.m
   }
-  triangle_code
-  {
-    powser.m
-  }
 }
