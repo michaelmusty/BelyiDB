@@ -1,4 +1,0 @@
-IsAbelian
-Timing
-Polredabsify
-Given one map in Galois orbit, make all the other maps
