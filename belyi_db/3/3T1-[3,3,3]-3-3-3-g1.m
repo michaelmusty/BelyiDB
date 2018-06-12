@@ -7,7 +7,7 @@ Base Field Data
 base_field_data := [* *];
 K1<nu1> := NumberField(Polynomial([RationalField() | 1, -1, 1]));
 place1 := InfinitePlaces(K1)[1];
-conj1 := true;
+conj1 := false;
 CC<I> := ComplexField(20);
 z1 := 0.00000000000000000000p20;
 base_field_data_1 := [* K1, place1, conj1, z1 *];

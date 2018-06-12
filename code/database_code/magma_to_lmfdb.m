@@ -124,7 +124,6 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   str *:= Sprintf("\'plabel\':\'%o\',\n", plabel_str);
   // triples
   triples := [PointedPassport(s)[i] : i in inds];
-  assert triples eq GaloisOrbits(s)[index];
   triples_str := OneLineConverter(triples);
   str *:= Sprintf("\'triples\':%o,\n", triples_str);
   // aut_group
@@ -191,7 +190,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
     _<x> := Parent(u);
     _<x> := Parent(v);
     if u eq 0 then
-      curve_str := Sprintf("y^2=%o", u, v);
+      curve_str := Sprintf("y^2=%o", v);
     else
       curve_str := Sprintf("y^2+%o*y=%o", u, v);
     end if;
@@ -210,7 +209,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   // orbit_size
   str *:= Sprintf("\'orbit_size\':%o,\n", #inds);
   // degree
-  str *:= Sprintf("\'degree\':%o,\n", Degree(s));
+  str *:= Sprintf("\'deg\':%o,\n", Degree(s));
   // group
   l := BelyiDBGetInfo(Filename(s));
   assert l[2] eq "T";
@@ -221,8 +220,13 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   str *:= Sprintf("\'geomtype\':\'%o\',\n", ShortType(s));
   // abc
   str *:= Sprintf("\'abc\':%o,\n", Orders(s));
-  // abc_sorted
-  str *:= Sprintf("\'abc_sorted\':%o,\n", Sort(Orders(s)));
+  // a_s
+  abc_sorted := Sort(Orders(s));
+  str *:= Sprintf("\'a_s\':%o,\n", abc_sorted[1]);
+  // b_s
+  str *:= Sprintf("\'b_s\':%o,\n", abc_sorted[2]);
+  // c_s
+  str *:= Sprintf("\'c_s\':%o,\n", abc_sorted[3]);
   // lambdas
   sigma := PermutationTriple(s);
   lambdas_str := "[";
@@ -278,9 +282,13 @@ intrinsic BelyiDBToDictionary(s::BelyiDB) -> MonStgElt
   // num_orbits
   str *:= Sprintf("\'num_orbits\':%o\n", #GaloisOrbits(s));
   /* galmaps dictionaries */
-  gal_orbits := GaloisOrbits(s);
-  // assert GaloisOrbitsSanityCheck(s);
-  // assert Passport(s) eq PointedPassport(s);
+  gal_orbits_before_sorting := GaloisOrbits(s); // we will sort by size (increasing)
+  gal_orbits := gal_orbits_before_sorting;
+  gal_orbits_sizes := [#orbit : orbit in gal_orbits_before_sorting];
+  ParallelSort(~gal_orbits_sizes, ~gal_orbits);
+  for i := 1 to #gal_orbits-1 do
+    assert #gal_orbits[i] le #gal_orbits[i+1];
+  end for;
   pass := PointedPassport(s);
   str *:= "}\n,\n[\n";
   for i := 1 to #gal_orbits-1 do
