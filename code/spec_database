@@ -11,5 +11,6 @@
     polredabs.m
     galois_orbits.m
     modify.m
+		magma_to_sage.m
   }
 }

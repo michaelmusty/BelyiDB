@@ -1,3 +1,21 @@
+intrinsic BelyiDBToGammas(s::BelyiDB) -> SeqEnum[GrpPSL2]
+  {Creates a sequence of GrpPSL2s from a BelyiDB object.}
+  assert s`BelyiDBType eq "Hyperbolic";
+  ppass := s`BelyiDBPointedPassport;
+  Gammas := [];
+  for sigma in ppass do
+    lcm := LeastCommonMultiple(s`BelyiDBOrders);
+    vprint Shimura : Sprintf("\nComputing Gamma with LCM(a,b,c) = %o...\n", lcm);
+    if lcm lt 100 then // TODO this is a bit of a hack
+      Gamma := TriangleSubgroup(sigma);
+    else
+      Gamma := TriangleSubgroup(sigma : Simplify := 0);
+    end if;
+    Append(~Gammas, Gamma);
+  end for;
+  return Gammas;
+end intrinsic;
+
 intrinsic GammasToBelyiDB(Gammas::SeqEnum[GrpPSL2]) -> BelyiDB
   {Assumes Gammas have everything computed and creates a BelyiDB object with sanity checks.}
   // setup

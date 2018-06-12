@@ -251,7 +251,7 @@ intrinsic GaloisOrbitsSanityCheck(d::RngIntElt) -> BoolElt
   end for;
   bools_set := SequenceToSet(bools);
   if #bools_set in [0,1] then
-    return true;
+    return true, [];
   else
     assert #bools_set eq 2;
     return false, bad;
