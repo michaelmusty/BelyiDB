@@ -4,11 +4,30 @@ s := BelyiDBInitialize();
 Base Field Data
 */
 
+base_field_data := [* *];
+K1<nu1> := RationalsAsNumberField();
+place1 := InfinitePlaces(K1)[1];
+conj1 := false;
+CC<I> := ComplexField(16);
+z1 := 1.000000000000000p16;
+base_field_data_1 := [* K1, place1, conj1, z1 *];
+Append(~base_field_data, base_field_data_1);
+s`BelyiDBBaseFieldData := base_field_data;
 
 /*
 Belyi Maps
 */
 
+curves := [* *];
+maps := [* *];
+K1<nu1> := K1;
+X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
+KX1<x> := FunctionField(X1);
+phi1 := KX1!(x);
+Append(~curves, X1);
+Append(~maps, phi1);
+s`BelyiDBBelyiCurves := curves;
+s`BelyiDBBelyiMaps := maps;
 
 /*
 auto printing
@@ -67,6 +86,28 @@ s`BelyiDBPointedPassport := [ PowerSequence(PermutationGroup<1 |
 [ 1 ]
 ]
 ];
+s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<1 |  
+\[ 1 ],
+\[ 1 ],
+\[ 1 ]:
+ Order := 1 >)) |
+[ PowerSequence(PermutationGroup<1 |  
+\[ 1 ],
+\[ 1 ],
+\[ 1 ]:
+ Order := 1 >) |
+[ PermutationGroup<1 |  
+\[ 1 ],
+\[ 1 ],
+\[ 1 ]:
+ Order := 1 > |
+[ 1 ],
+[ 1 ],
+[ 1 ]
+]
+]
+];
+s`BelyiDBSanityCheckTiming := 0.000p15;
 
 /*
 Numerical Data

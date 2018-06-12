@@ -146,7 +146,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   minpolys := [DefiningPolynomial(orbit_base_field_data[i][1]) : i in [1..#orbit_base_field_data]];
   assert #SequenceToSet(minpolys) eq 1;
   coeffs := Coefficients(minpolys[1]);
-  assert Parent(coeffs[1]) eq Rationals();
+  assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
   str *:= Sprintf("\'base_field\':%o,\n", coeffs);
   // embeddings
   orbit_embeddings := [];
@@ -221,6 +221,8 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   str *:= Sprintf("\'geomtype\':\'%o\',\n", ShortType(s));
   // abc
   str *:= Sprintf("\'abc\':%o,\n", Orders(s));
+  // abc_sorted
+  str *:= Sprintf("\'abc_sorted\':%o,\n", Sort(Orders(s)));
   // lambdas
   sigma := PermutationTriple(s);
   lambdas_str := "[";
@@ -277,8 +279,8 @@ intrinsic BelyiDBToDictionary(s::BelyiDB) -> MonStgElt
   str *:= Sprintf("\'num_orbits\':%o\n", #GaloisOrbits(s));
   /* galmaps dictionaries */
   gal_orbits := GaloisOrbits(s);
-  assert GaloisOrbitsSanityCheck(s);
-  assert Passport(s) eq PointedPassport(s);
+  // assert GaloisOrbitsSanityCheck(s);
+  // assert Passport(s) eq PointedPassport(s);
   pass := PointedPassport(s);
   str *:= "}\n,\n[\n";
   for i := 1 to #gal_orbits-1 do

@@ -6,9 +6,4 @@ AttachSpec("code/spec_database");
 AttachSpec("code/spec_triangle");
 SetVerbose("Shimura", 1);
 
-// bool, bad := GaloisOrbitsSanityCheck(6);
-s := BelyiDBGet(5,0 : only_hyperbolic := true)[1];
-
-Gammas := BelyiDBToGammas(s);
-
-BelyiMap(Gammas[1] : prec := 20);
+s := BelyiDBRead("6T15-[4,4,4]-42-42-42-g1.m");

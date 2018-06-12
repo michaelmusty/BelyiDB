@@ -1,7 +1,53 @@
 s := BelyiDBInitialize();
 
 /*
-Basic Information about the Passport
+Base Field Data
+*/
+
+base_field_data := [* *];
+K1<nu1> := RationalsAsNumberField();
+place1 := InfinitePlaces(K1)[1];
+conj1 := false;
+CC<I> := ComplexField(440);
+z1 := 1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000p440;
+base_field_data_1 := [* K1, place1, conj1, z1 *];
+Append(~base_field_data, base_field_data_1);
+K2<nu2> := RationalsAsNumberField();
+place2 := InfinitePlaces(K2)[1];
+conj2 := false;
+CC<I> := ComplexField(440);
+z2 := 1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000p440;
+base_field_data_2 := [* K2, place2, conj2, z2 *];
+Append(~base_field_data, base_field_data_2);
+s`BelyiDBBaseFieldData := base_field_data;
+
+/*
+Belyi Maps
+*/
+
+curves := [* *];
+maps := [* *];
+K1<nu1> := K1;
+aInvs1 := [0,0,0,-269/375,18962/16875];
+E1 := EllipticCurve(aInvs1);
+X1 := BaseChange(E1, K1);
+KX1<x,y> := FunctionField(X1);
+phi1 := KX1!((13824/3125*x + 142848/15625)/(x^5 + 47/15*x^4 + 4418/1125*x^3 - 21554/3375*x^2 + 24529/10125*x - 8693/30375)*y + (-13824/3125*x^2 + 64512/78125*x - 3896832/390625)/(x^5 + 47/15*x^4 + 4418/1125*x^3 - 21554/3375*x^2 + 24529/10125*x - 8693/30375));
+Append(~curves, X1);
+Append(~maps, phi1);
+K2<nu2> := K2;
+aInvs2 := [0,0,0,1/375,79/337500];
+E2 := EllipticCurve(aInvs2);
+X2 := BaseChange(E2, K2);
+KX2<x,y> := FunctionField(X2);
+phi2 := KX2!((-27/3125*x - 36/15625)/(x^5 - 7/15*x^4 + 98/1125*x^3 + 772/84375*x^2 + 1672/6328125*x + 5792/2373046875)*y + (27/3125*x^2 - 9/156250*x - 318/9765625)/(x^5 - 7/15*x^4 + 98/1125*x^3 + 772/84375*x^2 + 1672/6328125*x + 5792/2373046875));
+Append(~curves, X2);
+Append(~maps, phi2);
+s`BelyiDBBelyiCurves := curves;
+s`BelyiDBBelyiMaps := maps;
+
+/*
+auto printing
 */
 
 s`BelyiDBName := "5T4-[5,5,3]-5-5-311-g1";
@@ -103,103 +149,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<5 |
 ]
 ]
 ];
-
-/*
-Base Field Data
-*/
-
-base_field_data := [* *];
-K1<nu1> := RationalsAsNumberField();
-place1 := InfinitePlaces(K1)[1];
-conj1 := false;
-CC<I> := ComplexField(440);
-z1 := 1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000p440;
-base_field_data_1 := [* K1, place1, conj1, z1 *];
-Append(~base_field_data, base_field_data_1);
-K2<nu2> := RationalsAsNumberField();
-place2 := InfinitePlaces(K2)[1];
-conj2 := false;
-CC<I> := ComplexField(440);
-z2 := 1.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000p440;
-base_field_data_2 := [* K2, place2, conj2, z2 *];
-Append(~base_field_data, base_field_data_2);
-s`BelyiDBBaseFieldData := base_field_data;
-
-/*
-Belyi Maps
-*/
-
-curves := [* *];
-maps := [* *];
-K := K1;
-aInvs1 := [0,0,0,-269/375,18962/16875];
-E1 := EllipticCurve(aInvs1);
-X1 := BaseChange(E1, K1);
-KX1<x,y> := FunctionField(X1);
-phi1 := KX1!((13824/3125*x + 142848/15625)/(x^5 + 47/15*x^4 + 4418/1125*x^3 - 21554/3375*x^2 + 24529/10125*x - 8693/30375)*y + (-13824/3125*x^2 + 64512/78125*x - 3896832/390625)/(x^5 + 47/15*x^4 + 4418/1125*x^3 - 21554/3375*x^2 + 24529/10125*x - 8693/30375));
-Append(~curves, X1);
-Append(~maps, phi1);
-K := K2;
-aInvs2 := [0,0,0,1/375,79/337500];
-E2 := EllipticCurve(aInvs2);
-X2 := BaseChange(E2, K2);
-KX2<x,y> := FunctionField(X2);
-phi2 := KX2!((-27/3125*x - 36/15625)/(x^5 - 7/15*x^4 + 98/1125*x^3 + 772/84375*x^2 + 1672/6328125*x + 5792/2373046875)*y + (27/3125*x^2 - 9/156250*x - 318/9765625)/(x^5 - 7/15*x^4 + 98/1125*x^3 + 772/84375*x^2 + 1672/6328125*x + 5792/2373046875));
-Append(~curves, X2);
-Append(~maps, phi2);
-s`BelyiDBBelyiCurves := curves;
-s`BelyiDBBelyiMaps := maps;
-
-/*
-Exact Data
-*/
-
-s`BelyiDBExactCurveCoefficients := [*
-[K1 | 
-[ 269/10125 ],
-[ -9481/455625 ]
-],
-[K2 | 
-[ -1/10125 ],
-[ -79/18225000 ]
-]
-*];
-s`BelyiDBExactCurveCoefficients := [* s`BelyiDBExactCurveCoefficients, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactBelyiMapLeadingCoefficients := [*
-[K1 | 
-[ -13824/3125 ]
-],
-[K2 | 
-[ 27/3125 ]
-]
-*];
-s`BelyiDBExactBelyiMapLeadingCoefficients := [* s`BelyiDBExactBelyiMapLeadingCoefficients, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactBelyiMapNumeratorCoefficients := [*
-[K1 | 
-[ 1 ]
-],
-[K2 | 
-[ 1 ]
-]
-*];
-s`BelyiDBExactBelyiMapNumeratorCoefficients := [* s`BelyiDBExactBelyiMapNumeratorCoefficients, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactBelyiMapDenominatorCoefficients := [*
-[K1 | 
-[ 2537/1125 ],
-[ -14/75 ],
-[ 31/15 ],
-[ 1 ],
-[ 1 ]
-],
-[K2 | 
-[ -106/28125 ],
-[ -1/150 ],
-[ 4/15 ],
-[ 1 ],
-[ 1 ]
-]
-*];
-s`BelyiDBExactBelyiMapDenominatorCoefficients := [* s`BelyiDBExactBelyiMapDenominatorCoefficients, s`BelyiDBBaseFieldData *];
+s`BelyiDBSanityCheckTiming := 0.040p15;
 
 /*
 Numerical Data
