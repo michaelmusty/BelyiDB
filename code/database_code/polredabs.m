@@ -1,8 +1,8 @@
 /* auxiliary functions */
 
-intrinsic Eval(alpha::FldNumElt, v::PlcNumElt, is_conjugated::BoolElt) -> FldComElt
+intrinsic Eval(alpha::FldNumElt, v::PlcNumElt, is_conjugated::BoolElt : prec := 16) -> FldComElt
   {}
-  z := Evaluate(alpha, v);
+  z := Evaluate(alpha, v : Precision := prec);
   if is_conjugated then
     return ComplexConjugate(z);
   else
