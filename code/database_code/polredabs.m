@@ -198,9 +198,10 @@ end intrinsic;
 
 /* sanity checking */
 
+// TODO does this work?
 intrinsic IsPolredabsMatch(s::BelyiDB) -> BoolElt
   {check that base fields of the passport match polredabs.}
-  ppass := s`BelyiDBPointedPassport;
+  ppass := PointedPassport(s);
   assert #SequenceToSet([#s`BelyiDBBaseFieldData, #s`BelyiDBBelyiCurves, #s`BelyiDBBelyiMaps, #s`BelyiDBPointedPassport]) eq 1;
   curves := s`BelyiDBBelyiCurves;
   maps := s`BelyiDBBelyiMaps;
@@ -235,7 +236,7 @@ intrinsic IsPolredabsMatch(s::BelyiDB) -> BoolElt
     bool := field_bool and curve_bool and map_bool;
     Append(~bools, bool);
   end for;
-  if #SequenceToSet(bools) eq 1 then
+  if #SequenceToSet(bools) eq 1 and bools[1] eq true then
     return true;
   else
     return false;
@@ -270,22 +271,19 @@ end intrinsic;
 
 intrinsic PolredabsConversion(s::BelyiDB) -> BoolElt
   {Convert BelyiDB to polredabsified BelyiDB, sanity check the maps, write to file, and read in again. Return true if successful.}
-  sanity_bools := [];
   vprintf BelyiDB : "%o:\n", Name(s);
   t := Polredabs_db(s);
+  t := BelyiDBGaloisOrbitsComputer(t);
   vprintf BelyiDB : "  Polredabsified\n";
-  vprintf BelyiDB : "  p=%o sanity check: ", 101;
-  bool_local_101 := BelyiLocalSanityCheck(t, 101);
-  vprintf BelyiDB : "%o\n", bool_local_101;
-  Append(~sanity_bools, bool_local_101);
-  vprintf BelyiDB : "  p=%o sanity check: ", 830111;
-  bool_local_830111 := BelyiLocalSanityCheck(t, 830111);
-  Append(~sanity_bools, bool_local_830111);
-  vprintf BelyiDB : "%o\n", bool_local_830111;
-  if #SequenceToSet(sanity_bools) eq 1 and sanity_bools[1] eq true then
+  vprintf BelyiDB : "  sanity check: ";
+  bool_local := BelyiLocalSanityCheck(t);
+  vprintf BelyiDB : "%o\n", bool_local;
+  bool_embeddings := EmbeddingsSanityCheck(t);
+  bool_galois := GaloisOrbitsSanityCheck(t);
+  if bool_local then
     BelyiDBWrite(t);
     t := BelyiDBRead(Filename(t));
-    if BelyiLocalSanityCheck(t, 18287) then
+    if BelyiLocalSanityCheck(t) and EmbeddingsSanityCheck(t) then
       vprintf BelyiDB : "Reading in file successful.\n";
       return true;
     else

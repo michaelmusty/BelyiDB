@@ -330,12 +330,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<7 |
 [ 2, 3, 4, 5, 6, 7, 1 ],
 [ 2, 7, 1, 5, 3, 4, 6 ],
 [ 2, 3, 1, 5, 6, 4, 7 ]
-]
 ],
-[ PowerSequence(PermutationGroup<7 |  
-\[ 1, 2, 4, 5, 6, 7, 3 ],
-\[ 2, 3, 1, 4, 5, 6, 7 ]:
- Order := 2520 >) |
 [ PermutationGroup<7 |  
 \[ 1, 2, 4, 5, 6, 7, 3 ],
 \[ 2, 3, 1, 4, 5, 6, 7 ]:
@@ -391,8 +386,8 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<7 |
 ]
 ]
 ];
-s`BelyiDBLocalSanityCheckTiming := 0.390p15;
-s`BelyiDBLocalSanityCheckPrime := 830111;
+s`BelyiDBLocalSanityCheckTiming := 0.120p15;
+s`BelyiDBLocalSanityCheckPrime := 9721;
 
 /*
 Numerical Data
