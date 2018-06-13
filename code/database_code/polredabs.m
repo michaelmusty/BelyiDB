@@ -57,38 +57,38 @@ intrinsic Polredbest(f::RngUPolElt) -> RngUPolElt
   return Parent(f) ! ss;
 end intrinsic;
 
-intrinsic Polredabs(f::RngUPolElt) -> RngUPolElt
+intrinsic Polredabs_db(f::RngUPolElt) -> RngUPolElt
   {first do best...twice then do abs.}
   return Polred(Polredbest(Polredbest(f)));
 end intrinsic;
 
 /* polredabsify base fields */
 
-intrinsic Polredabs(K::FldNum) -> FldNum
+intrinsic Polredabs_db(K::FldNum) -> FldNum
   {}
   if Degree(K) le 1 then
     assert DefiningPolynomial(K) eq DefiningPolynomial(RationalsAsNumberField());
     return K;
   else
-    return NumberField(Polredabs(DefiningPolynomial(K)));
+    return NumberField(Polredabs_db(DefiningPolynomial(K)));
   end if;
 end intrinsic;
 
-intrinsic Polredabs(mp::Map, K::FldNum, vK::PlcNumElt, is_conjugated::BoolElt) -> Any
-  {returns L, vL, and a boolean where L is Polredabs(K) and vL is pullback of vK under the isomorphism mp : L -> K.}
+intrinsic Polredabs_db(mp::Map, K::FldNum, vK::PlcNumElt, is_conjugated::BoolElt) -> Any
+  {returns L, vL, and a boolean where L is Polredabs_db(K) and vL is pullback of vK under the isomorphism mp : L -> K.}
   if Degree(K) eq 1 then // we don't polredabsify QQ
     return K, vK, is_conjugated;
   end if;
   /*
   // after we do some sanity checking uncomment this?
-  if DefiningPolynomial(K) eq Polredabs(DefiningPolynomial(K)) then
+  if DefiningPolynomial(K) eq Polredabs_db(DefiningPolynomial(K)) then
     return l;
   end if;
   */
   assert ISA(Type(K), FldNum) and ISA(Type(vK), PlcNumElt) and ISA(Type(is_conjugated), BoolElt);
   L := Domain(mp); // mp : L -> K
-  assert DefiningPolynomial(L) eq DefiningPolynomial(Polredabs(L));
-  assert DefiningPolynomial(L) eq DefiningPolynomial(Polredabs(K));
+  assert DefiningPolynomial(L) eq DefiningPolynomial(Polredabs_db(L));
+  assert DefiningPolynomial(L) eq DefiningPolynomial(Polredabs_db(K));
   assert K eq Codomain(mp);
   vprintf BelyiDB : "Starting field: \n%o\n", K;
   if IsReal(vK) then
@@ -128,7 +128,7 @@ intrinsic Polredabs(mp::Map, K::FldNum, vK::PlcNumElt, is_conjugated::BoolElt) -
   end for;
 end intrinsic;
 
-intrinsic Polredabs(l::List) -> List
+intrinsic Polredabs_db(l::List) -> List
   {overloaded for [K,vK,conj] or [K,vK,conj,zCC]}
   t0 := Cputime();
   assert #l in [3, 4];
@@ -139,10 +139,10 @@ intrinsic Polredabs(l::List) -> List
   if #l eq 4 then
     assert ISA(Type(l[4]), FldComElt) or ISA(Type(l[4]), FldReElt);
   end if;
-  L := Polredabs(K);
+  L := Polredabs_db(K);
   is_iso, mp := IsIsomorphic(L, K);
   assert is_iso;
-  L, vL, is_conjugated_L := Polredabs(mp, K, vK, is_conjugated_K);
+  L, vL, is_conjugated_L := Polredabs_db(mp, K, vK, is_conjugated_K);
   if #l eq 3 then
     return [* L, vL, is_conjugated_L *];
   else
@@ -152,9 +152,9 @@ end intrinsic;
 
 /* polredabsify curves and maps */
 
-intrinsic Polredabs(l::List, X::Crv, phi::FldFunFracSchElt) -> List
+intrinsic Polredabs_db(l::List, X::Crv, phi::FldFunFracSchElt) -> List
   {}
-  lnew := Polredabs(l);
+  lnew := Polredabs_db(l);
   is_iso, mp := IsIsomorphic(l[1], lnew[1]);
   Y := BaseChange(X, mp);
   K := lnew[1];
@@ -168,8 +168,8 @@ end intrinsic;
 
 /* polredabsify BelyiDB */
 
-intrinsic Polredabs(t::BelyiDB) -> BelyiDB
-  {Polredabs fields, curves, and maps of t.}
+intrinsic Polredabs_db(t::BelyiDB) -> BelyiDB
+  {Polredabs_db fields, curves, and maps of t.}
   s := BelyiDBCopy(t);
   // assert BaseFieldDataSanityCheck(s);
   ppass := s`BelyiDBPointedPassport;
@@ -185,7 +185,7 @@ intrinsic Polredabs(t::BelyiDB) -> BelyiDB
   curves_new := [* *];
   maps_new := [* *];
   for i := 1 to #maps do
-    triple := Polredabs(lists[i], curves[i], maps[i]);
+    triple := Polredabs_db(lists[i], curves[i], maps[i]);
     Append(~lists_new, triple[1]);
     Append(~curves_new, triple[2]);
     Append(~maps_new, triple[3]);
@@ -218,17 +218,17 @@ intrinsic IsPolredabsMatch(s::BelyiDB) -> BoolElt
     assert Parent(phi) eq FunctionField(X);
     F_phi := BaseField(Curve(Parent(phi)));
     if Degree(F) gt 1 then
-      field_bool := DefiningPolynomial(F) eq Polredabs(DefiningPolynomial(F));
+      field_bool := DefiningPolynomial(F) eq Polredabs_db(DefiningPolynomial(F));
     else
       field_bool := true;
     end if;
     if Degree(F_X) gt 1 then
-      curve_bool := DefiningPolynomial(F_X) eq Polredabs(DefiningPolynomial(F_X));
+      curve_bool := DefiningPolynomial(F_X) eq Polredabs_db(DefiningPolynomial(F_X));
     else
       curve_bool := true;
     end if;
     if Degree(F_phi) gt 1 then
-      map_bool := DefiningPolynomial(F_phi) eq Polredabs(DefiningPolynomial(F_phi));
+      map_bool := DefiningPolynomial(F_phi) eq Polredabs_db(DefiningPolynomial(F_phi));
     else
       map_bool := true;
     end if;
@@ -272,7 +272,7 @@ intrinsic PolredabsConversion(s::BelyiDB) -> BoolElt
   {Convert BelyiDB to polredabsified BelyiDB, sanity check the maps, write to file, and read in again. Return true if successful.}
   sanity_bools := [];
   vprintf BelyiDB : "%o:\n", Name(s);
-  t := Polredabs(s);
+  t := Polredabs_db(s);
   vprintf BelyiDB : "  Polredabsified\n";
   vprintf BelyiDB : "  p=%o sanity check: ", 101;
   bool_local_101 := BelyiLocalSanityCheck(t, 101);

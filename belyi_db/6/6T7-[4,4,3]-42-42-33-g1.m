@@ -1,7 +1,38 @@
 s := BelyiDBInitialize();
 
 /*
-Basic Information about the Passport
+Base Field Data
+*/
+
+base_field_data := [* *];
+K1<nu1> := RationalsAsNumberField();
+place1 := InfinitePlaces(K1)[1];
+conj1 := false;
+CC<I> := ComplexField(150);
+z1 := 1.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000p150;
+base_field_data_1 := [* K1, place1, conj1, z1 *];
+Append(~base_field_data, base_field_data_1);
+s`BelyiDBBaseFieldData := base_field_data;
+
+/*
+Belyi Maps
+*/
+
+curves := [* *];
+maps := [* *];
+K1<nu1> := K1;
+aInvs1 := [0,0,0,-73/107163,170/26040609];
+E1 := EllipticCurve(aInvs1);
+X1 := BaseChange(E1, K1);
+KX1<x,y> := FunctionField(X1);
+phi1 := KX1!((1/1323*x - 1/107163)/(x^3 - 1/189*x^2 + 1/107163*x - 1/182284263));
+Append(~curves, X1);
+Append(~maps, phi1);
+s`BelyiDBBelyiCurves := curves;
+s`BelyiDBBelyiMaps := maps;
+
+/*
+auto printing
 */
 
 s`BelyiDBName := "6T7-[4,4,3]-42-42-33-g1";
@@ -83,79 +114,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<6 |
 ]
 ]
 ];
-
-/*
-Base Field Data
-*/
-
-base_field_data := [* *];
-K1<nu1> := RationalsAsNumberField();
-place1 := InfinitePlaces(K1)[1];
-conj1 := false;
-CC<I> := ComplexField(150);
-z1 := 1.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000p150;
-base_field_data_1 := [* K1, place1, conj1, z1 *];
-Append(~base_field_data, base_field_data_1);
-s`BelyiDBBaseFieldData := base_field_data;
-
-/*
-Belyi Maps
-*/
-
-curves := [* *];
-maps := [* *];
-K := K1;
-aInvs1 := [0,0,0,-73/107163,170/26040609];
-E1 := EllipticCurve(aInvs1);
-X1 := BaseChange(E1, K1);
-KX1<x,y> := FunctionField(X1);
-phi1 := KX1!((1/1323*x - 1/107163)/(x^3 - 1/189*x^2 + 1/107163*x - 1/182284263));
-Append(~curves, X1);
-Append(~maps, phi1);
-s`BelyiDBBelyiCurves := curves;
-s`BelyiDBBelyiMaps := maps;
-
-/*
-Exact Data
-*/
-
-s`BelyiDBExactCurveInvariants := [*
-[K1 | 
-[ 1556068/81 ]
-]
-*];
-s`BelyiDBExactCurveInvariants := [* s`BelyiDBExactCurveInvariants, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactCurveCoefficients := [*
-[K1 | 
-[ 73/2893401 ],
-[ -85/703096443 ]
-]
-*];
-s`BelyiDBExactCurveCoefficients := [* s`BelyiDBExactCurveCoefficients, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactBelyiMapLeadingCoefficients := [*
-[K1 | 
-[ -1/1323 ]
-]
-*];
-s`BelyiDBExactBelyiMapLeadingCoefficients := [* s`BelyiDBExactBelyiMapLeadingCoefficients, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactBelyiMapNumeratorCoefficients := [*
-[K1 | 
-[ -1/81 ],
-[ 1 ]
-]
-*];
-s`BelyiDBExactBelyiMapNumeratorCoefficients := [* s`BelyiDBExactBelyiMapNumeratorCoefficients, s`BelyiDBBaseFieldData *];
-s`BelyiDBExactBelyiMapDenominatorCoefficients := [*
-[K1 | 
-[ -1/182284263 ],
-[ 1/107163 ],
-[ 0 ],
-[ -1/189 ],
-[ 0 ],
-[ 1 ]
-]
-*];
-s`BelyiDBExactBelyiMapDenominatorCoefficients := [* s`BelyiDBExactBelyiMapDenominatorCoefficients, s`BelyiDBBaseFieldData *];
+s`BelyiDBSanityCheckTiming := 0.020p15;
 
 /*
 Numerical Data

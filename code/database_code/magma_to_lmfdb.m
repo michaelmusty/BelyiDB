@@ -84,6 +84,47 @@ intrinsic OneLineConverter(l::SeqEnum[GrpPermElt]) -> MonStgElt
   return str;
 end intrinsic;
 
+intrinsic CycleConverter(tau::GrpPermElt) -> MonStgElt
+  {}
+  if tau eq Identity(Parent(tau)) then
+    return "()";
+  else
+    return Sprintf("%o", tau);
+  end if;
+end intrinsic;
+
+intrinsic CycleConverter(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
+  {}
+  assert #sigma eq 3;
+  str := "[";
+  str *:= "\'";
+  str *:= CycleConverter(sigma[1]);
+  str *:= "\'";
+  str *:= ",";
+  str *:= "\'";
+  str *:= CycleConverter(sigma[2]);
+  str *:= "\'";
+  str *:= ",";
+  str *:= "\'";
+  str *:= CycleConverter(sigma[3]);
+  str *:= "\'";
+  str *:= "]";
+  return str;
+end intrinsic;
+
+intrinsic CycleConverter(triples::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
+  {}
+  str := "";
+  str *:= "[";
+  for i := 1 to #triples-1 do
+    str *:= Sprintf("%o", CycleConverter(triples[i]));
+    str *:= ",";
+  end for;
+  str *:= Sprintf("%o", CycleConverter(triples[#triples]));
+  str *:= "]";
+  return str;
+end intrinsic;
+
 intrinsic OneLineConverter(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
   {}
   str := "[";
@@ -126,6 +167,9 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   triples := [PointedPassport(s)[i] : i in inds];
   triples_str := OneLineConverter(triples);
   str *:= Sprintf("\'triples\':%o,\n", triples_str);
+  // triples_cyc
+  triples_cyc_str := CycleConverter(triples);
+  str *:= Sprintf("\'triples_cyc\':%o,\n", triples_cyc_str);
   // aut_group
     pass := Passport(s);
     aut := AutomorphismGroup(pass[inds[1]]);
@@ -151,7 +195,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   orbit_embeddings := [];
   for i in inds do
     K := base_field_data[i][1];
-    assert DefiningPolynomial(K) eq DefiningPolynomial(Polredabs(K));
+    assert DefiningPolynomial(K) eq DefiningPolynomial(Polredabs_db(K));
     v := base_field_data[i][2];
     conj := base_field_data[i][3];
     z := Eval(K.1, v, conj : prec := 16);

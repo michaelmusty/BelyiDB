@@ -1,4 +1,4 @@
-intrinsic BelyiDBGaloisOrbitsComputer(t::BelyiDB) -> BelyiDB
+intrinsic BelyiDBGaloisOrbitsComputer(t::BelyiDB : ignore := false) -> BelyiDB
   {Compute Galois orbits for s and save to s.}
   s := BelyiDBCopy(t);
   if BelyiMapIsComputed(s) then
@@ -40,12 +40,22 @@ intrinsic BelyiDBGaloisOrbitsComputer(t::BelyiDB) -> BelyiDB
         for j := 1 to #gal_fields do // j loops over all galois orbits so far
           condition_1 := DefiningPolynomial(fields_notQQ[i]) eq DefiningPolynomial(gal_fields[j][1]);
           condition_2 := BelyiDBCompareBelyiMaps(maps_notQQ[i], gal_maps[j][1]);
-          if condition_1 and condition_2 then
-            Append(~gal_fields[j], fields_notQQ[i]);
-            Append(~gal_ppass[j], ppass_notQQ[i]);
-            Append(~gal_minpolys[j], minpolys_notQQ[i]);
-            Append(~gal_maps[j], maps_notQQ[i]);
-            new_orbit := false;
+          if ignore then // ignore condition2
+            if condition_1 then
+              Append(~gal_fields[j], fields_notQQ[i]);
+              Append(~gal_ppass[j], ppass_notQQ[i]);
+              Append(~gal_minpolys[j], minpolys_notQQ[i]);
+              Append(~gal_maps[j], maps_notQQ[i]);
+              new_orbit := false;
+            end if;
+          else
+            if condition_1 and condition_2 then
+              Append(~gal_fields[j], fields_notQQ[i]);
+              Append(~gal_ppass[j], ppass_notQQ[i]);
+              Append(~gal_minpolys[j], minpolys_notQQ[i]);
+              Append(~gal_maps[j], maps_notQQ[i]);
+              new_orbit := false;
+            end if;
           end if;
         end for;
         if new_orbit then

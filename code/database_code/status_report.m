@@ -1,4 +1,4 @@
-intrinsic BelyiDBStatusReport(d::RngIntElt) -> BoolElt
+intrinsic BelyiDBStatusReport(d::RngIntElt) -> Any
   {}
   f := BelyiDBFilenames(d);
   objs := [BelyiDBRead(name) : name in f];
@@ -36,8 +36,8 @@ intrinsic BelyiDBStatusReport(d::RngIntElt) -> BoolElt
   vprintf BelyiDB : "  #check_galois_orbits = %o\n", #bad_galois_orbits;
   vprintf BelyiDB : "  #failed_sanity = %o\n", #failed_sanity;
   if #good eq #f and #maps_not_computed eq 0 and #bad_galois_orbits eq 0 and #failed_sanity eq 0 then
-    return true;
+    return true, maps_not_computed, bad_galois_orbits, failed_sanity;
   else
-    return false;
+    return false, maps_not_computed, bad_galois_orbits, failed_sanity;
   end if;
 end intrinsic;

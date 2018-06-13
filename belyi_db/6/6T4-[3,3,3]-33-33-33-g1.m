@@ -1,7 +1,38 @@
 s := BelyiDBInitialize();
 
 /*
-Basic Information about the Passport
+Base Field Data
+*/
+
+base_field_data := [* *];
+K1<nu1> := RationalsAsNumberField();
+place1 := InfinitePlaces(K1)[1];
+conj1 := false;
+CC<I> := ComplexField(20);
+z1 := 0.00000000000000000000p20;
+base_field_data_1 := [* K1, place1, conj1, z1 *];
+Append(~base_field_data, base_field_data_1);
+s`BelyiDBBaseFieldData := base_field_data;
+
+/*
+Belyi Maps
+*/
+
+curves := [* *];
+maps := [* *];
+K1<nu1> := K1;
+aInvs1 := [0,0,0,-15,22];
+E1 := EllipticCurve(aInvs1);
+X1 := BaseChange(E1, K1);
+KX1<x,y> := FunctionField(X1);
+phi1 := KX1!((-1/16*x^2 + 1/4*x - 7/16)/(x^2 - 4*x + 4)*y + 1/2);
+Append(~curves, X1);
+Append(~maps, phi1);
+s`BelyiDBBelyiCurves := curves;
+s`BelyiDBBelyiMaps := maps;
+
+/*
+auto printing
 */
 
 s`BelyiDBName := "6T4-[3,3,3]-33-33-33-g1";
@@ -75,42 +106,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<6 |
 ]
 ]
 ];
-
-/*
-Base Field Data
-*/
-
-base_field_data := [* *];
-K1<nu1> := RationalsAsNumberField();
-place1 := InfinitePlaces(K1)[1];
-conj1 := false;
-CC<I> := ComplexField(20);
-z1 := 0.00000000000000000000p20;
-base_field_data_1 := [* K1, place1, conj1, z1 *];
-Append(~base_field_data, base_field_data_1);
-s`BelyiDBBaseFieldData := base_field_data;
-
-/*
-Belyi Maps
-*/
-
-curves := [* *];
-maps := [* *];
-K := K1;
-aInvs1 := [0,0,0,-15,22];
-E1 := EllipticCurve(aInvs1);
-X1 := BaseChange(E1, K1);
-KX1<x,y> := FunctionField(X1);
-phi1 := KX1!((-1/16*x^2 + 1/4*x - 7/16)/(x^2 - 4*x + 4)*y + 1/2);
-Append(~curves, X1);
-Append(~maps, phi1);
-s`BelyiDBBelyiCurves := curves;
-s`BelyiDBBelyiMaps := maps;
-
-/*
-Exact Data
-*/
-
+s`BelyiDBSanityCheckTiming := 0.030p15;
 
 /*
 Numerical Data

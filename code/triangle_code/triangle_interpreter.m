@@ -122,7 +122,6 @@ intrinsic GammasToBelyiDB(Gammas::SeqEnum[GrpPSL2]) -> BelyiDB
     end for;
   */
     assert BelyiMapSanityCheck(s);
-    assert BelyiDBMatch(s);
   // return
     return s;
 end intrinsic;

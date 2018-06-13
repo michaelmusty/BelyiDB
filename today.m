@@ -6,4 +6,6 @@ AttachSpec("code/spec_database");
 AttachSpec("code/spec_triangle");
 SetVerbose("Shimura", 1);
 
-s := BelyiDBRead("6T15-[4,4,4]-42-42-42-g1.m");
+// s := BelyiDBRead("6T15-[4,4,4]-42-42-42-g1.m");
+
+bool, a, b, c := BelyiDBStatusReport(6);

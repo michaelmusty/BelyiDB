@@ -11,6 +11,7 @@ filenames cat:= BelyiDBFilenames(2);
 filenames cat:= BelyiDBFilenames(3);
 filenames cat:= BelyiDBFilenames(4);
 filenames cat:= BelyiDBFilenames(5);
+filenames cat:= BelyiDBFilenames(6);
 objs := [BelyiDBRead(filename) : filename in filenames];
 
 for s in objs do
@@ -22,7 +23,7 @@ for s in objs do
 	printf "  %o\n", bool2;
 	printf "  %o\n", bool3;
 	if bool1 then
-		t := Polredabs(s);
+		t := Polredabs_db(s);
 		assert BelyiMapSanityCheck(t);
 		BelyiDBWrite(t);
 		t := BelyiDBRead(Filename(t));
