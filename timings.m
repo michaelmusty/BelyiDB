@@ -33,7 +33,7 @@ SetDebugOnError(true);
 
 
 i := 6;
-prec := 20;
+prec := 60;
 precNewton := 1000;
 
 objs := [];
