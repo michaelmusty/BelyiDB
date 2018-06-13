@@ -10,9 +10,9 @@ intrinsic Eval(alpha::FldNumElt, v::PlcNumElt, is_conjugated::BoolElt : prec := 
   end if;
 end intrinsic;
 
-intrinsic Eval(l::List) -> FldComElt
+intrinsic Eval(l::List : prec := 16) -> FldComElt
   {}
-  return Eval(l[1].1, l[2], l[3]);
+  return Eval(l[1].1, l[2], l[3] : prec := prec);
 end intrinsic;
 
 intrinsic MachineZero(z::FldReElt) -> BoolElt

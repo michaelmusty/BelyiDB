@@ -47,4 +47,5 @@ Append(~objs, BelyiDBRead("7T6-[7,7,5]-7-7-511-g2.m"));
 
 s := objs[i];
 Gammas := BelyiDBToGammas(s);
-time BelyiMap(Gammas[1] : prec := prec, precNewton := precNewton);
+// time BelyiMap(Gammas[1] : prec := prec, precNewton := precNewton);
+time BelyiMap(Gammas[1] : prec := prec);
