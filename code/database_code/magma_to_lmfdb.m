@@ -171,7 +171,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   triples_cyc_str := CycleConverter(triples);
   str *:= Sprintf("\'triples_cyc\':%o,\n", triples_cyc_str);
   // aut_group
-    pass := Passport(s);
+    pass := PointedPassport(s);
     aut := AutomorphismGroup(pass[inds[1]]);
     for i in inds do
       assert aut eq AutomorphismGroup(pass[i]);
@@ -195,7 +195,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   orbit_embeddings := [];
   for i in inds do
     K := base_field_data[i][1];
-    assert DefiningPolynomial(K) eq DefiningPolynomial(Polredabs_db(K));
+    // assert DefiningPolynomial(K) eq DefiningPolynomial(Polredabs_db(K));
     v := base_field_data[i][2];
     conj := base_field_data[i][3];
     z := Eval(K.1, v, conj : prec := 16);
@@ -203,8 +203,8 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   end for;
   str *:= Sprintf("\'embeddings\':%o,\n", orbit_embeddings);
   // pass_size
-  assert #Passport(s) eq #PointedPassport(s);
-  str *:= Sprintf("\'pass_size\':%o,\n", #Passport(s));
+  // assert #Passport(s) eq #PointedPassport(s);
+  str *:= Sprintf("\'pass_size\':%o,\n", #PointedPassport(s));
   // curve and map
   X := BelyiCurves(s)[inds[1]];
   phi := BelyiMaps(s)[inds[1]];
@@ -290,6 +290,9 @@ end intrinsic;
 intrinsic BelyiDBToDictionary(s::BelyiDB) -> MonStgElt
   {}
   assert BelyiMapIsComputed(s);
+  // assert GaloisOrbitsSanityCheck(s);
+  assert IsPolredabsMatch(s);
+  assert EmbeddingsSanityCheck(s);
   str := "[\n{\n";
   /* passport dictionary */
   // plabel
@@ -323,8 +326,9 @@ intrinsic BelyiDBToDictionary(s::BelyiDB) -> MonStgElt
   max_degree := Max(degrees);
   str *:= Sprintf("\'maxdegbf\':%o,\n", max_degree);
   // pass_size
-  assert #Passport(s) eq #PointedPassport(s);
-  str *:= Sprintf("\'pass_size\':%o,\n", #Passport(s));
+  // assert #Passport(s) eq #PointedPassport(s);
+  // str *:= Sprintf("\'pass_size\':%o,\n", #Passport(s));
+  str *:= Sprintf("\'pass_size\':%o,\n", #PointedPassport(s));
   // num_orbits
   str *:= Sprintf("\'num_orbits\':%o\n", #GaloisOrbits(s));
   /* galmaps dictionaries */

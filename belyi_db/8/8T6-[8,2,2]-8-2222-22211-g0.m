@@ -1,7 +1,36 @@
 s := BelyiDBInitialize();
 
 /*
-Basic Information about the Passport
+Base Field Data
+*/
+
+base_field_data := [* *];
+K1<nu1> := RationalsAsNumberField();
+place1 := InfinitePlaces(K1)[1];
+conj1 := false;
+CC<I> := ComplexField(20);
+z1 := 0.00000000000000000000p20;
+base_field_data_1 := [* K1, place1, conj1, z1 *];
+Append(~base_field_data, base_field_data_1);
+s`BelyiDBBaseFieldData := base_field_data;
+
+/*
+Belyi Maps
+*/
+
+curves := [* *];
+maps := [* *];
+K1<nu1> := K1;
+X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
+KX1<x> := FunctionField(X1);
+phi1 := KX1!(-1/64/(x^8 - 2*x^6 + 5/4*x^4 - 1/4*x^2));
+Append(~curves, X1);
+Append(~maps, phi1);
+s`BelyiDBBelyiCurves := curves;
+s`BelyiDBBelyiMaps := maps;
+
+/*
+auto printing
 */
 
 s`BelyiDBName := "8T6-[8,2,2]-8-2222-22211-g0";
@@ -59,40 +88,24 @@ s`BelyiDBPointedPassport := [ PowerSequence(PermutationGroup<8 |
 [ 5, 4, 3, 2, 1, 8, 7, 6 ]
 ]
 ];
-
-/*
-Base Field Data
-*/
-
-base_field_data := [* *];
-K1<nu1> := RationalsAsNumberField();
-place1 := InfinitePlaces(K1)[1];
-conj1 := false;
-CC<I> := ComplexField(20);
-z1 := 0.00000000000000000000p20;
-base_field_data_1 := [* K1, place1, conj1, z1 *];
-Append(~base_field_data, base_field_data_1);
-s`BelyiDBBaseFieldData := base_field_data;
-
-/*
-Belyi Maps
-*/
-
-curves := [* *];
-maps := [* *];
-K := K1;
-X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
-KX1<x> := FunctionField(X1);
-phi1 := KX1!(-1/(64*x^8 - 128*x^6 + 80*x^4 - 16*x^2));
-Append(~curves, X1);
-Append(~maps, phi1);
-s`BelyiDBBelyiCurves := curves;
-s`BelyiDBBelyiMaps := maps;
-
-/*
-Exact Data
-*/
-
+s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<8 |  
+\[ 2, 3, 4, 5, 6, 7, 8, 1 ],
+\[ 6, 5, 4, 3, 2, 1, 8, 7 ]:
+ Order := 16 >)) |
+[ PowerSequence(PermutationGroup<8 |  
+\[ 2, 3, 4, 5, 6, 7, 8, 1 ],
+\[ 6, 5, 4, 3, 2, 1, 8, 7 ]:
+ Order := 16 >) |
+[ PermutationGroup<8 |  
+\[ 2, 3, 4, 5, 6, 7, 8, 1 ],
+\[ 6, 5, 4, 3, 2, 1, 8, 7 ]:
+ Order := 16 > |
+[ 2, 3, 4, 5, 6, 7, 8, 1 ],
+[ 4, 3, 2, 1, 8, 7, 6, 5 ],
+[ 5, 4, 3, 2, 1, 8, 7, 6 ]
+]
+]
+];
 
 /*
 Numerical Data

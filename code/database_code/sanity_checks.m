@@ -194,6 +194,41 @@ intrinsic BelyiLocalSanityCheck(s::BelyiDB, p::RngIntElt) -> BoolElt
   end if;
 end intrinsic;
 
+intrinsic BelyiLocalSanityCheck(s::BelyiDB) -> BoolElt
+  {BelyiMapSanityCheck...Localified...no lax!}
+  try
+    bool := BelyiLocalSanityCheck(s, 9721);
+    if bool then
+      return true;
+    else
+      return false;
+    end if;
+  catch e
+    print "p=9721 bad";
+    try
+      bool := BelyiLocalSanityCheck(s, 101);
+      if bool then
+        return true;
+      else
+        return false;
+      end if;
+    catch e
+      print "p=101 bad";
+      try
+        bool := BelyiLocalSanityCheck(s, 17);
+        if bool then
+          return true;
+        else
+          return false;
+        end if;
+      catch e
+        print "p=17 bad";
+        error "curve can't be reduced at all 3 primes!";
+      end try;
+    end try;
+  end try;
+end intrinsic;
+
 
 /* Galois orbits sanity checks */
 
@@ -230,11 +265,47 @@ intrinsic GaloisOrbitsSanityCheck(s::BelyiDB) -> BoolElt
   end if;
 end intrinsic;
 
-/*
+intrinsic EmbeddingsSanityCheck(s, inds : prec := 20) -> BoolElt
+  {}
+  eps := 10^(-prec/2);
+  l := BaseFieldData(s);
+  for i := 1 to #inds do
+    for j := i to #inds do
+      if i ne j then
+        if Abs(Eval(l[inds[i]]) - Eval(l[inds[j]])) le eps then
+          return false;
+        end if;
+      end if;
+    end for;
+  end for;
+  return true;
+end intrinsic;
+
 intrinsic EmbeddingsSanityCheck(s::BelyiDB) -> BoolElt
   {}
+  if BelyiMapIsComputed(s) then
+    if assigned s`BelyiDBGaloisOrbits then
+      t := s;
+    else
+      t := BelyiDBGaloisOrbitsComputer(s);
+    end if;
+    gal_orbits := GaloisOrbits(t);
+    pass := PointedPassport(t);
+    bools := [];
+    for i := 1 to #gal_orbits do
+      gal_orbit := gal_orbits[i];
+      inds := [Index(pass, triple) : triple in gal_orbit];
+      Append(~bools, EmbeddingsSanityCheck(s, inds));
+    end for;
+    if #SequenceToSet(bools) eq 1 and bools[1] eq true then
+      return true;
+    else
+      return false;
+    end if;
+  else
+    return false;
+  end if;
 end intrinsic;
-*/
 
 intrinsic GaloisOrbitsSanityCheck(d::RngIntElt) -> BoolElt
   {Check every BelyiDB of degree d.}
