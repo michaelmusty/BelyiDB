@@ -33,7 +33,7 @@ SetDebugOnError(true);
 
 
 i := 6;
-prec := 20;
+prec := 100;
 precNewton := 1000;
 
 objs := [];
@@ -47,5 +47,4 @@ Append(~objs, BelyiDBRead("7T6-[7,7,5]-7-7-511-g2.m"));
 
 s := objs[i];
 Gammas := BelyiDBToGammas(s);
-// time BelyiMap(Gammas[1] : prec := prec, precNewton := precNewton);
-time BelyiMap(Gammas[1] : prec := prec);
+time BelyiMap(Gammas[1] : prec := prec, precNewton := precNewton);
