@@ -5,6 +5,7 @@ intrinsic BelyiDBStatusReport(d::RngIntElt) -> Any
   maps_not_computed := [];
   bad_galois_orbits := [];
   failed_sanity := [];
+  failed_embedding := [];
   good := [];
   for i := 1 to #objs do
     s := objs[i];
@@ -12,10 +13,16 @@ intrinsic BelyiDBStatusReport(d::RngIntElt) -> Any
     if BelyiMapIsComputed(s) then
       bool1 := GaloisOrbitsSanityCheck(s);
       if bool1 then
-        bool2 := BelyiLocalSanityCheck(s, 101);
+        bool2 := BelyiLocalSanityCheck(s);
         if bool2 then
-          Append(~good, s);
-          vprintf BelyiDB : "good\n";
+          bool3 := EmbeddingsSanityCheck(s);
+          if bool3 then
+            Append(~good, s);
+            vprintf BelyiDB : "good\n";
+          else
+            Append(~failed_embedding, s);
+            vprintf BelyiDB : "failed embedding\n";
+          end if;
         else
           Append(~failed_sanity, s);
           vprintf BelyiDB : "failed sanity\n";
@@ -35,9 +42,10 @@ intrinsic BelyiDBStatusReport(d::RngIntElt) -> Any
   vprintf BelyiDB : "  #maps_not_computed = %o\n", #maps_not_computed;
   vprintf BelyiDB : "  #check_galois_orbits = %o\n", #bad_galois_orbits;
   vprintf BelyiDB : "  #failed_sanity = %o\n", #failed_sanity;
+  vprintf BelyiDB : "  #failed_embedding = %o\n", #failed_embedding;
   if #good eq #f and #maps_not_computed eq 0 and #bad_galois_orbits eq 0 and #failed_sanity eq 0 then
-    return true, maps_not_computed, bad_galois_orbits, failed_sanity;
+    return true, maps_not_computed, bad_galois_orbits, failed_sanity, failed_embedding;
   else
-    return false, maps_not_computed, bad_galois_orbits, failed_sanity;
+    return false, maps_not_computed, bad_galois_orbits, failed_sanity, failed_embedding;
   end if;
 end intrinsic;
