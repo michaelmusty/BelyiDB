@@ -230,6 +230,12 @@ intrinsic GaloisOrbitsSanityCheck(s::BelyiDB) -> BoolElt
   end if;
 end intrinsic;
 
+/*
+intrinsic EmbeddingsSanityCheck(s::BelyiDB) -> BoolElt
+  {}
+end intrinsic;
+*/
+
 intrinsic GaloisOrbitsSanityCheck(d::RngIntElt) -> BoolElt
   {Check every BelyiDB of degree d.}
   f := BelyiDBFilenames(d);

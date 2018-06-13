@@ -12,11 +12,31 @@ filenames cat:= BelyiDBFilenames(3);
 filenames cat:= BelyiDBFilenames(4);
 filenames cat:= BelyiDBFilenames(5);
 filenames cat:= BelyiDBFilenames(6);
-objs := [BelyiDBRead(filename) : filename in filenames];
+filenames cat:= BelyiDBFilenames(7);
+filenames cat:= BelyiDBFilenames(8);
+filenames cat:= BelyiDBFilenames(9);
 
+objs := [];
+for i := 1 to #filenames do
+	printf "reading %o: (%o out of %o)\n", filenames[i], i, #filenames;
+	s := BelyiDBRead(filenames[i]);
+	Append(~objs, s);
+end for;
+// objs := [BelyiDBRead(filename) : filename in filenames];
+
+computed_objs := [];
 for s in objs do
-	printf "%o:\n", Name(s);
-	bool1 := BelyiMapSanityCheck(s);
+	if BelyiMapIsComputed(s) then
+		t := BelyiDBGaloisOrbitsComputer(s : ignore := true);
+		Append(~computed_objs, t);
+	end if;
+end for;
+
+/*
+for i := 1 to #objs do
+	s := objs[i];
+	printf "%o: (%o out of %o)\n", Name(s), i, #objs;
+	bool1 := BelyiLocalSanityCheck(s, 101);
 	bool2 := GaloisOrbitsSanityCheck(s);
 	bool3 := IsPolredabsMatch(s);
 	printf "  %o\n", bool1;
@@ -24,19 +44,23 @@ for s in objs do
 	printf "  %o\n", bool3;
 	if bool1 then
 		t := Polredabs_db(s);
-		assert BelyiMapSanityCheck(t);
+		assert BelyiLocalSanityCheck(t, 101);
 		BelyiDBWrite(t);
 		t := BelyiDBRead(Filename(t));
-		BelyiMapSanityCheck(t);
+		BelyiLocalSanityCheck(t,101);
 	else
 		error "Belyi maps not computed";
 	end if;
 end for;
+*/
 
 // objs := [BelyiDBRead(filename) : filename in filenames];
 
 ola := [];
-for s in objs do
+// for s in objs do
+for i := 1 to #computed_objs do
+	printf "%o: (%o out of %o)\n", Name(s), i, #computed_objs;
+	s := computed_objs[i];
 	Append(~ola, BelyiDBToDictionary(s));
 end for;
 

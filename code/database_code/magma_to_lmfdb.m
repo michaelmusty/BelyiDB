@@ -260,6 +260,8 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   assert l[1] eq Degree(s);
   group_str := Sprintf("%oT%o", l[1], l[3][2]);
   str *:= Sprintf("\'group\':\'%o\',\n", group_str);
+  // group_num
+  str *:= Sprintf("\'group_num\':%o,\n", l[3][2]);
   // geomtype
   str *:= Sprintf("\'geomtype\':\'%o\',\n", ShortType(s));
   // abc

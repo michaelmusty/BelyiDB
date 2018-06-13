@@ -342,9 +342,9 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<6 |
 ]
 ]
 ];
-s`BelyiDBSanityCheckTiming := 1.110p15;
-s`BelyiDBLocalSanityCheckTiming := 0.100000000000000p15;
-s`BelyiDBLocalSanityCheckPrime := 830111;
+s`BelyiDBSanityCheckTiming := 1.13000000000000p15;
+s`BelyiDBLocalSanityCheckTiming := 0.110p15;
+s`BelyiDBLocalSanityCheckPrime := 101;
 
 /*
 Numerical Data
