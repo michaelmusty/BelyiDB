@@ -42,4 +42,6 @@ t1 := Cputime();
 
 printf "that took %o seconds", t1-t0;
 
+// for 550 passports on 061318 this took 298s to generate raw_data.py
+
 exit;
