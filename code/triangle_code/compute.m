@@ -12,11 +12,10 @@ intrinsic BelyiMapWrapper(s::BelyiDB) -> MonStgElt
 			BelyiDBWrite(t);
 			t := BelyiDBRead(Filename(t));
 			assert AllSanityChecks(t);
-			return Sprintf("%o : success!\n", Name(s));
+			return Sprintf("%o : success!\n", Filename(s));
 		catch e
-			printf Sprintf("%o:\n%o\n", Name(s), e);
+			return Sprintf("%o: failed\n", Filename(s));
 		end try;
-		return Sprintf("%o : Didn't work\n", Name(s));
 	else
 		return "Can only use wrapper with hyperbolic permutation triples.";
 	end if;
