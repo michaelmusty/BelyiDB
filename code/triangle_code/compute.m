@@ -4,7 +4,7 @@ intrinsic BelyiMapWrapper(s::BelyiDB) -> MonStgElt
 		t0 := Cputime();
 		Gammas := BelyiDBToGammas(s);
 		try
-			BelyiMap(Gammas : prec := 20);
+			BelyiMap(Gammas : prec := 25, precNewton := 5000);
 			t := GammasToBelyiDB(Gammas);
 			t1 := Cputime();
 			t`BelyiDBComputationTime := t1-t0;

@@ -8,7 +8,8 @@ intrinsic BelyiDBGenerateName(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
   G := sub<Sym(d)|sigma>;
   assert IsTransitive(G);
   a,b,c := Explode([Order(sigma[1]), Order(sigma[2]), Order(sigma[3])]);
-  if (a lt 10) and (b lt 10) and (c lt 10) then
+  // if (a lt 10) and (b lt 10) and (c lt 10) then
+  if d lt 10 then
     g,d_test := TransitiveGroupIdentification(G);
     assert d eq d_test;
     name := Sprintf("%oT%o-[%o,%o,%o]-", d, g, a, b, c);
