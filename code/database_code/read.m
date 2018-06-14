@@ -202,3 +202,15 @@ intrinsic BelyiDBGet(d::RngIntElt, genus::RngIntElt : only_hyperbolic := false, 
   return_filenames := BelyiDBGetFilenames(d, genus : only_hyperbolic := only_hyperbolic, only_nonhyperbolic := only_nonhyperbolic);
   return [ BelyiDBRead(f) : f in return_filenames ];
 end intrinsic;
+
+intrinsic BelyiDBGetNotComputed(d::RngIntElt, genus::RngIntElt : only_hyperbolic := false, only_nonhyperbolic := false) -> Any
+  {}
+  objs := BelyiDBGet(d, genus : only_hyperbolic := only_hyperbolic, only_nonhyperbolic := only_nonhyperbolic);
+  not_computed := [];
+  for s in objs do
+    if not BelyiMapIsComputed(s) then
+      Append(~not_computed, s);
+    end if;
+  end for;
+  return not_computed;
+end intrinsic;

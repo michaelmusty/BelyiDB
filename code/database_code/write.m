@@ -203,6 +203,7 @@ intrinsic BelyiDBText(s::BelyiDB) -> MonStgElt
   Append(~automatic_attrs, "BelyiDBPassport");
   Append(~automatic_attrs, "BelyiDBPointedPassport");
   Append(~automatic_attrs, "BelyiDBGaloisOrbits");
+  Append(~automatic_attrs, "BelyiDBComputationTime");
   Append(~automatic_attrs, "BelyiDBSanityCheckTiming");
   Append(~automatic_attrs, "BelyiDBLocalSanityCheckTiming");
   Append(~automatic_attrs, "BelyiDBLocalSanityCheckPrime");

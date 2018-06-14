@@ -1,6 +1,7 @@
 {
   triangle_code
   {
-		triangle_interpreter.m
+    triangle_interpreter.m
+    compute.m
   }
 }

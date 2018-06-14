@@ -30,6 +30,7 @@ declare attributes BelyiDB:
   BelyiDBBelyiCurves,
   BelyiDBBelyiMaps,
 // timing
+  BelyiDBComputationTime,
   BelyiDBSanityCheckTiming,
   BelyiDBLocalSanityCheckTiming,
   BelyiDBLocalSanityCheckPrime,
