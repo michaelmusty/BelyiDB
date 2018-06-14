@@ -1,3 +1,5 @@
+t0 := Cputime();
+
 SetColumns(0);
 
 AttachSpec("code/spec_database");
@@ -35,3 +37,9 @@ for i := 1 to #computed_objs do
 end for;
 
 Write("/Users/mjmusty/github/lmfdb/scripts/belyi/raw_data.py", Sprintf("ola = %o", ola) : Overwrite := true);
+
+t1 := Cputime();
+
+printf "that took %o seconds", t1-t0;
+
+exit;

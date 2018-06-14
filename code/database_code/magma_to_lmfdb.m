@@ -291,8 +291,8 @@ intrinsic BelyiDBToDictionary(s::BelyiDB) -> MonStgElt
   {}
   assert BelyiMapIsComputed(s);
   // assert GaloisOrbitsSanityCheck(s);
-  assert IsPolredabsMatch(s);
-  assert EmbeddingsSanityCheck(s);
+  // assert IsPolredabsMatch(s);
+  // assert EmbeddingsSanityCheck(s);
   str := "[\n{\n";
   /* passport dictionary */
   // plabel

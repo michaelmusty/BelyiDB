@@ -307,6 +307,23 @@ intrinsic EmbeddingsSanityCheck(s::BelyiDB) -> BoolElt
   end if;
 end intrinsic;
 
+intrinsic AllSanityChecks(s::BelyiDB) -> BoolElt
+  {}
+  is_computed := BelyiMapIsComputed(s);
+  gal_orb_sanity := GaloisOrbitsSanityCheck(s);
+  local_sanity := BelyiLocalSanityCheck(s);
+  embeddings_sanity := EmbeddingsSanityCheck(s);
+  is_polredabs := IsPolredabsMatch(s);
+  bool := is_computed and gal_orb_sanity and local_sanity and embeddings_sanity and is_polredabs;
+  vprintf BelyiDB : "\n%o:\n", Name(s);
+  vprintf BelyiDB : "  computed? %o\n", is_computed;
+  vprintf BelyiDB : "  Galois orbits? %o\n", gal_orb_sanity;
+  vprintf BelyiDB : "  local sanity? %o\n", local_sanity;
+  vprintf BelyiDB : "  embeddings_sanity? %o\n", embeddings_sanity;
+  vprintf BelyiDB : "  is polredabs? %o\n", is_polredabs;
+  return bool;
+end intrinsic;
+
 intrinsic GaloisOrbitsSanityCheck(d::RngIntElt) -> BoolElt
   {Check every BelyiDB of degree d.}
   f := BelyiDBFilenames(d);
