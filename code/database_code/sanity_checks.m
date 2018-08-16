@@ -68,16 +68,16 @@ intrinsic BelyiMapSanityCheck(s::BelyiDB : lax := false) -> BoolElt
   {BelyiMapSanityCheck...objectified.}
   if BelyiMapIsComputed(s) then
     t_start := Cputime();
-    pass := Passport(s);
+    ppass := PointedPassport(s);
     curves := BelyiCurves(s);
     maps := BelyiMaps(s);
-    test_cycle_structure := BelyiCycleStructure(pass[1]);
-    for i := 1 to #pass do
-      assert BelyiCycleStructure(pass[i]) eq test_cycle_structure;
+    test_cycle_structure := BelyiCycleStructure(ppass[1]);
+    for i := 1 to #ppass do
+      assert BelyiCycleStructure(ppass[i]) eq test_cycle_structure;
       // something is terribly wrong if this fails!
-      if not BelyiMapSanityCheck(pass[i], curves[i], maps[i] : lax := lax) then
+      if not BelyiMapSanityCheck(ppass[i], curves[i], maps[i] : lax := lax) then
         vprintf BelyiDB : "Sanity Check Failed:\n";
-        vprintf BelyiDB : "sigma = \n%o.\n", pass[1];
+        vprintf BelyiDB : "sigma = \n%o.\n", ppass[1];
         supp, mult := Support(Divisor(maps[i]));
         vprintf BelyiDB : "supp(phi) = \n%o\n%o.\n", supp, mult;
         supp1, mult1 := Support(Divisor(maps[i]-1));
@@ -85,7 +85,7 @@ intrinsic BelyiMapSanityCheck(s::BelyiDB : lax := false) -> BoolElt
         return false;
       end if;
     end for;
-    // if we make it here then we passed!
+    // if we make it here then we ppassed!
     t_end := Cputime();
     s`BelyiDBSanityCheckTiming := t_end - t_start;
     return true;
@@ -161,21 +161,21 @@ intrinsic BelyiLocalSanityCheck(s::BelyiDB, p::RngIntElt) -> BoolElt
   {BelyiMapSanityCheck...Localified...no lax!}
   if BelyiMapIsComputed(s) then
     t_start := Cputime();
-    pass := Passport(s);
+    ppass := Passport(s);
     curves := BelyiCurves(s);
     maps := BelyiMaps(s);
-    test_cycle_structure := BelyiCycleStructure(pass[1]);
-    for i := 1 to #pass do
-      assert BelyiCycleStructure(pass[i]) eq test_cycle_structure;
+    test_cycle_structure := BelyiCycleStructure(ppass[1]);
+    for i := 1 to #ppass do
+      assert BelyiCycleStructure(ppass[i]) eq test_cycle_structure;
       // something is terribly wrong if this fails!
       // reduce curve and Belyi map mod pp
       vprintf BelyiDB : "Reducing mod p = %o...", p;
       C, mapp := BelyiReduceCurve(curves[i], maps[i], p);
       vprintf BelyiDB : "done.\n";
       // sanity check
-      if not BelyiMapSanityCheck(pass[i], C, mapp) then
+      if not BelyiMapSanityCheck(ppass[i], C, mapp) then
         vprintf BelyiDB : "Local Sanity Check Failed:\n";
-        vprintf BelyiDB : "sigma = \n%o.\n", pass[1];
+        vprintf BelyiDB : "sigma = \n%o.\n", ppass[1];
         supp, mult := Support(Divisor(mapp));
         vprintf BelyiDB : "supp(phi) = \n%o\n%o.\n", supp, mult;
         supp1, mult1 := Support(Divisor(mapp-1));
@@ -184,7 +184,7 @@ intrinsic BelyiLocalSanityCheck(s::BelyiDB, p::RngIntElt) -> BoolElt
       end if;
     end for;
     vprintf BelyiDB : "Local sanity check setup done.\n";
-    // if we make it here then we passed!
+    // if we make it here then we ppassed!
     t_end := Cputime();
     s`BelyiDBLocalSanityCheckTiming := t_end - t_start;
     s`BelyiDBLocalSanityCheckPrime := p;
