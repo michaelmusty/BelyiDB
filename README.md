@@ -13,7 +13,7 @@ how to use BelyiDB.
 load "usage.m";
 ```
 
-## Built With
+## Built with
 
 * [Magma](http://magma.maths.usyd.edu.au/magma/)
 
