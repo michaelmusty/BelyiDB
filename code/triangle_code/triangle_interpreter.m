@@ -111,9 +111,10 @@ intrinsic GammasToBelyiDB(Gammas::SeqEnum[GrpPSL2]) -> BelyiDB
       delete s`BelyiDBRescalingFactors;
     end if;
   // Powser
-    assert assigned Gamma`TrianglePowserBases;
-    s`BelyiDBPowserIndat := Gamma`TrianglePowserBases[1][1];
-    s`BelyiDBPowserBases := Gamma`TrianglePowserBases[1][2][1];
+    if assigned Gamma`TrianglePowserBases then
+      s`BelyiDBPowserIndat := Gamma`TrianglePowserBases[1][1];
+      s`BelyiDBPowserBases := Gamma`TrianglePowserBases[1][2][1];
+    end if;
   // TODO assertions
   /* pick attributes to check are assigned
     attrs := GetAttributes(Type(s));
