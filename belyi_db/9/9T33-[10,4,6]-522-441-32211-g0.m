@@ -287,8 +287,8 @@ s`BelyiDBPassport := [ PowerSequence(PermutationGroup<9 |
 \[ 1, 2, 8, 7, 6, 9, 4, 3, 5 ]:
  Order := 181440 > |
 [ 2, 3, 4, 5, 1, 7, 6, 9, 8 ],
-[ 7, 8, 6, 3, 4, 5, 2, 1, 9 ],
-[ 6, 8, 7, 4, 5, 1, 3, 9, 2 ]
+[ 8, 6, 2, 3, 7, 4, 1, 5, 9 ],
+[ 8, 7, 3, 4, 6, 5, 2, 9, 1 ]
 ]
 ];
 s`BelyiDBPointedPassport := [ PowerSequence(PermutationGroup<9 |  
