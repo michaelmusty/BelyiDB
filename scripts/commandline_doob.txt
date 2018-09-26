@@ -1,0 +1,3 @@
+screen -S belran6
+/home/sarunas/tmp_magma/magma-2.21-12/magma-2.21-12
+load "r_g0_9.m";
