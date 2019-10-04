@@ -64,5 +64,8 @@ for f in g1_names do
     end if;
     Append(~curves_min, Xmin);
     Append(~maps_min, phi_min);
+    // TODO: put writing stuff here
   end for;
+  s`BelyiDBBelyiCurves := curves_min;
+  s`BelyiDBBelyiMaps := maps_min;
 end for;
