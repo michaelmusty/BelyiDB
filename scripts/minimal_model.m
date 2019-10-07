@@ -61,7 +61,7 @@ for f in g2_names do
     phi := maps[i];
     K := BaseRing(X);
     if Degree(K) eq 1 then
-      printf "%o defined over QQ; computing reduced minimal model\n", K;
+      print "X defined over QQ; computing reduced minimal model";
       X_QQ, phi_QQ := BaseChangeToRationals(X,phi);
       X_min, mp := ReducedMinimalWeierstrassModel(X_QQ);
       phi_min := Pushforward(mp,phi_QQ);
