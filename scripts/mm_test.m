@@ -13,7 +13,7 @@ for f in filenames do
 end for;
 done := [];
 something_changed := [];
-bad_base_change := [];
+measure_increased := [];
 // change to minimal model if possible
 /* for i := 1 to #g1_names do */
 for i := 1 to 45 do
@@ -51,7 +51,7 @@ for i := 1 to 45 do
   end if;
   measure_after := Measure(s);
   if measure_after gt measure_before then
-    Append(~bad_base_change, s);
+    Append(~measure_increased, s);
   end if;
   t1 := Cputime();
   printf "(%o out of %o) %o: %o s\n", i, #g1_names, Name(s), t1-t0;
