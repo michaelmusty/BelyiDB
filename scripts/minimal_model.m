@@ -1,5 +1,4 @@
 load "config.m";
-load "scripts.base_change.m";
 
 filenames := [];
 for i := 1 to 9 do

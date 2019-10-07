@@ -13,12 +13,14 @@ for f in filenames do
 end for;
 done := [];
 something_changed := [];
+bad_base_change := [];
 // change to minimal model if possible
 /* for i := 1 to #g1_names do */
 for i := 1 to 45 do
   t0 := Cputime();
   f := g1_names[i];
   s := BelyiDBRead(f);
+  measure_before := Measure(s);
   assert Genus(s) eq 1;
   maps := s`BelyiDBBelyiMaps;
   curves := s`BelyiDBBelyiCurves;
@@ -46,6 +48,10 @@ for i := 1 to 45 do
   Append(~done, s);
   if changed_at_least_one then
     Append(~something_changed, s);
+  end if;
+  measure_after := Measure(s);
+  if measure_after gt measure_before then
+    Append(~bad_base_change, s);
   end if;
   t1 := Cputime();
   printf "(%o out of %o) %o: %o s\n", i, #g1_names, Name(s), t1-t0;
