@@ -57,7 +57,8 @@ for i := 1 to 45 do
   printf "(%o out of %o) %o: %o s\n", i, #g1_names, Name(s), t1-t0;
 end for;
 
-s := something_changed[#something_changed]; // after
+i := 2;
+s := measure_increased[i]; // after
 t := BelyiDBRead(Filename(s)); // before
 
 BelyiCurves(t);
