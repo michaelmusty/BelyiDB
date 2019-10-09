@@ -40,7 +40,6 @@ for f in g1_names do
   // write edited file to the DB
   //BelyiDBWrite(s);
 end for;
-// TODO: finish genus 2 (and 3?)
 // pick out only g2 names
 g2_names := [];
 for f in filenames do
@@ -78,3 +77,4 @@ for f in g2_names do
   // write edited file to the DB
   //BelyiDBWrite(s);
 end for;
+// do genus 3 hyperelliptic, too?
