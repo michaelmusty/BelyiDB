@@ -31,7 +31,7 @@ for i := 1 to 45 do
     X := curves[i];
     phi := maps[i];
     K := BaseRing(X);
-    if ClassNumber(K) eq 1 then
+    if ClassNumber(K : Proof := "GRH") eq 1 then
       changed_at_least_one := true;
       /* printf "%o has class number 1; computing minimal model\n", K; */ 
       Xmin, mp := MinimalModel(X);
