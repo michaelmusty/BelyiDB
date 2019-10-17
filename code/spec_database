@@ -10,6 +10,7 @@
     sanity_checks.m
     polredabs.m
     galois_orbits.m
+    LLL.m
     modify.m
     magma_to_lmfdb.m
     status_report.m
