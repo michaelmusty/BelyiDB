@@ -6,21 +6,27 @@ KX<x,y> := Parent(phi);
 QQ := Rationals();
 phi0 := Numerator(phi);
 phioo := Denominator(phi);
-R<X,Y,Phi> := PolynomialRing(QQ,3);
+R<X,Y,Phi,v> := PolynomialRing(QQ,4);
 h := hom< KX -> R | [X,Y]>;
 curve_eqn := DefiningEquation(AffinePatch(C,1));
 h_curve := hom< Parent(curve_eqn) -> R | [X,Y]>;
 h_curve(curve_eqn);
-I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0)>;
-new_eqn := Basis(EliminationIdeal(I,1))[1];
+//I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0)>;
+I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0), v*h(phioo) - 1>;
+//new_eqn := Basis(EliminationIdeal(I,1))[1];
+new_eqn := Basis(EliminationIdeal(I,{Y,Phi}))[1];
 S<x,y> := PolynomialRing(QQ,2);
-h_plane := hom< Parent(new_eqn) -> S | [0,y,x] >;
+//h_plane := hom< Parent(new_eqn) -> S | [0,y,x] >;
+h_plane := hom< Parent(new_eqn) -> S | [0,y,x,0] >;
+/*
 C_red := Curve(AffineSpace(S),h_plane(new_eqn));
 irreds := IrreducibleComponents(C_red);
 C_plane := Curve(irreds[3]);
+*/
+C_plane := Curve(AffineSpace(S),h_plane(new_eqn));
 printf "New curve is %o\n", C_plane;
 KC_plane<x> := FunctionField(C_plane);
-printf "New Belyi map is x, with divisor\n";
+printf "New Belyi map is x, whose divisor has support\n";
 Support(Divisor(x));
 Support(Divisor(x-1));
 
