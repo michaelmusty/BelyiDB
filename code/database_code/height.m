@@ -31,6 +31,7 @@ end intrinsic;
 
 intrinsic Measure(s::BelyiDB) -> RngIntElt
   {}
+  error "deprecated use Height instead";
   if BelyiMapIsComputed(s) then
     curves := BelyiCurves(s);
     maps := BelyiMaps(s);

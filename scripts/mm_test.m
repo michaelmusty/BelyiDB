@@ -15,7 +15,6 @@ end for;
 done := [];
 something_changed := [];
 height_increased := [];
-measure_increased := [];
 // change to minimal model if possible
 /* for i := 1 to #g1_names do */
 for i := 1 to 45 do
@@ -23,7 +22,6 @@ for i := 1 to 45 do
   f := g1_names[i];
   s := BelyiDBRead(f);
   height_before := Height(s);
-  measure_before := Measure(s);
   assert Genus(s) eq 1;
   maps := s`BelyiDBBelyiMaps;
   curves := s`BelyiDBBelyiCurves;
@@ -53,10 +51,6 @@ for i := 1 to 45 do
     Append(~something_changed, s);
   end if;
   height_after := Height(s);
-  measure_after := Measure(s);
-  if measure_after gt measure_before then
-    Append(~measure_increased, s);
-  end if;
   if height_after gt height_before then
     Append(~height_increased, s);
   end if;
