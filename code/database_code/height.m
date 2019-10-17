@@ -1,3 +1,34 @@
+/* HEIGHTS */
+
+intrinsic Height(s::BelyiDB) -> RngIntElt
+  {}
+  if BelyiMapIsComputed(s) then
+    curves := BelyiCurves(s);
+    maps := BelyiMaps(s);
+    return &+[Height(curves[i]) + Height(maps[i]) : i in [1..#curves]];
+  else
+    return -1;
+  end if;
+end intrinsic;
+
+intrinsic Height(X::Crv) -> RngIntElt
+  {}
+  _<[x]> := Parent(DefiningPolynomials(X)[1]);
+  if Degree(BaseField(X)) eq 1 then
+   _<eta> := BaseField(X);
+  end if;
+  return #Sprintf("%o", DefiningEquations(X));
+end intrinsic;
+
+intrinsic Height(phi::FldFunFracSchElt) -> RngIntElt
+  {}
+  _<y> := Parent(phi);
+  _<x> := BaseRing(Parent(phi));
+  return #Sprintf("%o", phi);
+end intrinsic;
+
+/* MEASURES */
+
 intrinsic Measure(s::BelyiDB) -> RngIntElt
   {}
   if BelyiMapIsComputed(s) then

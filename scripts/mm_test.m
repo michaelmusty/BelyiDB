@@ -11,8 +11,10 @@ for f in filenames do
     Append(~g1_names,f);
   end if;
 end for;
+/* time g1_objs := [BelyiDBRead(f) : f in g1_names]; */
 done := [];
 something_changed := [];
+height_increased := [];
 measure_increased := [];
 // change to minimal model if possible
 /* for i := 1 to #g1_names do */
@@ -20,6 +22,7 @@ for i := 1 to 45 do
   t0 := Cputime();
   f := g1_names[i];
   s := BelyiDBRead(f);
+  height_before := Height(s);
   measure_before := Measure(s);
   assert Genus(s) eq 1;
   maps := s`BelyiDBBelyiMaps;
@@ -49,22 +52,33 @@ for i := 1 to 45 do
   if changed_at_least_one then
     Append(~something_changed, s);
   end if;
+  height_after := Height(s);
   measure_after := Measure(s);
   if measure_after gt measure_before then
     Append(~measure_increased, s);
+  end if;
+  if height_after gt height_before then
+    Append(~height_increased, s);
   end if;
   t1 := Cputime();
   printf "(%o out of %o) %o: %o s\n", i, #g1_names, Name(s), t1-t0;
 end for;
 
-i := 2;
-s := measure_increased[i]; // after
+i := 5;
+s := height_increased[i]; // after
 t := BelyiDBRead(Filename(s)); // before
 
 BelyiCurves(t);
 BelyiCurves(s);
 BelyiMaps(t);
 BelyiMaps(s);
+
+Height(t); // before
+X := BelyiCurves(t)[1];
+phi := BelyiMaps(t)[1];
+Height(s); // after
+Y := BelyiCurves(s)[1];
+psi := BelyiMaps(s)[1];
 
 // READ/WRITE testing
 // str := BelyiDBText(s);
