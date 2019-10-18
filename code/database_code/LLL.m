@@ -47,3 +47,21 @@ intrinsic PlaneEquation(phi::FldFunFracSchElt) -> Any
   // sanity check here? compare with divisor of phi. how to get sigma, though...?
   return C_plane;
 end intrinsic;
+
+intrinsic SpecializePolynomial(f::RngMPolElt, t::FldRatElt) -> Any
+  {}
+  S := Parent(f);
+  K := BaseRing(S);
+  assert Rank(S) eq 2;
+  R<y> := PolynomialRing(K);
+  h := hom< S -> R | [t,y] >;
+  return h(f);
+end intrinsic;
+
+intrinsic T2Norm(f::RUPolElt : Precision := 100) -> Any
+  {}
+  CC<I> := ComplexField(Precision);
+  roots := Roots(f,CC);
+  t2 := &+[AbsoluteValue(el)^2 : el in roots];
+  return t2;
+end intrinsic;
