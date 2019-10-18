@@ -6,3 +6,6 @@ F := DefiningEquation(C);
 vals := GetSpecializationValues();
 val := vals[2];
 f := SpecializePolynomial(F,val);
+K<nu> := NumberField(f);
+f := DefiningPolynomial(K);
+t2 := T2Norm(f);

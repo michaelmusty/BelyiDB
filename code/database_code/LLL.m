@@ -58,10 +58,16 @@ intrinsic SpecializePolynomial(f::RngMPolElt, t::FldRatElt) -> Any
   return h(f);
 end intrinsic;
 
-intrinsic T2Norm(f::RUPolElt : Precision := 100) -> Any
+intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
   {}
   CC<I> := ComplexField(Precision);
-  roots := Roots(f,CC);
+  roots_pairs := Roots(f,CC);
+  roots := [];
+  for el in roots_pairs do
+    for i := 1 to el[2] do
+      Append(~roots, el[1]);
+    end for;
+  end for;
   t2 := &+[AbsoluteValue(el)^2 : el in roots];
   return t2;
 end intrinsic;
