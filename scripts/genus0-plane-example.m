@@ -1,0 +1,12 @@
+load "config.m";
+s := BelyiDBGet(5,0)[12];
+phi := s`BelyiDBBelyiMaps[1];
+C := PlaneEquation(phi);
+C;
+print "Is C singular?";
+IsSingular(C);
+KC := FunctionField(C);
+C0 := Curve(KC);
+print "You sure C isn't singular?";
+IsSingular(C0);
+SingularPoints(C0);

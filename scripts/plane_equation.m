@@ -10,7 +10,6 @@ R<X,Y,Phi,v> := PolynomialRing(QQ,4);
 h := hom< KX -> R | [X,Y]>;
 curve_eqn := DefiningEquation(AffinePatch(C,1));
 h_curve := hom< Parent(curve_eqn) -> R | [X,Y]>;
-h_curve(curve_eqn);
 //I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0)>;
 I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0), v*h(phioo) - 1>;
 //new_eqn := Basis(EliminationIdeal(I,1))[1];
