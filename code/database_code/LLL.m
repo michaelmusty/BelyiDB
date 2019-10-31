@@ -1,6 +1,8 @@
 intrinsic GetSpecializationValues() -> Any
   {}
-  return SetToSequence(SequenceToSet(eval Read("scripts/c4c6toJ.m")));
+  vals :=  SetToSequence(SequenceToSet(eval Read("scripts/c4c6toJ.m")));
+  Remove(~vals,1); // first value is always 0
+  return vals;
 end intrinsic;
 
 intrinsic PlaneEquation(phi::FldFunFracSchElt) -> Any
@@ -14,7 +16,7 @@ intrinsic PlaneEquation(phi::FldFunFracSchElt) -> Any
     R<X,Phi,v> := PolynomialRing(K,3);
     h := hom< KC -> R | [X]>;
     // need last equation to avoid points where phioo = 0
-    I := ideal< R | h(phioo)*Phi - h(phi0), v*h(phioo) - 1>; 
+    I := ideal< R | h(phioo)*Phi - h(phi0), v*h(phioo) - 1>;
     // eliminate v to obtain plane equation
     basis := Basis(EliminationIdeal(I,{X,Phi}));
     assert #basis eq 1;
@@ -28,7 +30,7 @@ intrinsic PlaneEquation(phi::FldFunFracSchElt) -> Any
     curve_eqn := DefiningEquation(AffinePatch(C,1));
     h_curve := hom< Parent(curve_eqn) -> R | [X,Y] >;
     // need last equation to avoid points where phioo = 0
-    I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0), v*h(phioo) - 1>; 
+    I := ideal< R | h_curve(curve_eqn), h(phioo)*Phi - h(phi0), v*h(phioo) - 1>;
     // eliminate X and v to obtain plane equation
     basis := Basis(EliminationIdeal(I,{Y,Phi}));
     assert #basis eq 1;
@@ -81,4 +83,19 @@ intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
   K_abs := NumberField(f_abs);
   _, iota := IsIsomorphic(K,K_abs);
   return Eltseq((iota^-1)(K_abs.1));
+end intrinsic;
+
+intrinsic PolredFunctionFieldabs(F::RngMPolElt) -> Any
+  {}
+  as := [];
+  vals := GetSpecializationValues();
+  for val in vals do
+    Append(~as, PolredCoefficients(F,val));
+  end for;
+  a_polys := [];
+  for i := 1 to #as[1] do
+    a := Interpolation(vals,[el[i] : el in as]);
+  end for;
+  Append(~a_polys,a);
+  return a_polys;
 end intrinsic;
