@@ -22,8 +22,6 @@ K_abs;
 K;
 #cs;
 Polredabs : Maximal;
-ThetaSeriesIntegralLimited;
-ThetaSeriesIntegralLimited : Maximal;
 f_abs;
 cs;
 Evaluate(f_abs,cs[1]);
