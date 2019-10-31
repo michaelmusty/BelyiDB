@@ -71,3 +71,14 @@ intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
   t2 := &+[AbsoluteValue(el)^2 : el in roots];
   return t2;
 end intrinsic;
+
+intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
+  {}
+  f := SpecializePolynomial(F,val);
+  K<nu> := NumberField(f);
+  f2 := DefiningPolynomial(K);
+  f_abs, cs := Polredbestabs(f2);
+  K_abs := NumberField(f_abs);
+  _, iota := IsIsomorphic(K,K_abs);
+  return Eltseq((iota^-1)(K_abs.1));
+end intrinsic;
