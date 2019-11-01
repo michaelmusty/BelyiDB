@@ -74,6 +74,12 @@ intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
   return t2;
 end intrinsic;
 
+intrinsic T2BilinearForm(f::RngUPolElt, g::RngUPolElt : Precision := 100) -> Any
+  {}
+  prec := Precision;
+  return (1/2)*(T2Norm(f+g : Precision := prec) - T2Norm(f : Precision := prec) - T2Norm(g : Precision := prec));
+end intrinsic;
+
 intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
   {}
   f := SpecializePolynomial(F,val);

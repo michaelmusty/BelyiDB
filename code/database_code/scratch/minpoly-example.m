@@ -1,4 +1,4 @@
-load "code/database_code/example.m";
+load "code/database_code/scratch/example.m";
 QQ := Rationals();
 C;
 KC<x,y> := FunctionField(C);
@@ -10,7 +10,6 @@ Rk<Y> := PolynomialRing(k);
 F_func := Evaluate(F,[k.1,Y]);
 K_func := FunctionField(F_func);
 MinimalPolynomial(K_func.1);
-EvaluateCoefficients(F,[1/k.1]);
 min_y := MinimalPolynomial(K_func.1);
 min_y;
 cs := Coefficients(min_y);
