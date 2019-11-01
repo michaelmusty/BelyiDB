@@ -80,6 +80,19 @@ intrinsic T2BilinearForm(f::RngUPolElt, g::RngUPolElt : Precision := 100) -> Any
   return (1/2)*(T2Norm(f+g : Precision := prec) - T2Norm(f : Precision := prec) - T2Norm(g : Precision := prec));
 end intrinsic;
 
+intrinsic T2GramMatrix(basis::SeqEnum : Precision := 100) -> Any
+  {}
+  prec := Precision;
+  CC<I> := ComplexField(prec);
+  M := ZeroMatrix(CC, #basis, #basis);
+  for i := 1 to #basis do
+    for j := 1 to #basis do
+      M[i,j] := T2BilinearForm(basis[i], basis[j] : Precision := prec);
+    end for;
+  end for;
+  return M;
+end intrinsic;
+
 intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
   {}
   f := SpecializePolynomial(F,val);
