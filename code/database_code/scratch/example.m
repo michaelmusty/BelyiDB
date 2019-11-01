@@ -3,6 +3,7 @@ s := BelyiDBGet(4,1)[2];
 phi := BelyiMaps(s)[1];
 C := PlaneEquation(phi);
 F := DefiningEquation(C);
+// testing out specialization
 vals := GetSpecializationValues();
 val := vals[1];
 f := SpecializePolynomial(F,val);
@@ -14,7 +15,7 @@ t2 := T2Norm(f);
 QQ := Rationals();
 KC<x,y> := FunctionField(C);
 // make polynomial over rational function field
-k := RationalFunctionField(QQ);
+k<t> := RationalFunctionField(QQ);
 Rk<Y> := PolynomialRing(k);
 F_func := Evaluate(F,[k.1,Y]);
 K_func := FunctionField(F_func);
@@ -25,8 +26,10 @@ cs := Coefficients(min_y);
 cs_new := [Evaluate(el,1/k.1) : el in cs];
 min_y_new := &+[cs_new[i]*Y^(i-1) : i in [1..#cs_new]];
 F_func_new := 2^20*min_y_new;
+//F_func_new := 2^20/3^12*min_y_new;
 //R<Y> := Parent(F_new);
 F_func_new := Evaluate(F_func_new,Y/(2^5));
+//F_func_new := Evaluate(F_func_new,3^3*Y/(2^5));
 printf "rescaled minpoly is %o\n", F_func_new;
 
 // make new poly and curve
