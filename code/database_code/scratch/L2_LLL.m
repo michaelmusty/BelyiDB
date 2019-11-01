@@ -1,4 +1,4 @@
-load "scripts/plane_equation.m";
+load "code/database_code/scratch/plane_equation.m";
 F := DefiningEquation(C_plane);
 vals := GetSpecializationValues();
 val := vals[2];

@@ -17,3 +17,7 @@ cs := Coefficients(min_y);
 cs_new := [Evaluate(el,1/k.1) : el in cs];
 min_y_new := &+[cs_new[i]*Y^(i-1) : i in [1..#cs_new]];
 min_y_new;
+F_new := 2^20*min_y_new;
+Evaluate(F_new,[Y/2^5]);
+R<Y> := Parent(F_new);
+F_new := Evaluate(F_new,Y/2^5);
