@@ -63,6 +63,10 @@ end intrinsic;
 // should really define T2 of an element, which is the T2 of its characteristic (not minimal poly)
 // so for instance, if number field has deg 4, but alpha is in quadratic subfield, should
 // compute T2 of minpoly squared
+// LLLWithGram() then ShortestVectors()
+intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
+  {}
+end intrinsic;
 
 intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
   {}
