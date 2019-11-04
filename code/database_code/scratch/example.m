@@ -38,7 +38,12 @@ F_new := OneVarTwoVarPoly(F_func_new, R);
 C_new := Curve(AffineSpace(R), F_new);
 KC_new<x_new, y_new> := FunctionField(C_new);
 // Belyi map is now 1/x_new
-
+/*
 S0<X> := PolynomialRing(QQ);
 S<Y> := PolynomialRing(S0);
 h := hom< R -> S | [S0.1, S.1] >;
+*/
+
+my_vals := vals[1..3];
+M := PolredGramMatrix(F_new, my_vals);
+M_LLL, T, r := LLLGram(M);

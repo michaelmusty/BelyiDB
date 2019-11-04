@@ -62,7 +62,8 @@ end intrinsic;
 // should really define T2 of an element, which is the T2 of its characteristic (not minimal poly)
 // so for instance, if number field has deg 4, but alpha is in quadratic subfield, should
 // compute T2 of minpoly squared
-// LLLWithGram() then ShortestVectors()
+// LLLGram() then ShortestVectors()
+// There is also the intrinsic LatticeWithGram, but it require the matrix to be positive definite
 intrinsic T2Norm(a::FldNumElt : Precision := 100) -> Any
   {}
   prec := Precision;
@@ -87,28 +88,62 @@ intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
   return t2;
 end intrinsic;
 
+/*
 intrinsic T2BilinearForm(f::RngUPolElt, g::RngUPolElt : Precision := 100) -> Any
   {}
   prec := Precision;
   return (T2Norm(f+g : Precision := prec) - T2Norm(f : Precision := prec) - T2Norm(g : Precision := prec));
 end intrinsic;
+*/
+
+intrinsic T2BilinearForm(a::FldNumElt, b::FldNumElt : Precision := 100) -> Any
+  {}
+  prec := Precision;
+  return (T2Norm(a+b : Precision := prec) - T2Norm(a : Precision := prec) - T2Norm(b : Precision := prec));
+end intrinsic;
+
 
 intrinsic T2GramMatrix(basis::SeqEnum : Precision := 100) -> Any
   {}
   prec := Precision;
-  CC<I> := ComplexField(prec);
-  M := ZeroMatrix(CC, #basis, #basis);
+  //CC<I> := ComplexField(prec);
+  RR := RealField(prec);
+  M := ZeroMatrix(RR, #basis, #basis);
   for i := 1 to #basis do
-    for j := 1 to #basis do
+    for j := i to #basis do
       M[i,j] := T2BilinearForm(basis[i], basis[j] : Precision := prec);
     end for;
   end for;
+  // fill in tranposed entries to make symmetric
+  /*
+  for i := 1 to #basis do
+    for j := 1 to i-1 do
+      M[i,j] := M[j,i];
+    end for;
+  end for;
+  */
+  M := M + Transpose(M);
   return M;
 end intrinsic;
 
-intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum) -> Any
+intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum : Precision := 100) -> Any
   {}
-
+  prec := Precision;
+  //CC<I> := ComplexField(prec);
+  RR := RealField(prec);
+  mons := Monomials(F);
+  M := ZeroMatrix(RR, #mons, #mons);
+  for val in vals do
+    F_spec := SpecializePolynomial(F,val);
+    R<y> := Parent(F_spec);
+    K<nu> := NumberField(F_spec);
+    mons_spec := [SpecializePolynomial(el, val) : el in mons];
+    h := hom< R -> K | nu>;
+    mons_val := [h(el) : el in mons_spec];
+    M_val := T2GramMatrix(mons_val : Precision := prec);
+    M +:= M_val;
+  end for;
+  return M;
 end intrinsic;
 
 intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
