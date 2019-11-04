@@ -15,8 +15,7 @@ intrinsic PlaneEquation(phi::FldFunFracSchElt) -> Any
   if Genus(C) eq 0 then // defined on PP1, so no curve equation
     R<X,Phi,v> := PolynomialRing(K,3);
     h := hom< KC -> R | [X]>;
-    // need last equation to avoid points where phioo = 0
-    I := ideal< R | h(phioo)*Phi - h(phi0), v*h(phioo) - 1>;
+    I := ideal< R | h(phioo)*Phi - h(phi0), v*h(phioo) - 1>; // need last equation to avoid points where phioo = 0
     // eliminate v to obtain plane equation
     basis := Basis(EliminationIdeal(I,{X,Phi}));
     assert #basis eq 1;
@@ -64,8 +63,14 @@ end intrinsic;
 // so for instance, if number field has deg 4, but alpha is in quadratic subfield, should
 // compute T2 of minpoly squared
 // LLLWithGram() then ShortestVectors()
-intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
+intrinsic T2Norm(a::FldNumElt : Precision := 100) -> Any
   {}
+  prec := Precision;
+  K<nu> := Parent(a);
+  f := MinimalPolynomial(a);
+  t2 := T2Norm(f : Precision := prec);
+  t2 := (AbsoluteDegree(K)/Degree(f))*t2;
+  return t2;
 end intrinsic;
 
 intrinsic T2Norm(f::RngUPolElt : Precision := 100) -> Any
@@ -85,7 +90,7 @@ end intrinsic;
 intrinsic T2BilinearForm(f::RngUPolElt, g::RngUPolElt : Precision := 100) -> Any
   {}
   prec := Precision;
-  return (1/2)*(T2Norm(f+g : Precision := prec) - T2Norm(f : Precision := prec) - T2Norm(g : Precision := prec));
+  return (T2Norm(f+g : Precision := prec) - T2Norm(f : Precision := prec) - T2Norm(g : Precision := prec));
 end intrinsic;
 
 intrinsic T2GramMatrix(basis::SeqEnum : Precision := 100) -> Any
@@ -99,6 +104,11 @@ intrinsic T2GramMatrix(basis::SeqEnum : Precision := 100) -> Any
     end for;
   end for;
   return M;
+end intrinsic;
+
+intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum) -> Any
+  {}
+
 end intrinsic;
 
 intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
