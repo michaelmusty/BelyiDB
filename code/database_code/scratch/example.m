@@ -23,12 +23,12 @@ min_y := MinimalPolynomial(K_func.1);
 printf "minimal polynomial of y is %o\n", min_y;
 // rescale minpoly to have ZZ coeffs
 cs := Coefficients(min_y);
-cs_new := [Evaluate(el,1/k.1) : el in cs];
-min_y_new := &+[cs_new[i]*Y^(i-1) : i in [1..#cs_new]];
-F_func_new := 2^20*min_y_new;
+//cs_new := [Evaluate(el,1/k.1) : el in cs];
+//min_y_new := &+[cs_new[i]*Y^(i-1) : i in [1..#cs_new]];
+F_func_new := 2^20*t^4*min_y;
 //F_func_new := 2^20/3^12*min_y_new;
 //R<Y> := Parent(F_new);
-F_func_new := Evaluate(F_func_new,Y/(2^5));
+F_func_new := Evaluate(F_func_new,Y/(2^5*t));
 //F_func_new := Evaluate(F_func_new,3^3*Y/(2^5));
 printf "rescaled minpoly is %o\n", F_func_new;
 
