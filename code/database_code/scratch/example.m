@@ -44,8 +44,8 @@ S<Y> := PolynomialRing(S0);
 h := hom< R -> S | [S0.1, S.1] >;
 */
 
-my_vals := vals[1..3];
-M := PolredGramMatrix(F_new, my_vals);
+my_vals := vals[1..5];
+time M := PolredGramMatrix(F_new, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
 ShortestVectors(L);
