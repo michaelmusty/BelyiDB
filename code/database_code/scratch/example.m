@@ -50,3 +50,5 @@ printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
 ShortestVectors(L);
 M_LLL, T, r := LLLGram(M);
+
+// can intersect lattices using L meet M
