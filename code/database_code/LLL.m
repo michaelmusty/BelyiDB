@@ -115,14 +115,12 @@ intrinsic T2GramMatrix(basis::SeqEnum : Precision := 100) -> Any
     end for;
   end for;
   // fill in tranposed entries to make symmetric
-  /*
   for i := 1 to #basis do
     for j := 1 to i-1 do
       M[i,j] := M[j,i];
     end for;
   end for;
-  */
-  M := M + Transpose(M);
+  //M := M + Transpose(M);
   return M;
 end intrinsic;
 
