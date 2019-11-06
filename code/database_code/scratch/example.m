@@ -5,11 +5,18 @@ C := PlaneEquation(phi);
 F := DefiningEquation(C);
 // testing out specialization
 vals := GetSpecializationValues();
+/*
+QQ := Rationals();
+vals := [7,23,5,14,-6,9,31];
+vals := [QQ!el : el in vals];
+*/
 val := vals[1];
+/*
 f := SpecializePolynomial(F,val);
 K<nu> := NumberField(f);
 f := DefiningPolynomial(K);
 t2 := T2Norm(f);
+*/
 
 // improving minpoly
 QQ := Rationals();
