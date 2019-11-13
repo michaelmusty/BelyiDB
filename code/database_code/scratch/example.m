@@ -36,6 +36,7 @@ F_func_new := 2^20*t^4*min_y;
 //F_func_new := 2^20/3^12*min_y_new;
 //R<Y> := Parent(F_new);
 F_func_new := Evaluate(F_func_new,Y/(2^5*t));
+F_func_new := Evaluate(F_func_new/3^4, 3*Y);
 //F_func_new := Evaluate(F_func_new,3^3*Y/(2^5));
 printf "rescaled minpoly is %o\n", F_func_new;
 
@@ -51,11 +52,12 @@ S<Y> := PolynomialRing(S0);
 h := hom< R -> S | [S0.1, S.1] >;
 */
 
-my_vals := vals[1..5];
+my_vals := vals[1..10];
 time M := PolredGramMatrix(F_new, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
-ShortestVectors(L);
-M_LLL, T, r := LLLGram(M);
+shortest := ShortestVectors(L);
+norm := Norm(shortest[1]);
+//M_LLL, T, r := LLLGram(M);
 
 // can intersect lattices using L meet M

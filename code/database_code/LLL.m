@@ -130,6 +130,7 @@ intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum : Precision := 100) -> A
   //CC<I> := ComplexField(prec);
   RR := RealField(prec);
   mons := Monomials(F);
+  Remove(~mons,#mons); // remove leading term, otherwise matrix will have nontrivial kernel
   M := ZeroMatrix(RR, #mons, #mons);
   for val in vals do
     F_spec := SpecializePolynomial(F,val);
