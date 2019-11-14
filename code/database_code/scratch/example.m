@@ -58,6 +58,18 @@ printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
 shortest := ShortestVectors(L);
 norm := Norm(shortest[1]);
-//M_LLL, T, r := LLLGram(M);
+// try to find short vectors beyond trivial answer
+for i := 1 to 1000 do
+  shorties := ShortVectors(L,Floor(i^2*norm), Ceiling((i+1)^2*norm));
+  if #shorties gt 2 then
+    print "Success!";
+    print i;
+    print shorties;
+    break i;
+  end if;
+end for;
 
+
+
+//M_LLL, T, r := LLLGram(M);
 // can intersect lattices using L meet M
