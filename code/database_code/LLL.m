@@ -128,13 +128,23 @@ intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum : Precision := 100) -> A
   {}
   prec := Precision;
   RR := RealField(prec);
+  S<X,Y> := Parent(F);
+  d := Degree(F,Y);
   mons := Monomials(F);
-  //Remove(~mons,#mons); // remove leading term, otherwise matrix will have nontrivial kernel
+  ind := Index(mons, Y^d);
+  Remove(~mons,ind); // remove leading term, otherwise matrix will have nontrivial kernel
+  //FIXME: probably doesn't work when Degree(F,Y) = 1
   M := ZeroMatrix(RR, #mons, #mons);
   for val in vals do
     F_spec := SpecializePolynomial(F,val);
     R<y> := Parent(F_spec);
-    K<nu> := NumberField(F_spec);
+    if Degree(F_spec) eq 1 then
+      K := RationalsAsNumberField();
+      cs := Coefficients(F_spec);
+      nu := -cs[1]/cs[2];
+    else
+      K<nu> := NumberField(F_spec);
+    end if;
     mons_spec := [SpecializePolynomial(el, val) : el in mons];
     h := hom< R -> K | nu>;
     mons_val := [h(el) : el in mons_spec];

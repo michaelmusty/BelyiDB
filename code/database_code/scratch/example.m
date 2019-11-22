@@ -56,6 +56,7 @@ my_vals := vals[1..10];
 time M := PolredGramMatrix(F_new, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
+/*
 shortest := ShortestVectors(L);
 norm := Norm(shortest[1]);
 // try to find short vectors beyond trivial answer
@@ -68,7 +69,7 @@ for i := 1 to 1000 do
     break i;
   end if;
 end for;
-
+*/
 
 
 //M_LLL, T, r := LLLGram(M);
