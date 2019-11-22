@@ -124,15 +124,17 @@ intrinsic T2GramMatrix(basis::SeqEnum : Precision := 100) -> Any
   return M;
 end intrinsic;
 
-intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum : Precision := 100) -> Any
+intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum : Precision := 100, mons := []) -> Any
   {}
   prec := Precision;
   RR := RealField(prec);
   S<X,Y> := Parent(F);
   d := Degree(F,Y);
-  mons := Monomials(F);
-  ind := Index(mons, Y^d);
-  Remove(~mons,ind); // remove leading term, otherwise matrix will have nontrivial kernel
+  if mons eq [] then
+    mons := Monomials(F);
+    ind := Index(mons, Y^d);
+    Remove(~mons,ind); // remove leading term, otherwise matrix will have nontrivial kernel
+  end if;
   //FIXME: probably doesn't work when Degree(F,Y) = 1
   M := ZeroMatrix(RR, #mons, #mons);
   for val in vals do
