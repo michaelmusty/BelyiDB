@@ -45,7 +45,6 @@ R<X,Y> := Parent(F0);
 F := OneVarTwoVarPoly(F_func_new, R);
 C := Curve(AffineSpace(R), F);
 KC<x,y> := FunctionField(C);
-// Belyi map is now 1/x_new
 /*
 S0<X> := PolynomialRing(QQ);
 S<Y> := PolynomialRing(S0);
@@ -53,10 +52,17 @@ h := hom< R -> S | [S0.1, S.1] >;
 */
 
 my_vals := vals[1..10];
-time M := PolredGramMatrix(F_new, my_vals);
+time M := PolredGramMatrix(F, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
 L_red, basis := LLL(L);
+
+val := vals[1];
+F_spec := SpecializePolynomial(F,val);
+K<nu> := NumberField(F_spec);
+OK := Integers(K);
+h := hom< KC -> K | [val,nu]>;
+
 /*
 shortest := ShortestVectors(L);
 norm := Norm(shortest[1]);
