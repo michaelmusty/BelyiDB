@@ -61,6 +61,8 @@ val := vals[1];
 F_spec := SpecializePolynomial(F,val);
 K<nu> := NumberField(F_spec);
 OK := Integers(K);
+basis_OK := Basis(OK);
+basis_K := [K!el : el in basis_OK];
 h := hom< KC -> K | [val,nu]>;
 
 /*
