@@ -1,8 +1,8 @@
 load "config.m";
 s := BelyiDBGet(4,1)[2];
 phi := BelyiMaps(s)[1];
-C := PlaneEquation(phi);
-F := DefiningEquation(C);
+C0 := PlaneEquation(phi);
+F0 := DefiningEquation(C0);
 // testing out specialization
 vals := GetSpecializationValues();
 /*
@@ -12,7 +12,7 @@ vals := [QQ!el : el in vals];
 */
 val := vals[1];
 /*
-f := SpecializePolynomial(F,val);
+f := SpecializePolynomial(F0,val);
 K<nu> := NumberField(f);
 f := DefiningPolynomial(K);
 t2 := T2Norm(f);
@@ -20,11 +20,11 @@ t2 := T2Norm(f);
 
 // improving minpoly
 QQ := Rationals();
-KC<x,y> := FunctionField(C);
+KC0<x0,y0> := FunctionField(C0);
 // make polynomial over rational function field
 k<t> := RationalFunctionField(QQ);
 Rk<Y> := PolynomialRing(k);
-F_func := Evaluate(F,[k.1,Y]);
+F_func := Evaluate(F0,[k.1,Y]);
 K_func := FunctionField(F_func);
 min_y := MinimalPolynomial(K_func.1);
 printf "minimal polynomial of y is %o\n", min_y;
@@ -41,10 +41,10 @@ F_func_new := Evaluate(F_func_new/3^4, 3*Y);
 printf "rescaled minpoly is %o\n", F_func_new;
 
 // make new poly and curve
-R<X,Y> := Parent(F);
-F_new := OneVarTwoVarPoly(F_func_new, R);
-C_new := Curve(AffineSpace(R), F_new);
-KC_new<x_new, y_new> := FunctionField(C_new);
+R<X,Y> := Parent(F0);
+F := OneVarTwoVarPoly(F_func_new, R);
+C := Curve(AffineSpace(R), F);
+KC<x,y> := FunctionField(C);
 // Belyi map is now 1/x_new
 /*
 S0<X> := PolynomialRing(QQ);
@@ -56,6 +56,7 @@ my_vals := vals[1..10];
 time M := PolredGramMatrix(F_new, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
+L_red, basis := LLL(L);
 /*
 shortest := ShortestVectors(L);
 norm := Norm(shortest[1]);
@@ -71,6 +72,4 @@ for i := 1 to 1000 do
 end for;
 */
 
-
-//M_LLL, T, r := LLLGram(M);
 // can intersect lattices using L meet M
