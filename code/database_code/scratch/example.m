@@ -52,7 +52,7 @@ h := hom< R -> S | [S0.1, S.1] >;
 */
 
 my_vals := vals[1..10];
-time M := PolredGramMatrix(F, my_vals);
+time M, mons := PolredGramMatrix(F, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
 L_red, basis := LLL(L);

@@ -153,7 +153,7 @@ intrinsic PolredGramMatrix(F::RngMPolElt, vals::SeqEnum : Precision := 100, mons
     M_val := T2GramMatrix(mons_val : Precision := prec);
     M +:= M_val;
   end for;
-  return M;
+  return M, mons;
 end intrinsic;
 
 intrinsic PolredCoefficients(F::RngMPolElt, val::FldRatElt) -> Any
