@@ -51,12 +51,26 @@ S<Y> := PolynomialRing(S0);
 h := hom< R -> S | [S0.1, S.1] >;
 */
 
-my_vals := vals[1..10];
+my_vals := vals[1..5];
 time M, mons := PolredGramMatrix(F, my_vals);
 printf "Is positive definite? %o\n", IsPositiveDefinite(M);
 L := LatticeWithGram(M);
 L_red, basis := LLL(L);
+// make new y
+print basis[4];
+cs := Eltseq(basis[4]);
+Y_new := &+[cs[i]*mons[i] : i in [1..#mons]];
+//y_new := Evaluate(Y_new, [KC.1,KC.2]);
 
+// compute minpoly of new y
+Rk<Y> := PolynomialRing(k);
+F_func_new := Evaluate(F,[k.1,Y]);
+K_func_new := FunctionField(F_func_new);
+y_new := Evaluate(Y_new, [k.1, K_func_new.1]);
+MinimalPolynomial(y_new);
+
+// trying to pullback ring of integers: "saturate"
+/*
 val := vals[1];
 F_spec := SpecializePolynomial(F,val);
 K<nu> := NumberField(F_spec);
@@ -64,6 +78,7 @@ OK := Integers(K);
 basis_OK := Basis(OK);
 basis_K := [K!el : el in basis_OK];
 h := hom< KC -> K | [val,nu]>;
+*/
 
 /*
 shortest := ShortestVectors(L);
