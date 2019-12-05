@@ -67,7 +67,8 @@ F_func_new := Evaluate(F,[k.1,Y]);
 K_func_new := FunctionField(F_func_new);
 y_new := Evaluate(Y_new, [k.1, K_func_new.1]);
 MinimalPolynomial(y_new);
-R<U,V> := Parent(F0);
+R<U,V> := Parent(F);
+h_poly := hom< 
 
 // trying to pullback ring of integers: "saturate"
 /*
