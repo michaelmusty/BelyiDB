@@ -57,6 +57,21 @@ intrinsic Polredbest(f::RngUPolElt) -> RngUPolElt
   return Parent(f) ! ss;
 end intrinsic;
 
+intrinsic Polredbestabs(f::RngUPolElt) -> RngUPolElt, SeqEnum, BoolElt
+  { A smallest generating polynomial of the number field, using pari.  First polredbest, then polredabs.}
+
+  fbest, fbest_root := Polredabs(f : Best := true);
+  fredabs, fredabs_root, bl := Polredabs(fbest);
+
+  K := NumberField(f);
+  Kbest := NumberField(fbest);
+  iotabest := hom<K -> Kbest | fbest_root>;
+  Kredabs := NumberField(fredabs);
+  iotaredabs := hom<Kbest -> Kredabs | fredabs_root>;
+  iota := iotabest*iotaredabs;  // functional composition is backwards in Magma, for some reason
+  return fredabs, Eltseq(iota(K.1)), bl;
+end intrinsic;
+
 intrinsic Polredabs_db(f::RngUPolElt) -> RngUPolElt
   {first do best...twice then do abs.}
   return Polred(Polredbest(Polredbest(f)));
