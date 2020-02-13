@@ -16,7 +16,7 @@ function GeneratePortraitDirectoriesByDegree(d);
   return returnText;
 end function;
 
-function DrawPortraitByDegree(d);
+function DrawPortraitsByDegree(d);
   //load "config.m";
   names := BelyiDBFilenames(d);
   for name_m in names do
@@ -27,10 +27,10 @@ function DrawPortraitByDegree(d);
       gal_orbs := s`BelyiDBGaloisOrbits;
       for orb in gal_orbs do
         sigma := orb[1];
-        printf "Making TeX file for orbit represented by %o\n", sigma;
-        System(Sprintf("mkdir -p ~/github/BelyiDB/portraits/%o/%o/%o", d, name, sigma));
-        Gamma := TriangleSubgroup(sigma);
         sigma_str := BelyiDBDeleteLineBreaks(Sprint(sigma));
+        printf "Making TeX file for orbit represented by %o\n", sigma_str;
+        //System(Sprintf("mkdir -p ~/github/BelyiDB/portraits/%o/%o/%o", d, name, sigma_str));
+        Gamma := TriangleSubgroup(sigma);
         savePath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.tex", d, name, sigma_str);
         TriangleDrawDessinToFile(Gamma : filename := savePath);
       end for;
