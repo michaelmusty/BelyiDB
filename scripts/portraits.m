@@ -16,7 +16,7 @@ function GeneratePortraitDirectoriesByDegree(d);
   return returnText;
 end function;
 
-function DrawPortraitsByDegree(d);
+function DrawPortraitsByDegree(d : compile := true);
   //load "config.m";
   names := BelyiDBFilenames(d);
   for name_m in names do
@@ -33,8 +33,13 @@ function DrawPortraitsByDegree(d);
         //System(Sprintf("mkdir -p ~/github/BelyiDB/portraits/%o/%o/%o", d, name, sigma_str));
         Gamma := TriangleSubgroup(sigma);
         savePath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.tex", d, name, IntegerToLetter(i));
-        TriangleDrawDessinToFile(Gamma : filename := savePath);
+        TriangleDrawDessinToFile(Gamma : filename := savePath, includeLegend := false);
         Write(savePath, "\n% "*sigma_str : Overwrite := false);
+        if compile then
+          // doesn't seem to be working...some problem with PDF-Crop
+          //System(Sprintf("pdflatex --shell-escape %o", savePath));           
+          System(Sprintf("xelatex %o", savePath)); 
+        end if;
       end for;
     end if;
   end for;
