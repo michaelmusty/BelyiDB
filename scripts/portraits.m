@@ -25,14 +25,16 @@ function DrawPortraitsByDegree(d);
     s := BelyiDBRead(name_m);
     if (s`BelyiDBType eq "Hyperbolic") and BelyiMapIsComputed(s) then
       gal_orbs := s`BelyiDBGaloisOrbits;
-      for orb in gal_orbs do
+      for i := 1 to #gal_orbs do
+        orb := gal_orbs[i];
         sigma := orb[1];
         sigma_str := BelyiDBDeleteLineBreaks(Sprint(sigma));
         printf "Making TeX file for orbit represented by %o\n", sigma_str;
         //System(Sprintf("mkdir -p ~/github/BelyiDB/portraits/%o/%o/%o", d, name, sigma_str));
         Gamma := TriangleSubgroup(sigma);
-        savePath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.tex", d, name, sigma_str);
+        savePath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.tex", d, name, IntegerToLetter(i));
         TriangleDrawDessinToFile(Gamma : filename := savePath);
+        Write(savePath, "\n% "*sigma_str : Overwrite := false);
       end for;
     end if;
   end for;
