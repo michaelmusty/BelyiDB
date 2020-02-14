@@ -36,9 +36,11 @@ function DrawPortraitsByDegree(d : compile := true);
         TriangleDrawDessinToFile(Gamma : filename := savePath, includeLegend := false);
         Write(savePath, "\n% "*sigma_str : Overwrite := false);
         if compile then
-          // doesn't seem to be working...some problem with PDF-Crop
-          //System(Sprintf("pdflatex --shell-escape %o", savePath));           
-          System(Sprintf("xelatex %o", savePath)); 
+          outputPath := Sprintf("~/github/BelyiDB/portraits/%o/%o/", d, name);
+          //System(Sprintf("pdflatex --shell-escape -output-directory %o %o", outputPath, savePath));
+          System(Sprintf("xelatex --shell-escape -aux-directory %o -output-directory %o %o", outputPath, outputPath, savePath));
+          pdfPath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.pdf", d, name, IntegerToLetter(i));
+          System(Sprintf("pdfcrop %o", pdfPath));
         end if;
       end for;
     end if;
