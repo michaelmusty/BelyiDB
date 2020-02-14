@@ -38,7 +38,7 @@ function DrawPortraitsByDegree(d : compile := true);
         if compile then
           outputPath := Sprintf("~/github/BelyiDB/portraits/%o/%o/", d, name);
           //System(Sprintf("pdflatex --shell-escape -output-directory %o %o", outputPath, savePath));
-          System(Sprintf("xelatex --shell-escape -aux-directory %o -output-directory %o %o", outputPath, outputPath, savePath));
+          System(Sprintf("xelatex --shell-escape -output-directory %o %o", outputPath, savePath));
           pdfPath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.pdf", d, name, IntegerToLetter(i));
           System(Sprintf("pdfcrop %o", pdfPath));
         end if;
