@@ -17,5 +17,5 @@ def image_to_text(direc):
             text_file = open(path_out, 'w')
             text_file.write(f_str)
             text_file.close()
-    return_text = "Wrote images to base 64 text for all files in %s" % direc
+    return_text = "Wrote images to base64 text for all PNG files in %s" % direc
     return return_text
