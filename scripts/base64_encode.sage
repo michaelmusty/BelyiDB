@@ -36,6 +36,7 @@ def verify_orbit_label(label):
     perms_list = perms.split(',(')
     perms_list[1] = '(' + perms_list[1]
     perms_list[2] = '(' + perms_list[2]
+    print("perm triple found: %s") % perms_list
     rec = db.belyi_galmaps.lookup(label)
     return perms_list in rec['triples_cyc']
 
