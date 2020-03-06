@@ -39,7 +39,6 @@ def verify_orbit_label(label):
     rec = db.belyi_galmaps.lookup(label)
     return perms_list in rec['triples_cyc']
 
-# TODO: finish this
 def make_upload_file(direc):
     d = datetime.datetime.today()
     upload_name = "upload-"+d.strftime('%Y-%m-%d--%H:%M')+".txt"
@@ -51,7 +50,9 @@ def make_upload_file(direc):
         if (fs[1] == 'png'):
         #if (fs[1] == 'png') and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
             label = fs[0]
+            os.chdir("/scratch/home/sschiavo/github/BelyiDB/portraits/")
             assert verify_orbit_label(label)
+            os.chdir("/scratch/home/sschiavo/github/lmfdb")
             #b64 = open(f,'r')
             b64 = encode_image(f)
             img_str = "%s|%s\n" % (label, b64)
