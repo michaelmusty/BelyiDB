@@ -51,6 +51,7 @@ def make_upload_file(direc):
         if (fs[1] == 'png'):
         #if (fs[1] == 'png') and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
             label = fs[0]
+            print("processing image %s") % f
             os.chdir("/scratch/home/sschiavo/github/BelyiDB/portraits/")
             assert verify_orbit_label(label)
             os.chdir("/scratch/home/sschiavo/github/lmfdb")
