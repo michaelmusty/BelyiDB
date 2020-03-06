@@ -5,7 +5,7 @@ from lmfdb import db
 
 def encode_image(filename):
     img64 = b64encode(open(filename, 'rb').read())
-    img64 = "data:image/png;base64," + quote(img64)
+    img64 = "data:image/png;base64," + img64
     return(img64)
 
 def image_to_text(direc):
