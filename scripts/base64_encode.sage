@@ -38,7 +38,10 @@ def verify_orbit_label(label):
     perms_list[2] = '(' + perms_list[2]
     print("perm triple found: %s") % perms_list
     rec = db.belyi_galmaps.lookup(label)
-    return perms_list in rec['triples_cyc']
+    if rec != None:
+        return perms_list in rec['triples_cyc']
+    else: # if map isn't in the LMFDB
+        return True
 
 def make_upload_file(direc):
     d = datetime.datetime.today()
