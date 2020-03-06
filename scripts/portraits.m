@@ -65,3 +65,31 @@ function DrawPortraitsByDegree(d : compile := true);
   returnText := Sprintf("Made TeX files for all computed hyperbolic passports of degree %o", d);
   return returnText;
 end function;
+
+function OldNameNewName()
+  for d := 4 to 9 do
+    names := BelyiDBFilenames(d);
+    for name_m in names do
+      name := Split(name_m, ".")[1];
+      printf "Processing passport with label %o\n", name;
+      s := BelyiDBRead(name_m);
+      if (s`BelyiDBType eq "Hyperbolic") and BelyiMapIsComputed(s) then
+        gal_orbs_presort := s`BelyiDBGaloisOrbits;
+        gal_orbs := gal_orbs_presort;
+        gal_orbs_sizes := [#orbit : orbit in gal_orbs_presort];
+        ParallelSort(~gal_orbs_sizes, ~gal_orbs);
+        for i := 1 to #gal_orbs do
+          orb := gal_orbs[i];
+          old_ind := Index(gal_orbs_presort, orb);
+          //savePath := Sprintf("~/github/BelyiDB/portraits/%o/%o/%o.tex", d, name, IntegerToLetter(i));
+          for ext in ["-crop.pdf", ".aux", ".log", ".pdf", ".png", ".tex"] do
+            oldSavePath := Sprintf("~/github/BelyiDB/portraits/%o-%o%o", name, IntegerToLetter(old_ind), ext);
+            newSavePath := Sprintf("~/github/BelyiDB/portraits/New/%o-%o%o", name, IntegerToLetter(i), ext);
+            System(Sprintf("cp %o %o", oldSavePath, newSavePath));
+          end for;
+        end for;
+      end if;
+    end for;
+  end for;
+  return "Changed old names to new names; new files written to New";
+end function;
