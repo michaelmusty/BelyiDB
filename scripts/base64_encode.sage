@@ -48,10 +48,11 @@ def make_upload_file(direc):
     files = os.listdir(direc)
     for f in files:
         fs = f.split('.')
-        if (fs[1] == 'txt') and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
+        if (fs[1] == 'png') #and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
             label = fs[0]
             assert verify_orbit_label(label)
-            b64 = open(f,'r')
+            #b64 = open(f,'r')
+            b64 = encode_image(f)
             img_str = "%s|%s\n" % (label, b64)
             upload_file.write(img_str,'a')
             print("Wrote file %s to upload file") % f
