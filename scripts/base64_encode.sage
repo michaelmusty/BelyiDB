@@ -57,10 +57,10 @@ def make_upload_file(direc):
             print("processing image %s") % f
             os.chdir("/scratch/home/sschiavo/github/BelyiDB/portraits/")
             assert verify_orbit_label(label)
-            os.chdir("/scratch/home/sschiavo/github/lmfdb")
             #b64 = open(f,'r')
             b64 = encode_image(f)
             img_str = "%s|%s\n" % (label, b64)
+            os.chdir("/scratch/home/sschiavo/github/lmfdb")
             upload_file.write(img_str,'a')
             print("Wrote file %s to upload file") % f
     upload_file.close()
