@@ -54,6 +54,7 @@ def make_upload_file(direc):
             b64 = open(f,'r')
             img_str = "%s|%s\n" % (label, b64)
             upload_file.write(img_str,'a')
+            print("Wrote file %s to upload file") % f
     upload_file.close()
     return_text = "Created upload file at %s" % upload_path
     return return_text
