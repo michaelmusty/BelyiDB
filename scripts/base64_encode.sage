@@ -50,9 +50,9 @@ def make_upload_file(direc):
     upload_file = open(upload_path, 'w')
     files = os.listdir(direc)
     for f in files:
-        fs = f.split('.')
-        if (fs[1] == 'png'):
+        if f.endswith('.png'):
         #if (fs[1] == 'png') and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
+            fs = f.split('.')
             label = fs[0]
             print("processing image %s") % f
             os.chdir("/scratch/home/sschiavo/github/BelyiDB/portraits/")
