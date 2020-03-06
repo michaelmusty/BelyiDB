@@ -48,7 +48,8 @@ def make_upload_file(direc):
     files = os.listdir(direc)
     for f in files:
         fs = f.split('.')
-        if (fs[1] == 'png') #and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
+        if (fs[1] == 'png'):
+        #if (fs[1] == 'png') and (fs[0][0] in ['4','5','6','7','8','9']): # to exclude upload file...
             label = fs[0]
             assert verify_orbit_label(label)
             #b64 = open(f,'r')
