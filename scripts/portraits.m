@@ -27,7 +27,10 @@ function DrawPortraitsByDegree(d : compile := true);
     printf "Processing passport with label %o\n", name;
     s := BelyiDBRead(name_m);
     if (s`BelyiDBType eq "Hyperbolic") and BelyiMapIsComputed(s) then
-      gal_orbs := s`BelyiDBGaloisOrbits;
+      gal_orbs_presort := s`BelyiDBGaloisOrbits;
+      gal_orbs := gal_orbs_presort;
+      gal_orbs_sizes := [#orbit : orbit in gal_orbs_presort];
+      ParallelSort(~gal_orbs_sizes, ~gal_orbs);
       for i := 1 to #gal_orbs do
         orb := gal_orbs[i];
         sigma := orb[1];
