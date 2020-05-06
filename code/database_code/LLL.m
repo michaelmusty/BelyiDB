@@ -9,7 +9,8 @@ intrinsic PlaneEquation(phi::FldFunFracSchElt) -> Any
   {Given a Belyi map phi, return a plane model for its domain such that x is the Belyi map}
   KC := Parent(phi);
   C := Curve(KC);
-  K<nu> := BaseRing(C);
+  K := BaseRing(C);
+  nu := K.1;
   phi0 := Numerator(phi);
   phioo := Denominator(phi);
   if Genus(C) eq 0 then // defined on PP1, so no curve equation
