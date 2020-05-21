@@ -1,3 +1,4 @@
+// examples from MMW's BELYI-EXTENDING MAPS AND THE GALOIS ACTION ON DESSINS D’ENFANTS
 d := 10;
 sigma0 := Sym(d)!(1, 2, 3, 4)(5, 6, 7)(8, 9);
 sigma1 := Sym(d)!(1, 8, 4, 7)(2, 3, 10)(5, 6);
