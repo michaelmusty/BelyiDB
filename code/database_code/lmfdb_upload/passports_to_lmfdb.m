@@ -30,6 +30,27 @@ intrinsic SortPermutations(sigma::SeqEnum[GrpPermElt]) -> SeqEnum
   {}
   assert #sigma eq 3;
   decs := [CycleDecomposition(el) : el in sigma];
-  
-  lens := [#el : el in decs];
+  lens := [];
+  for s in decs do
+    s_lens := [];
+    for cyc in s do
+      Append(~s_lens, #cyc);
+    end for;
+    Append(~lens, s_lens);
+  end for;
+  //Sort(~lens);
+  ParallelSort(~lens, ~sigma);
+  swap := [2,1,3];
+  ParallelSort(~swap, ~sigma);
+  return sigma;
+end intrinsic;
+
+intrinsic SortPermutations(~sigma::SeqEnum[GrpPermElt])
+  {}
+  sigma := SortPermutations(sigma);
+end intrinsic;
+
+intrinsic BelyiDBObjToLMFDB(s::BelyiDB) -> MonStgElt
+  {}
+
 end intrinsic;
