@@ -12,9 +12,12 @@
     galois_orbits.m
     LLL.m
     modify.m
-    magma_to_lmfdb.m
     status_report.m
     height.m
     base_change.m
+    lmfdb_upload
+    {
+    magma_to_lmfdb.m
+    }
   }
 }
