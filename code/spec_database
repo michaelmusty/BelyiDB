@@ -15,9 +15,12 @@
     status_report.m
     height.m
     base_change.m
+    utils.m
+
     lmfdb_upload
     {
     magma_to_lmfdb.m
+    passports_to_lmfdb.m
     }
   }
 }
