@@ -98,6 +98,7 @@ intrinsic ShortGeometryType(s::BelyiDB) -> MonStgElt
   end if;
 end intrinsic;
 
+// TODO: update this
 intrinsic PassportFileHeaders() -> MonStgElt
   {}
   return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s";
