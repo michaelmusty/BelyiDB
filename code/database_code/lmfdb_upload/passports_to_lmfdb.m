@@ -45,6 +45,7 @@ intrinsic SortPermutations(sigma::SeqEnum[GrpPermElt]) -> SeqEnum
   return sigma;
 end intrinsic;
 
+// procedure version
 intrinsic SortPermutations(~sigma::SeqEnum[GrpPermElt])
   {}
   sigma := SortPermutations(sigma);
