@@ -12,12 +12,12 @@ intrinsic ReplaceStringOld(s::MonStgElt, fs::MonStgElt, ts::MonStgElt) -> MonStg
   return s[[2..#s-1]];
 end intrinsic;
 */
-
+// TODO: fix this: split doesn't work correctly for multiple characters
 intrinsic ReplaceString(s::MonStgElt, fs::MonStgElt, ts::MonStgElt) -> MonStgElt
   {Return a string obtained from the string s by replacing all occurences of fs with ts.}
   spl := Split(s, fs);
   new := Join(spl, ts);
-  // if string begins or ends with fs, this gets lost
+  // if string begins or ends with fs, this gets lost, so add back in if necessary
   if s[1] eq fs then
     new := ts*new;
   end if;
