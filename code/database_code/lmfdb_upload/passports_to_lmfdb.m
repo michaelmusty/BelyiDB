@@ -16,7 +16,7 @@ intrinsic PermutationTripleToLMFDBLabel(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
   {Given a permutation triple sigma, return the LMFDB label of its passport}
   assert #sigma eq 3;
   G := sub< Parent(sigma[1]) | sigma >;
-  d, k := TransitiveGroupIdentification(G);
+  k, d := TransitiveGroupIdentification(G);
   label := Sprintf("%oT%o-", d, k);
   for sig in sigma do
     label *:= PermutationToCycleStructure(sig);
@@ -89,17 +89,58 @@ end intrinsic;
 
 intrinsic ShortGeometryType(s::BelyiDB) -> MonStgElt
   {}
-  /*
-  if TriangleType(s) eq "Hyperbolic" then
-    return "H";
-  elif TriangleType(s) eq "Euclidean" then
-    return "E";
-  else
-    assert TriangleType(s) eq "Spherical";
-    return "S";
-  end if;
-  */
   return TriangleType(s)[1];
+end intrinsic;
+
+intrinsic PermutationToPartition(perm::GrpPermElt) -> SeqEnum[RngIntElt]
+  {}
+  cs := CycleStructure(perm);
+  part := [];
+  for i in {1..#cs} do
+    for j in {1..cs[i][2]} do
+      Append(~part, cs[i][1]);
+    end for;
+  end for;
+  return part;
+end intrinsic;
+
+// for permutation triples
+intrinsic ConvertToOneLine(l::SeqEnum[GrpPermElt]) -> MonStgElt
+  {}
+  str := "[";
+  if #l eq 0 then
+    str *:= "[]";
+  else
+    for i := 1 to #l-1 do
+      str *:= Sprintf("%m, ", l[i]);
+    end for;
+    str *:= Sprintf("%m", l[#l]);
+  end if;
+  str *:= "]";
+  return str;
+end intrinsic;
+
+// For SeqEnums of permutation triples
+intrinsic ConvertToOneLine(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
+  {}
+  str := "[";
+  if #l eq 0 then
+    str *:= "[]";
+  else
+    for i := 1 to #l-1 do
+      str *:= ConvertToOneLine(l[i]);
+      str *:= ",";
+    end for;
+    str *:= ConvertToOneLine(l[#l]);
+  end if;
+  str *:= "]";
+  return str;
+end intrinsic;
+
+
+intrinsic SortedPointedPassport(s::BelyiDB) -> SeqEnum
+  {}
+  ppass := s`BelyiDBPointedPassport;
 end intrinsic;
 
 intrinsic PassportFileHeaders() -> MonStgElt
@@ -107,13 +148,29 @@ intrinsic PassportFileHeaders() -> MonStgElt
   return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s|triples|aut_group";
 end intrinsic;
 
-intrinsic BelyiDBObjToLMFDB(s::BelyiDB) -> MonStgElt
-  {return string containing one line of data}
-  s := "";
-  s *:= ShortGeometryType(s);
-  s *:= Sprintf("|%o", #(s`BelyiDBPassport));
-  s *:= Sprintf("|%o", s`BelyiDBOrders);
-  s *:= Sprintf("|%o", Split(s`BelyiDBFilename,"-")[1]);
-  s *:= Sprintf("|%o", s`BelyiDBGenus);
-  s *:= Sprintf("|%o", Maximum([#el : el in s`BelyiDBGaloisOrbits]));
+intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
+  {return string containing one row of data}
+  row := "";
+  row *:= ShortGeometryType(s);
+  row *:= Sprintf("|%o", #(s`BelyiDBPassport));
+  row *:= Sprintf("|%o", s`BelyiDBOrders);
+  row *:= Sprintf("|%o", Split(s`BelyiDBFilename,"-")[1]);
+  row *:= Sprintf("|%o", s`BelyiDBGenus);
+  row *:= Sprintf("|%o", Maximum([#el : el in s`BelyiDBGaloisOrbits]));
+  sigma := s`BelyiDBPermutationTriple;
+  lambdas_str := "[";
+  for i := 1 to 2 do
+    lambdas_str *:= Sprintf("%o,", PermutationToPartition(sigma[i]));
+  end for;
+  lambdas_str *:= Sprintf("%o", PermutationToPartition(sigma[3]));
+  lambdas_str *:= "]";
+  row *:= Sprintf("|%o", lambdas_str);
+  row *:= Sprintf("|%o", PermutationTripleToLMFDBLabel(sigma));
+  row *:= Sprintf("|%o", #s`BelyiDBGaloisOrbits);
+  row *:= Sprintf("|%o", s`BelyiDBDegree);
+  abc_sorted := Sort(Orders(s));
+  for i := 1 to 3 do
+    row *:= Sprintf("|%o", abc_sorted[i]);
+  end for;
+  return row;
 end intrinsic;
