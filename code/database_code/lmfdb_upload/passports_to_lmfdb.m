@@ -89,6 +89,7 @@ end intrinsic;
 
 intrinsic ShortGeometryType(s::BelyiDB) -> MonStgElt
   {}
+  /*
   if TriangleType(s) eq "Hyperbolic" then
     return "H";
   elif TriangleType(s) eq "Euclidean" then
@@ -97,16 +98,22 @@ intrinsic ShortGeometryType(s::BelyiDB) -> MonStgElt
     assert TriangleType(s) eq "Spherical";
     return "S";
   end if;
+  */
+  return TriangleType(s)[1];
 end intrinsic;
 
-// TODO: update this
 intrinsic PassportFileHeaders() -> MonStgElt
   {}
-  return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s";
+  return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s|triples|aut_group";
 end intrinsic;
 
 intrinsic BelyiDBObjToLMFDB(s::BelyiDB) -> MonStgElt
-  {return string containing one line}
+  {return string containing one line of data}
   s := "";
   s *:= ShortGeometryType(s);
+  s *:= Sprintf("|%o", #(s`BelyiDBPassport));
+  s *:= Sprintf("|%o", s`BelyiDBOrders);
+  s *:= Sprintf("|%o", Split(s`BelyiDBFilename,"-")[1]);
+  s *:= Sprintf("|%o", s`BelyiDBGenus);
+  s *:= Sprintf("|%o", Maximum([#el : el in s`BelyiDBGaloisOrbits]));
 end intrinsic;
