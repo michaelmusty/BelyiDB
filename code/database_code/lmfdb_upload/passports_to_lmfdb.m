@@ -137,26 +137,93 @@ intrinsic ConvertToOneLine(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
   return str;
 end intrinsic;
 
-
 intrinsic SortedPointedPassport(s::BelyiDB) -> SeqEnum
   {}
   ppass := s`BelyiDBPointedPassport;
+  ppass_sort := [];
+  for sigma in ppass do
+    Append(~ppass_sort, SortPermutations(sigma));
+  end for;
+  return ppass_sort;
 end intrinsic;
 
 intrinsic PassportFileHeaders() -> MonStgElt
   {}
-  return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s|triples|aut_group";
+  return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s|passport_pointed|aut_group";
 end intrinsic;
 
+// sorted version
 intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
   {return string containing one row of data}
   row := "";
+  ppass := SortedPointedPassport(s);
+  sigma := ppass[1];
+  // geomtype
   row *:= ShortGeometryType(s);
-  row *:= Sprintf("|%o", #(s`BelyiDBPassport));
-  row *:= Sprintf("|%o", s`BelyiDBOrders);
+  // pass_size
+  row *:= Sprintf("|%o", #ppass);
+  // abc
+  row *:= Sprintf("|%o", [Order(el) : el in sigma]);
+  // group
   row *:= Sprintf("|%o", Split(s`BelyiDBFilename,"-")[1]);
+  // g
   row *:= Sprintf("|%o", s`BelyiDBGenus);
+  // maxdegbf (maximum degree of base field)
   row *:= Sprintf("|%o", Maximum([#el : el in s`BelyiDBGaloisOrbits]));
+  // lambdas (partitions)
+  lambdas_str := "[";
+  for i := 1 to 2 do
+    lambdas_str *:= Sprintf("%o,", PermutationToPartition(sigma[i]));
+  end for;
+  lambdas_str *:= Sprintf("%o", PermutationToPartition(sigma[3]));
+  lambdas_str *:= "]";
+  row *:= Sprintf("|%o", lambdas_str);
+  // plabel
+  row *:= Sprintf("|%o", PermutationTripleToLMFDBLabel(sigma));
+  // num_orbits
+  row *:= Sprintf("|%o", #s`BelyiDBGaloisOrbits);
+  // deg
+  row *:= Sprintf("|%o", s`BelyiDBDegree);
+  // a_s, b_s, c_s (sorted abc)
+  abc_sorted := Sort(Orders(s));
+  for i := 1 to 3 do
+    row *:= Sprintf("|%o", abc_sorted[i]);
+  end for;
+  ppass_sort := SortedPointedPassport(s);
+  row *:= Sprintf("|%o", ConvertToOneLine(ppass_sort));
+  // aut_group
+  aut := AutomorphismGroup(ppass_sort[1]);
+  for el in ppass_sort do
+    assert aut eq AutomorphismGroup(el);
+  end for;
+  if #aut eq 1 then
+    aut_group_str := Sprintf("[%m]", Identity(aut));
+  else
+    gens := SetToSequence(Generators(aut));
+    aut_group_str := ConvertToOneLine(gens);
+  end if;
+  row *:= Sprintf("|%o", aut_group_str);
+  return row;
+end intrinsic;
+
+// unsorted version
+/*
+intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
+  {return string containing one row of data}
+  row := "";
+  // geomtype
+  row *:= ShortGeometryType(s);
+  // pass_size
+  row *:= Sprintf("|%o", #(s`BelyiDBPassport));
+  // abc
+  row *:= Sprintf("|%o", s`BelyiDBOrders);
+  // group
+  row *:= Sprintf("|%o", Split(s`BelyiDBFilename,"-")[1]);
+  // g
+  row *:= Sprintf("|%o", s`BelyiDBGenus);
+  // maxdegbf (maximum degree of base field)
+  row *:= Sprintf("|%o", Maximum([#el : el in s`BelyiDBGaloisOrbits]));
+  // lambdas (partitions)
   sigma := s`BelyiDBPermutationTriple;
   lambdas_str := "[";
   for i := 1 to 2 do
@@ -165,12 +232,34 @@ intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
   lambdas_str *:= Sprintf("%o", PermutationToPartition(sigma[3]));
   lambdas_str *:= "]";
   row *:= Sprintf("|%o", lambdas_str);
+  // plabel
   row *:= Sprintf("|%o", PermutationTripleToLMFDBLabel(sigma));
+  // num_orbits
   row *:= Sprintf("|%o", #s`BelyiDBGaloisOrbits);
+  // deg
   row *:= Sprintf("|%o", s`BelyiDBDegree);
+  // a_s, b_s, c_s (sorted abc)
   abc_sorted := Sort(Orders(s));
   for i := 1 to 3 do
     row *:= Sprintf("|%o", abc_sorted[i]);
   end for;
+  // passport_pointed
+  // will sorting cause problems? abc and lambdas out of order?
+  // not to mention the Belyi map...
+  ppass := PointedPassport(s)
+  row *:= Sprintf("|%o", ConvertToOneLine(ppass));
+  // aut_group
+  aut := AutomorphismGroup(ppass[1]);
+  for i in inds do
+    assert aut eq AutomorphismGroup(pass[i]);
+  end for;
+  if #aut eq 1 then
+    aut_group_str := Sprintf("[%m]", Identity(aut));
+  else
+    gens := SetToSequence(Generators(aut));
+    aut_group_str := OneLineConverter(gens);
+  end if;
+  str *:= Sprintf("\'aut_group\':%o,\n", aut_group_str);
   return row;
 end intrinsic;
+*/
