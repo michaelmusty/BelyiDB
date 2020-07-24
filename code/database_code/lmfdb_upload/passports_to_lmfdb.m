@@ -189,11 +189,10 @@ intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
   for i := 1 to 3 do
     row *:= Sprintf("|%o", abc_sorted[i]);
   end for;
-  ppass_sort := SortedPointedPassport(s);
-  row *:= Sprintf("|%o", ConvertToOneLine(ppass_sort));
+  row *:= Sprintf("|%o", ConvertToOneLine(ppass));
   // aut_group
-  aut := AutomorphismGroup(ppass_sort[1]);
-  for el in ppass_sort do
+  aut := AutomorphismGroup(ppass[1]);
+  for el in ppass do
     assert aut eq AutomorphismGroup(el);
   end for;
   if #aut eq 1 then
