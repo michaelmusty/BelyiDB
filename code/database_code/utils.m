@@ -11,7 +11,6 @@ intrinsic ReplaceStringOld(s::MonStgElt, fs::MonStgElt, ts::MonStgElt) -> MonStg
   end while;
   return s[[2..#s-1]];
 end intrinsic;
-*/
 // TODO: fix this: split doesn't work correctly for multiple characters
 intrinsic ReplaceString(s::MonStgElt, fs::MonStgElt, ts::MonStgElt) -> MonStgElt
   {Return a string obtained from the string s by replacing all occurences of fs with ts.}
@@ -25,6 +24,22 @@ intrinsic ReplaceString(s::MonStgElt, fs::MonStgElt, ts::MonStgElt) -> MonStgElt
     new := new*ts;
   end if;
   return new;
+end intrinsic;
+*/
+
+intrinsic ReplaceString(s::MonStgElt, fs::MonStgElt, ts::MonStgElt) -> MonStgElt
+  {Return a string obtained from the string s by replacing all occurences of fs with ts.}
+  i:=Position(s,fs);
+  if i eq 0 then
+    strg:=s;  // nothing to find
+  elif (i+#fs-1) eq #s   then // if fs is at end
+    strg:=Substring(s,1,i-1) cat ts;
+  elif i eq 1 then // if fs is at beginning
+    strg:=ts cat $$(Substring(s,i+#fs,#s-i),fs,ts);
+  else
+    strg:=Substring(s,1,i-1) cat ts cat $$(Substring(s,i+#fs,#s-i),fs,ts); // recursively call on tail
+  end if;
+  return strg;
 end intrinsic;
 
 intrinsic ReplaceString(s::MonStgElt, fs::[MonStgElt], ts::[MonStgElt]) -> MonStgElt
