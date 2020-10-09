@@ -149,7 +149,8 @@ end intrinsic;
 
 intrinsic PassportFileHeaders() -> MonStgElt
   {}
-  return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|num_orbits|deg|a_s|b_s|c_s|passport_pointed|aut_group";
+  return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|BelyiDB_plabel|num_orbits|deg|a_s|b_s|c_s|aut_group";
+  //return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|BelyiDB_plabel|num_orbits|deg|a_s|b_s|c_s|passport_pointed|aut_group";
 end intrinsic;
 
 // sorted version
@@ -180,6 +181,8 @@ intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
   row *:= Sprintf("|%o", lambdas_str);
   // plabel
   row *:= Sprintf("|%o", PermutationTripleToLMFDBLabel(sigma));
+  // BelyiDB_plabel
+  row *:= Split(s`BelyiDBFilename,".")[1];
   // num_orbits
   row *:= Sprintf("|%o", #s`BelyiDBGaloisOrbits);
   // deg
