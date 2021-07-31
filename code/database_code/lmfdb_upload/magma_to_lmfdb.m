@@ -78,7 +78,7 @@ column_handler := [
   <"group_num", >,
   <"embeddings", Embeddings>,
   <"group", >,
-  <"triples", >,
+  <"triples", OrbitTriples>,
   <"b_s", >,
   <"plabel", >,
   <"lambdas", >,
