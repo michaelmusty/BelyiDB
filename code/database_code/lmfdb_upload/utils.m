@@ -47,6 +47,54 @@ intrinsic GenusSt(s::BelyiDB) -> MonStgElt
   return Sprintf("%o", s`BelyiDBGenus);
 end intrinsic;
 
+intrinsic OrbitSize(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
+  return Sprint(#s`BelyiDBGaloisOrbits[index]);
+end intrinsic;
+
+intrinsic Curve(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
+  return Sprint(s`BelyiDBBelyiCurves[inds[1]]);
+end intrinsic;
+
+intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
+  return Sprint(s`BelyiDBBelyiMaps[inds[1]]);
+end intrinsic;
+
+
+intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
+  base_field_data := s`BelyiDBBaseFieldData;
+  orbit_base_field_data := [base_field_data[i] : i in inds];
+  minpolys := [DefiningPolynomial(orbit_base_field_data[i][1]) : i in [1..#orbit_base_field_data]];
+  assert #SequenceToSet(minpolys) eq 1;
+  coeffs := Coefficients(minpolys[1]);
+  assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
+  return Sprint(coeffs);
+end intrinsic;
+
+
+intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  base_field_data := s`BelyiDBBaseFieldData;
+  orbit_base_field_data := [base_field_data[i] : i in inds];
+  minpolys := [DefiningPolynomial(orbit_base_field_data[i][1]) : i in [1..#orbit_base_field_data]];
+  assert #SequenceToSet(minpolys) eq 1;
+  coeffs := Coefficients(minpolys[1]);
+  assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
+  str *:= Sprintf("\'base_field\':%o,\n", coeffs);
+  // embeddings
+  orbit_embeddings := [];
+  for i in inds do
+    K := base_field_data[i][1];
+    // assert DefiningPolynomial(K) eq DefiningPolynomial(Polredabs_db(K));
+    v := base_field_data[i][2];
+    conj := base_field_data[i][3];
+    z := Eval(K.1, v, conj : prec := 16);
+    Append(~orbit_embeddings, [Re(z), Im(z)]);
+    return Sprint(orbit_embeddings);
+  end for;
+
 
 intrinsic Base26Encode(n::RngIntElt) -> MonStgElt
 { Given a nonnegative integer n, returns its encoding in base-26 (a=0,..., z=25, ba=26,...). }
