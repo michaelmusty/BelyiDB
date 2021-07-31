@@ -279,6 +279,7 @@ intrinsic LambdaSt(s::BelyiDB) -> MonStgElt //lambdas (partitions)
   lambdas_str := "[";
   for i := 1 to 2 do
     lambdas_str *:= sprint(PermutationToPartition(sigma[i]));
+    lambdas_str *:= ",";
   end for;
   lambdas_str *:= sprint(PermutationToPartition(sigma[3]));
   lambdas_str *:= "]";

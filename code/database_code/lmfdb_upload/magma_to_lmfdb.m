@@ -73,11 +73,7 @@ end intrinsic;
 intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> SeqEnum[MonStgElt]
   {return string containing one row of data}
   res := [];
-  //for fn in galmap_column_handler() do
-  cols := galmap_column_handler();
-  for i in [1..#cols] do
-    printf "i = %o\n", i;
-    fn := cols[i];
+  for fn in galmap_column_handler() do
     if fn[4] then
       Append(~res, fn[3](s, inds, index));
     else
