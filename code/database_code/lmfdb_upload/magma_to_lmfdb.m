@@ -60,8 +60,8 @@ intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgEl
     gal_orbits_sizes := [#orbit : orbit in gal_orbits_before_sorting];
     ParallelSort(~gal_orbits_sizes, ~gal_orbits);
     pass := PointedPassport(s);
-    for i := 1 to #gal_orbits-1 do
-      assert #gal_orbits[i] le #gal_orbits[i+1];
+    for i := 1 to #gal_orbits do
+      if i lt #gal_orbits then assert #gal_orbits[i] le #gal_orbits[i+1]; end if;
       gal_orbit := gal_orbits[i];
       inds := [Index(pass, triple) : triple in gal_orbit];
       Append(~data, BelyiDBToLMFDBSeq(s, inds, i));
