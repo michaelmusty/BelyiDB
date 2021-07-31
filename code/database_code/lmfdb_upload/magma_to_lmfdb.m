@@ -1,6 +1,6 @@
 // list of search cols
-galmap_column_handler := [
 // <name, type, function, needs inds and index>
+galmap_column_handler := [
   <"geomtype", "text", GeomTypeShort, false>,
   <"map", "text", BelyiMap, true>,
   <"abc", "smallint[]", ABC, false>,
@@ -36,15 +36,22 @@ galmap_column_handler := [
 
 intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return string containing one row of data}
-  return Join(BelyiDBToLMFDB(s, inds, index), '|');
+  return Join(BelyiDBToLMFDB(s, inds, index), "|");
 end intrinsic;
 
 
 intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> Seq[MonStgElt]
   {return string containing one row of data}
-  return [fn[4] select fn[3](s) else fn[3](s, inds, index) : fn in galmap_column_handler];
+  res := [];
+  for fn in galmap_column_handler do
+    if fn[4] then
+      Append(~res, fn[3](s, inds, index));
+    else
+      Append(~res, fn[3](s));
+    end if;
+  end for;
+  return res;
 end intrinsic;
-
 
 intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgElt
   {return string containing one row of data per map}
@@ -54,7 +61,7 @@ intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgEl
 
   data := [];
   for s in seq do
-    /* galmaps dictionaries */
+    // galmaps dictionaries
     gal_orbits_before_sorting := GaloisOrbits(s); // we will sort by size (increasing)
     gal_orbits := gal_orbits_before_sorting;
     gal_orbits_sizes := [#orbit : orbit in gal_orbits_before_sorting];
@@ -99,7 +106,7 @@ end intrinsic;
 
 intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
   {return string containing one row of data}
-  return Join(BelyiDBPassportToLMFDBseq(s), '|');
+  return Join(BelyiDBPassportToLMFDBseq(s), "|");
 end intrinsic;
 
 

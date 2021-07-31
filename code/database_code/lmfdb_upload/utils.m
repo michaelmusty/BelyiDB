@@ -20,7 +20,7 @@ end function;
 
 intrinsic PassportLabel(s::BelyiDB) -> MonStgElt
   {return Passport label}
-  spl = Split(BelyiDB_plabel(s), '-');
+  spl = Split(BelyiDB_plabel(s), "-");
   return Sprintf("%o-%o_%o_%o", spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]));
 end intrinsic;
 
@@ -34,7 +34,7 @@ end intrinsic;
 
 intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
-  spl = Split(BelyiDB_label(s), '-');
+  spl = Split(BelyiDB_label(s), "-");
   return Sprintf("%o-%o_%o_%o-%o", spl[1], add_dot_seps(spl[3]), add_dot_seps(spl[4]), add_dot_seps(spl[5]), spl[7]);
 end intrinsic;
 
@@ -243,17 +243,17 @@ intrinsic ConvertToCycles(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
   {}
   assert #sigma eq 3;
   str := "[";
-  str *:= "\'";
+  str *:= "\"";
   str *:= ConvertToCycles(sigma[1]);
-  str *:= "\'";
+  str *:= "\"";
   str *:= ",";
-  str *:= "\'";
+  str *:= "\"";
   str *:= ConvertToCycles(sigma[2]);
-  str *:= "\'";
+  str *:= "\"";
   str *:= ",";
-  str *:= "\'";
+  str *:= "\"";
   str *:= ConvertToCycles(sigma[3]);
-  str *:= "\'";
+  str *:= "\"";
   str *:= "]";
   return str;
 end intrinsic;
@@ -323,7 +323,7 @@ intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> 
   assert #SequenceToSet(minpolys) eq 1;
   coeffs := Coefficients(minpolys[1]);
   assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
-  str *:= Sprintf("\'base_field\':%o,\n", coeffs);
+  str *:= Sprintf("\"base_field\":%o,\n", coeffs);
   // embeddings
   orbit_embeddings := [];
   for i in inds do
