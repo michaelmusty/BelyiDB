@@ -20,7 +20,7 @@ end function;
 
 intrinsic PassportLabel(s::BelyiDB) -> MonStgElt
   {return Passport label}
-  spl = Split(BelyiDB_plabel(s), "-");
+  spl := Split(BelyiDB_plabel(s), "-");
   return Sprintf("%o-%o_%o_%o", spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]));
 end intrinsic;
 
@@ -34,7 +34,7 @@ end intrinsic;
 
 intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
-  spl = Split(BelyiDB_label(s), "-");
+  spl := Split(BelyiDB_label(s), "-");
   return Sprintf("%o-%o_%o_%o-%o", spl[1], add_dot_seps(spl[3]), add_dot_seps(spl[4]), add_dot_seps(spl[5]), spl[7]);
 end intrinsic;
 
@@ -130,11 +130,13 @@ end intrinsic;
 
 intrinsic ABC(s::BelyiDB) -> MonStgElt
   {}
+  sigma := PermutationTriple(s);
   sprint([Order(el) : el in sigma]);
 end intrinsic;
 
 intrinsic ABC_sorted(s::BelyiDB, i::RngIntElt) -> MonStgElt
  {}
+  sigma := PermutationTriple(s);
   return sprint(Sort([Order(el) : el in sigma])[i]);
 end intrinsic;
 
@@ -279,6 +281,7 @@ end intrinsic;
 
 intrinsic LambdaSt(s::BelyiDB) -> MonStgElt //lambdas (partitions)
   {}
+  sigma := PermutationTriple(s);
   lambdas_str := "[";
   for i := 1 to 2 do
     lambdas_str *:= sprint(PermutationToPartition(sigma[i]));
