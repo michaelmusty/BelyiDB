@@ -1,3 +1,12 @@
+intrinsic PassportLabel(s::BelyiDB) -> MonStgElt
+  {return Passport label}
+  function add_dot_seps(string):
+    return Join([string[i] : i in [1..#string]], ".");
+  end function;
+  spl = Split(BelyiDB_plabel(s));
+  return "%o-%o_%o_%o".format(spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]))
+end intrinsic;
+
 intrinsic PermutationTripleToLMFDBLabel(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
   {Given a permutation triple sigma, return the LMFDB label of its passport}
   assert #sigma eq 3;
