@@ -341,9 +341,33 @@ end intrinsic;
 
 intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
-  return sprint(s`BelyiDBBelyiMaps[inds[1]]);
+  // curve and map
+  X := BelyiCurves(s)[inds[1]];
+  phi := BelyiMaps(s)[inds[1]];
+  K<nu> := BaseField(X);
+  g := Genus(s);
+  assert Genus(X) eq Genus(s);
+  if g eq 0 then
+    KX<x> := Parent(phi);
+    map_str := sprint(phi);
+  elif g eq 1 then
+    assert IsProjective(X);
+    KX<x,y> := Parent(phi);
+    map_str := sprint(phi);
+  elif Type(X) eq CrvHyp then
+    assert IsProjective(X);
+    KX<x,y> := Parent(phi);
+    map_str := sprint(phi);
+  else
+    X<[x]> := X;
+    B := Basis(Ideal(X));
+    P<[x]> := Parent(B[1]);
+    AssignNames(~P, VarSeq("x", 1, Rank(P)));
+    KX<[x]> := Parent(phi);
+    map_str := sprint(phi);
+  end if;
+  return map_str;
 end intrinsic;
-
 
 intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
@@ -355,7 +379,6 @@ intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> M
   assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
   return sprint(coeffs);
 end intrinsic;
-
 
 intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
