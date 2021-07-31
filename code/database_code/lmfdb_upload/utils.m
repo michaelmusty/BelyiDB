@@ -290,9 +290,53 @@ intrinsic OrbitSize(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> M
   return sprint(#s`BelyiDBGaloisOrbits[index]);
 end intrinsic;
 
+// TODO: needs to give equation, or PP1
 intrinsic Curve(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
-  return sprint(s`BelyiDBBelyiCurves[inds[1]]);
+  // curve and map
+  X := BelyiCurves(s)[inds[1]];
+  phi := BelyiMaps(s)[inds[1]];
+  K<nu> := BaseField(X);
+  g := Genus(s);
+  assert Genus(X) eq Genus(s);
+  if g eq 0 then
+    curve_str := "PP1";
+  elif g eq 1 then
+    assert IsProjective(X);
+    v,u := HyperellipticPolynomials(X);
+    _<x> := Parent(u);
+    _<x> := Parent(v);
+    if u eq 0 then
+      curve_str := Sprintf("y^2=%o", sprint(v));
+    else
+      curve_str := Sprintf("y^2+%o*y=%o", sprint(u), sprint(v));
+    end if;
+  elif Type(X) eq CrvHyp then
+    assert IsProjective(X);
+    v,u := HyperellipticPolynomials(X);
+    _<x> := Parent(u);
+    _<x> := Parent(v);
+    if u eq 0 then
+      curve_str := Sprintf("y^2=%o", sprint(v));
+    else
+      curve_str := Sprintf("y^2+%o*y=%o", sprint(u), sprint(v));
+    end if;
+  else
+    X<[x]> := X;
+    B := Basis(Ideal(X));
+    P<[x]> := Parent(B[1]);
+    AssignNames(~P, VarSeq("x", 1, Rank(P)));
+    curve_str := "";
+    for i := 1 to #B do
+      if i ne #B then
+        curve_str *:= Sprintf("%o, ", B[i]);
+      else 
+        curve_str *:= Sprint(B[i]);
+      end if;
+    end for;
+  end if;
+  return curve_str;
+  //return sprint(s`BelyiDBBelyiCurves[inds[1]]);
 end intrinsic;
 
 intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt

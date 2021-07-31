@@ -89,8 +89,8 @@ end intrinsic;
 
 intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
-  headers := [[col[1] : col in passports_column_handler()]];
-  headers cat:= [[col[2] : col in passports_column_handler()]];
+  headers := [[col[1] : col in galmap_column_handler()]];
+  headers cat:= [[col[2] : col in galmap_column_handler()]];
   headers cat:= [[]];
 
   data := [];
