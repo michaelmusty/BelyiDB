@@ -24,20 +24,76 @@ end intrinsic;
 
 intrinsic GeomTypeShort(s::BelyiDB) -> MonStgElt
   {retun the short type of geometric type}
-  if TriangleType(s) eq "Hyperbolic" then
-    return "H";
-  elif TriangleType(s) eq "Euclidean" then
-    return "E";
-  else
-    assert TriangleType(s) eq "Spherical";
-    return "S";
-  end if;
+  return TriangleType(s)[1];
 end intrinsic;
 
 
 intrinsic PassportSize(s::BelyiDB) -> MongStgElt
   {return the size of the passport}
-  return sprint(s`BelyiDBPassport);
+  return sprint(#(s`BelyiDBPassport));
+end intrinsic;
+
+intrinsic PermutationToPartition(perm::GrpPermElt) -> SeqEnum[RngIntElt]
+  {}
+  cs := CycleStructure(perm);
+  part := [];
+  for i in {1..#cs} do
+    for j in {1..cs[i][2]} do
+      Append(~part, cs[i][1]);
+    end for;
+  end for;
+  return part;
+end intrinsic;
+
+intrinsic PermutationToCycleStructure(sigma::GrpPermElt) -> MonStgElt
+  {}
+  s := "";
+  struc := CycleStructure(sigma);
+  for pair in struc do
+    len, m := Explode(pair);
+    for i := 1 to m do
+      s *:= Sprintf("%o.", len);
+    end for;
+  end for;
+  s := s[1..#s-1]; // remove last dot
+  return s;
+end intrinsic;
+
+
+
+intrinsic SortPermutations(sigma::SeqEnum[GrpPermElt]) -> SeqEnum
+  {}
+  assert #sigma eq 3;
+  decs := [CycleDecomposition(el) : el in sigma];
+  lens := [];
+  for s in decs do
+    s_lens := [];
+    for cyc in s do
+      Append(~s_lens, #cyc);
+    end for;
+    Append(~lens, s_lens);
+  end for;
+  //Sort(~lens);
+  ParallelSort(~lens, ~sigma);
+  swap := [2,1,3];
+  ParallelSort(~swap, ~sigma);
+  return sigma;
+end intrinsic;
+
+// procedure version
+intrinsic SortPermutations(~sigma::SeqEnum[GrpPermElt])
+  {}
+  sigma := SortPermutations(sigma);
+end intrinsic;
+
+intrinsic SortedPointedPassport(s::BelyiDB) -> SeqEnum
+  {}
+  ppass := s`BelyiDBPointedPassport;
+  ppass_sort := [];
+  for sigma in ppass do
+    Append(~ppass_sort, SortPermutations(sigma));
+  end for;
+  return ppass_sort;
 end intrinsic;
 
 
@@ -98,6 +154,7 @@ end intrinsic;
 
 intrinsic AutGroupStr(s::BelyiDB) -> MonStgElt
   {}
+  ppass := SortedPointedPassport(s);
   aut := AutomorphismGroup(ppass[1]);
   for el in ppass do
     assert aut eq AutomorphismGroup(el);
@@ -285,18 +342,14 @@ intrinsic Base26Decode(s::MonStgElt) -> RngIntElt
 end intrinsic;
 
 
-intrinsic putrecs(filename::MonStgElt,S::SeqEnum[SeqEnum[MonStgElt]]) -> RngIntElt
-{ Given a list of lists of strings, creates a colon delimited file with one list per line, returns number of records written. }
-    fp := Open(filename,"w");
-    n := 0;
-    for r in S do Puts(fp,Join(r,":")); n+:=1; end for;
-    Flush(fp);
-    return n;
-end intrinsic;
 
-intrinsic getrecs(filename::MonStgElt:Delimiter:=":") -> SeqEnum
-{ Reads a delimited file, returns list of lists of strings (one list per line). }
-    return [Split(r,Delimiter:IncludeEmpty):r in Split(Read(filename))];
+intrinsic putrecs(filename::MonStgElt, S::SeqEnum[SeqEnum[MonStgElt]] : Delimiter:="|") -> RngIntElt
+  {Given a list of lists of strings, creates a Delimiter delimited file with one list per line, returns number of records written.}
+  fp := Open(filename,"w");
+  n := 0;
+  for r in S do Puts(fp,Join(r, Delimiter)); n+:=1; end for;
+  Flush(fp);
+  return n;
 end intrinsic;
 
 
