@@ -94,7 +94,7 @@ passports_column_handler := [
 
 intrinsic BelyiDBPassportToLMFDBseq(s::BelyiDB) -> MonStgElt
   {return string containing one row of data}
-  return [fn[3](s): for fn in passports_column_handler];
+  return [fn[3](s) : fn in passports_column_handler];
 end intrinsic;
 
 intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
