@@ -59,7 +59,7 @@ intrinsic GeomTypeShort(s::BelyiDB) -> MonStgElt
 end intrinsic;
 
 
-intrinsic PassportSize(s::BelyiDB) -> MongStgElt
+intrinsic PassportSize(s::BelyiDB) -> MonStgElt
   {return the size of the passport}
   return sprint(#(s`BelyiDBPassport));
 end intrinsic;
@@ -155,7 +155,7 @@ intrinsic c_s(s::BelyiDB) -> MonStgElt
   return ABC_sorted(s, 3);
 end intrinsic;
 
-intrinsic GroupSt(s::BelyiDB) -> MongStgElt
+intrinsic GroupSt(s::BelyiDB) -> MonStgElt
   {}
   return Split(Name(s), "-")[1];
 end intrinsic;

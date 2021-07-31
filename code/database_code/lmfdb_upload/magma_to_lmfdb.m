@@ -1,6 +1,6 @@
 // list of search cols
 // <name, type, function, needs inds and index>
-galmap_column_handler := [<"geomtype", "text", GeomTypeShort, false>,
+galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
   <"map", "text", BelyiMap, true>,
   <"abc", "smallint[]", ABC, false>,
   <"base_field", "numeric[]", BaseField, true>,
@@ -31,7 +31,35 @@ galmap_column_handler := [<"geomtype", "text", GeomTypeShort, false>,
   <"base_field_label", "text", NULL, true>,
   <"primitivization", "text", NULL, true>,
   <"is_primitive", "bool", NULL, true>
-];
+*];
+
+// <name, type, function>
+passports_column_handler := [*
+ <"geomtype", "text", GeomTypeShort>,
+ <"pass_size", "smallint", PassportSize>,
+ <"abc", "smallint[]", ABC>,
+ <"group", "text", GroupSt>,
+ <"g", "smallint", GenusSt>,
+ <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
+ <"lambdas", "jsonb", LambdaSt>,
+ <"plabel", "test", PassportLabel>,
+ <"num_orbits", "smallint", NumOrbits>,
+ <"deg", "smallint", DegreegSt>,
+ <"BelyiDB_plabel", "text", BelyiDB_plabel>,
+ <"a_s", "smallint", a_s>,
+ <"b_s", "smallint", b_s>,
+ <"c_s", "smallint", c_s>,
+ <"triples", "jsonb", PointedPassportSt>,
+ <"aut_group", "jsonb", AutGroupStr>
+*];
+
+intrinsic foo() -> Any
+{}
+  return [* galmap_column_handler, passports_column_handler *];
+end intrinsic;
+/*
+
+
 
 intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return string containing one row of data}
@@ -51,6 +79,8 @@ intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   end for;
   return res;
 end intrinsic;
+
+
 
 intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgElt
   {return string containing one row of data per map}
@@ -78,25 +108,7 @@ end intrinsic;
 
 
 
-// <name, type, function>
-passports_column_handler := [
- <"geomtype", "text", GeomTypeShort>,
- <"pass_size", "smallint", PassportSize>,
- <"abc", "smallint[]", ABC>,
- <"group", "text", GroupSt>,
- <"g", "smallint", GenusSt>,
- <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
- <"lambdas", "jsonb", LambdaSt>,
- <"plabel", "test", PassportLabel>,
- <"num_orbits", "smallint", NumOrbits>,
- <"deg", "smallint", DegreegSt>,
- <"BelyiDB_plabel", "text", BelyiDB_plabel>,
- <"a_s", "smallint", a_s>,
- <"b_s", "smallint", b_s>,
- <"c_s", "smallint", c_s>,
- <"triples", "jsonb", PointedPassportSt>,
- <"aut_group", "jsonb", AutGroupStr>
-];
+
 
 intrinsic BelyiDBPassportToLMFDBseq(s::BelyiDB) -> MonStgElt
   {return string containing one row of data}
@@ -116,4 +128,4 @@ intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> 
   headers cat:= [[]]
   putrecs(filename, headers cat [BelyiDBPassportToLMFDBseq(s) : s in seq]);
 end intrinsic;
-
+*/
