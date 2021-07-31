@@ -90,8 +90,6 @@ intrinsic PermutationToCycleStructure(sigma::GrpPermElt) -> MonStgElt
   return s;
 end intrinsic;
 
-
-
 intrinsic SortPermutations(sigma::SeqEnum[GrpPermElt]) -> SeqEnum
   {}
   assert #sigma eq 3;
@@ -127,11 +125,10 @@ intrinsic SortedPointedPassport(s::BelyiDB) -> SeqEnum
   return ppass_sort;
 end intrinsic;
 
-
 intrinsic ABC(s::BelyiDB) -> MonStgElt
   {}
   sigma := PermutationTriple(s);
-  sprint([Order(el) : el in sigma]);
+  return sprint([Order(el) : el in sigma]);
 end intrinsic;
 
 intrinsic ABC_sorted(s::BelyiDB, i::RngIntElt) -> MonStgElt
@@ -175,8 +172,6 @@ intrinsic MaximumBaseFieldDegree(s::BelyiDB) -> MonStgElt
   return sprint(Maximum([#el : el in s`BelyiDBGaloisOrbits]));
 end intrinsic;
 
-
-
 intrinsic NumOrbits(s::BelyiDB) -> MonStgElt
   {}
   return sprint(#s`BelyiDBGaloisOrbits);
@@ -197,7 +192,6 @@ intrinsic AutGroupStr(s::BelyiDB) -> MonStgElt
   end if;
   return sprint(aut_group_str);
 end intrinsic;
-
 
 // for permutation triples
 intrinsic ConvertToOneLine(l::SeqEnum[GrpPermElt]) -> MonStgElt
