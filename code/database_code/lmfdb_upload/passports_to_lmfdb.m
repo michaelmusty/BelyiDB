@@ -1,3 +1,23 @@
+column_handler := [
+ <"geomtype", GeomTypeShort>,
+ <"pass_size", PassportSize>,
+ <"abc",>,
+ <"group",>,
+ <"g",>,
+ <"maxdegbf",>,
+ <"lambdas",>,
+ <"plabel",>,
+ <"num_orbits",>,
+ <"deg",>,
+ <"BelyiDB_plabel",>,
+ <"a_s",>,
+ <"b_s",>,
+ <"c_s",>,
+ <"triples",>,
+ <"aut_group",>
+];
+
+
 intrinsic PermutationToCycleStructure(sigma::GrpPermElt) -> MonStgElt
   {}
   s := "";
@@ -12,19 +32,7 @@ intrinsic PermutationToCycleStructure(sigma::GrpPermElt) -> MonStgElt
   return s;
 end intrinsic;
 
-intrinsic PermutationTripleToLMFDBLabel(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
-  {Given a permutation triple sigma, return the LMFDB label of its passport}
-  assert #sigma eq 3;
-  G := sub< Parent(sigma[1]) | sigma >;
-  k, d := TransitiveGroupIdentification(G);
-  label := Sprintf("%oT%o-", d, k);
-  for sig in sigma do
-    label *:= PermutationToCycleStructure(sig);
-    label *:= "_";
-  end for;
-  label := label[1..#label-1]; // remove last _
-  return label;
-end intrinsic;
+
 
 intrinsic SortPermutations(sigma::SeqEnum[GrpPermElt]) -> SeqEnum
   {}

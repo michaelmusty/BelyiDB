@@ -1,63 +1,3 @@
-// TODO make this go beyond 26
-intrinsic IntegerToLetter(n::RngIntElt) -> MonStgElt
-  {}
-  if n eq 1 then
-    return "a";
-  elif n eq 2 then
-    return "b";
-  elif n eq 3 then
-    return "c";
-  elif n eq 4 then
-    return "d";
-  elif n eq 5 then
-    return "e";
-  elif n eq 6 then
-    return "f";
-  elif n eq 7 then
-    return "g";
-  elif n eq 8 then
-    return "h";
-  elif n eq 9 then
-    return "i";
-  elif n eq 10 then
-    return "j";
-  elif n eq 11 then
-    return "k";
-  elif n eq 12 then
-    return "l";
-  elif n eq 13 then
-    return "m";
-  elif n eq 14 then
-    return "n";
-  elif n eq 15 then
-    return "o";
-  elif n eq 16 then
-    return "p";
-  elif n eq 17 then
-    return "q";
-  elif n eq 18 then
-    return "r";
-  elif n eq 19 then
-    return "s";
-  elif n eq 20 then
-    return "t";
-  elif n eq 21 then
-    return "u";
-  elif n eq 22 then
-    return "v";
-  elif n eq 23 then
-    return "w";
-  elif n eq 24 then
-    return "x";
-  elif n eq 25 then
-    return "y";
-  elif n eq 26 then
-    return "z";
-  else
-    error "integer out of range of alphabet!";
-  end if;
-end intrinsic;
-
 intrinsic PermutationToPartition(perm::GrpPermElt) -> SeqEnum[RngIntElt]
   {}
   cs := CycleStructure(perm);
@@ -142,20 +82,10 @@ intrinsic OneLineConverter(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
   return str;
 end intrinsic;
 
-intrinsic ShortType(s::BelyiDB) -> MonStgElt
-  {}
-  if TriangleType(s) eq "Hyperbolic" then
-    return "H";
-  elif TriangleType(s) eq "Euclidean" then
-    return "E";
-  else
-    assert TriangleType(s) eq "Spherical";
-    return "S";
-  end if;
-end intrinsic;
+
 
 intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
-  {}
+  {return a dictionary with the attributes of the galois orbit map}
   str := "";
   letter := IntegerToLetter(index);
   // label
@@ -289,7 +219,7 @@ intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
 end intrinsic;
 
 intrinsic BelyiDBToDictionary(s::BelyiDB) -> MonStgElt
-  {}
+  {return a dictionary with the attributes of the passport}
   assert BelyiMapIsComputed(s);
   // assert GaloisOrbitsSanityCheck(s);
   // assert IsPolredabsMatch(s);

@@ -57,8 +57,43 @@ intrinsic S3Action(tau::GrpPermElt, l::List) -> List
   return [* S3Action(tau, x) : x in l *];
 end intrinsic;
 
+
+
 // list of search cols
-//['geomtype', 'map', 'abc', 'base_field', 'triples_cyc', 'g', 'curve', 'orbit_size', 'label', 'a_s', 'pass_size', 'c_s', 'aut_group', 'deg', 'group_num', 'embeddings', 'group', 'triples', 'b_s', 'plabel', 'lambdas', 'friends', 'curve_label', 'old_label', 'old_plabel', 'specializations', 'models', 'moduli_field', 'moduli_field_label', 'base_field_label', 'primitivization', 'is_primitive']
+column_handler := [
+  <"geomtype", GeomTypeShort>,
+  <"map", >,
+  <"abc", >,
+  <"base_field", >,
+  <"triples_cyc", >,
+  <"g", >,
+  <"curve", >,
+  <"orbit_size", >,
+  <"label", >,
+  <"a_s", >,
+  <"pass_size", >,
+  <"c_s", >,
+  <"aut_group", >,
+  <"deg", >,
+  <"group_num", >,
+  <"embeddings", >,
+  <"group", >,
+  <"triples", >,
+  <"b_s", >,
+  <"plabel", >,
+  <"lambdas", >,
+  <"friends", >,
+  <"curve_label", >,
+  <"old_label", >,
+  <"old_plabel", >,
+  <"specializations", >,
+  <"models", >,
+  <"moduli_field", >,
+  <"moduli_field_label", >,
+  <"base_field_label", >,
+  <"primitivization", >,
+  <"is_primitive", >
+];
 
 intrinsic BelyiDBToLMFDB(s::BelyiDB) -> MonStgElt
   {}

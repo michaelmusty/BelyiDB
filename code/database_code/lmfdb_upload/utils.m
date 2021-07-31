@@ -1,3 +1,37 @@
+intrinsic PermutationTripleToLMFDBLabel(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
+  {Given a permutation triple sigma, return the LMFDB label of its passport}
+  assert #sigma eq 3;
+  G := sub< Parent(sigma[1]) | sigma >;
+  k, d := TransitiveGroupIdentification(G);
+  label := Sprintf("%oT%o-", d, k);
+  for sig in sigma do
+    label *:= PermutationToCycleStructure(sig);
+    label *:= "_";
+  end for;
+  label := label[1..#label-1]; // remove last _
+  return label;
+end intrinsic;
+
+
+intrinsic GeomTypeShort(s::BelyiDB) -> MonStgElt
+  {retun the short type of geometric type}
+  if TriangleType(s) eq "Hyperbolic" then
+    return "H";
+  elif TriangleType(s) eq "Euclidean" then
+    return "E";
+  else
+    assert TriangleType(s) eq "Spherical";
+    return "S";
+  end if;
+end intrinsic;
+
+
+intrinsic PassportSize(s::BelyiDB) -> MongStgElt
+ {return the size of the passport}
+ return Sprintf("%o", #(s`BelyiDBPassport));
+end intrinsic;
+
+
 intrinsic Base26Encode(n::RngIntElt) -> MonStgElt
 { Given a nonnegative integer n, returns its encoding in base-26 (a=0,..., z=25, ba=26,...). }
     require n ge 0: "n must be a nonnegative integer";
