@@ -19,9 +19,8 @@
 
     lmfdb_upload
     {
-    magma_to_lmfdb.m
-    passports_to_lmfdb.m
-    utils.m
+      magma_to_lmfdb.m
+      utils.m
     }
   }
 }

@@ -16,7 +16,7 @@ galmap_column_handler := [
   <"b_s", "smallint", b_s, false>,
   <"c_s", "smallint", c_s, false>,
   <"pass_size", "smallint", PassportSize, false>,
-  <"aut_group", "jsonb", AutGroupStr, false>
+  <"aut_group", "jsonb", AutGroupStr, false>,
   <"deg", "smallint", DegreegSt, false>,
   <"embeddings", "jsonb", Embeddings, true>,
   <"plabel", "test", PassportLabel, false>,
@@ -42,7 +42,7 @@ end intrinsic;
 
 intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> Seq[MonStgElt]
   {return string containing one row of data}
-  return [fn[4] select fn[3](s) else fn[3](s, inds, index): for fn in galmap_column_handler];
+  return [fn[4] select fn[3](s) else fn[3](s, inds, index) : fn in galmap_column_handler];
 end intrinsic;
 
 

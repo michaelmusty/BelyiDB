@@ -1,19 +1,19 @@
 intrinsic NULL(s::BelyiDB) -> MonStgElt
   {}
   return "NULL";
-end if;
+end intrinsic;
 
 intrinsic NULL(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
   return "NULL";
-end if;
+end intrinsic;
 
 intrinsic BelyiDB_plabel(s::BelyiDB) -> MonStgElt
   {}
   return Name(s);
 end intrinsic;
 
-function add_dot_seps(string):
+function add_dot_seps(string)
   return Join([string[i] : i in [1..#string]], ".");
 end function;
 
@@ -21,7 +21,7 @@ end function;
 intrinsic PassportLabel(s::BelyiDB) -> MonStgElt
   {return Passport label}
   spl = Split(BelyiDB_plabel(s), '-');
-  return "%o-%o_%o_%o".format(spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]))
+  return Sprintf("%o-%o_%o_%o", spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]));
 end intrinsic;
 
 
@@ -35,7 +35,7 @@ end intrinsic;
 intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
   spl = Split(BelyiDB_label(s), '-');
-  return "{}-{}_{}_{}-{}".format(spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]),spl[7])
+  return Sprintf("%o-%o_%o_%o-%o", spl[1], add_dot_seps(spl[3]), add_dot_seps(spl[4]), add_dot_seps(spl[5]), spl[7]);
 end intrinsic;
 
 intrinsic PermutationTripleToLMFDBLabel(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
@@ -131,29 +131,29 @@ end intrinsic;
 intrinsic ABC(s::BelyiDB) -> MonStgElt
   {}
   sprint([Order(el) : el in sigma]);
-end;
+end intrinsic;
 
 intrinsic ABC_sorted(s::BelyiDB, i::RngIntElt) -> MonStgElt
  {}
   return sprint(Sort([Order(el) : el in sigma])[i]);
-end;
+end intrinsic;
 
 intrinsic a_s(s::BelyiDB) -> MonStgElt
  {}
   return ABC_sorted(s, 1);
-end;
+end intrinsic;
 
 intrinsic b_s(s::BelyiDB) -> MonStgElt
   {}
   return ABC_sorted(s, 2);
-end;
+end intrinsic;
 
 intrinsic c_s(s::BelyiDB) -> MonStgElt
   {}
   return ABC_sorted(s, 3);
-end;
+end intrinsic;
 
-intrisic GroupSt(s::BelyiDB) -> MongStgElt
+intrinsic GroupSt(s::BelyiDB) -> MongStgElt
   {}
   return Split(Name(s), "-")[1];
 end intrinsic;
@@ -316,6 +316,7 @@ end intrinsic;
 
 
 intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
   base_field_data := s`BelyiDBBaseFieldData;
   orbit_base_field_data := [base_field_data[i] : i in inds];
   minpolys := [DefiningPolynomial(orbit_base_field_data[i][1]) : i in [1..#orbit_base_field_data]];
