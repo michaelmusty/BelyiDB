@@ -165,7 +165,7 @@ intrinsic GenusSt(s::BelyiDB) -> MonStgElt
   return sprint(s`BelyiDBGenus);
 end intrinsic;
 
-intrinsic DegreegSt(s::BelyiDB) -> MonStgElt
+intrinsic DegreeSt(s::BelyiDB) -> MonStgElt
   {}
   return sprint(s`BelyiDBDegree);
 end intrinsic;

@@ -1,6 +1,8 @@
 // list of search cols
 // <name, type, function, needs inds and index>
-galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
+intrinsic galmap_column_handler() -> List
+  {}
+  return [*<"geomtype", "text", GeomTypeShort, false>,
   <"map", "text", BelyiMap, true>,
   <"abc", "smallint[]", ABC, false>,
   <"base_field", "numeric[]", BaseField, true>,
@@ -16,7 +18,7 @@ galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
   <"c_s", "smallint", c_s, false>,
   <"pass_size", "smallint", PassportSize, false>,
   <"aut_group", "jsonb", AutGroupStr, false>,
-  <"deg", "smallint", DegreegSt, false>,
+  <"deg", "smallint", DegreeSt, false>,
   <"embeddings", "jsonb", Embeddings, true>,
   <"plabel", "test", PassportLabel, false>,
   <"lambdas", "jsonb", LambdaSt, false>,
@@ -32,9 +34,12 @@ galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
   <"primitivization", "text", NULL, true>,
   <"is_primitive", "bool", NULL, true>
 *];
+end intrinsic;
 
 // <name, type, function>
-passports_column_handler := [*
+intrinsic passports_column_handler() -> List
+  {}
+  return [*
  <"geomtype", "text", GeomTypeShort>,
  <"pass_size", "smallint", PassportSize>,
  <"abc", "smallint[]", ABC>,
@@ -44,7 +49,7 @@ passports_column_handler := [*
  <"lambdas", "jsonb", LambdaSt>,
  <"plabel", "test", PassportLabel>,
  <"num_orbits", "smallint", NumOrbits>,
- <"deg", "smallint", DegreegSt>,
+ <"deg", "smallint", DegreeSt>,
  <"BelyiDB_plabel", "text", BelyiDB_plabel>,
  <"a_s", "smallint", a_s>,
  <"b_s", "smallint", b_s>,
@@ -52,25 +57,17 @@ passports_column_handler := [*
  <"triples", "jsonb", PointedPassportSt>,
  <"aut_group", "jsonb", AutGroupStr>
 *];
+end intrinsic;
 
 intrinsic foo() -> Any
 {}
-  return [* galmap_column_handler, passports_column_handler *];
-end intrinsic;
-/*
-
-
-
-intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
-  {return string containing one row of data}
-  return Join(BelyiDBToLMFDBSeq(s, inds, index), "|");
+  return [* galmap_column_handler(), passports_column_handler() *];
 end intrinsic;
 
-
-intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> Seq[MonStgElt]
+intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> SeqEnum[MonStgElt]
   {return string containing one row of data}
   res := [];
-  for fn in galmap_column_handler do
+  for fn in galmap_column_handler() do
     if fn[4] then
       Append(~res, fn[3](s, inds, index));
     else
@@ -80,13 +77,21 @@ intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntE
   return res;
 end intrinsic;
 
+intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {return string containing one row of data}
+  bar := BelyiDBToLMFDBSeq(s, inds, index);
+  return Join(bar, "|");
+end intrinsic;
 
 
-intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgElt
+
+
+
+intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
-  headers := [[col[1] : col in passports_column_handler]];
-  headers cat:= [[col[2] : col in passports_column_handler]];
-  headers cat:= [[]]
+  headers := [[col[1] : col in passports_column_handler()]];
+  headers cat:= [[col[2] : col in passports_column_handler()]];
+  headers cat:= [[]];
 
   data := [];
   for s in seq do
@@ -103,7 +108,7 @@ intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgEl
       Append(~data, BelyiDBToLMFDBSeq(s, inds, i));
     end for;
   end for;
-  putrecs(filename, headers cat data);
+  return putrecs(filename, headers cat data);
 end intrinsic;
 
 
@@ -112,7 +117,7 @@ end intrinsic;
 
 intrinsic BelyiDBPassportToLMFDBseq(s::BelyiDB) -> MonStgElt
   {return string containing one row of data}
-  return [fn[3](s) : fn in passports_column_handler];
+  return [fn[3](s) : fn in passports_column_handler()];
 end intrinsic;
 
 intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
@@ -121,11 +126,10 @@ intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
 end intrinsic;
 
 
-intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgElt
+intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
-  headers := [[col[1] : col in passports_column_handler]];
-  headers cat:= [[col[2] : col in passports_column_handler]];
-  headers cat:= [[]]
-  putrecs(filename, headers cat [BelyiDBPassportToLMFDBseq(s) : s in seq]);
+  headers := [[col[1] : col in passports_column_handler()]];
+  headers cat:= [[col[2] : col in passports_column_handler()]];
+  headers cat:= [[]];
+  return putrecs(filename, headers cat [BelyiDBPassportToLMFDBseq(s) : s in seq]);
 end intrinsic;
-*/
