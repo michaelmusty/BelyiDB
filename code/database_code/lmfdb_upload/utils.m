@@ -32,6 +32,22 @@ intrinsic PassportSize(s::BelyiDB) -> MongStgElt
 end intrinsic;
 
 
+intrinsic ABC(s::BelyiDB) -> MonStgElt
+ {}
+    Sprintf("%o", [Order(el) : el in sigma]);
+end;
+
+intrisic GroupSt(s::BelyiDB) -> MongStgElt
+  {}
+  return Split(s`BelyiDBFilename,"-")[1];
+end intrinsic;
+
+intrinsic GenusSt(s::BelyiDB) -> MonStgElt
+  {}
+  return Sprintf("%o", s`BelyiDBGenus);
+end intrinsic;
+
+
 intrinsic Base26Encode(n::RngIntElt) -> MonStgElt
 { Given a nonnegative integer n, returns its encoding in base-26 (a=0,..., z=25, ba=26,...). }
     require n ge 0: "n must be a nonnegative integer";

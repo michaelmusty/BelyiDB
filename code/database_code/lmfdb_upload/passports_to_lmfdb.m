@@ -1,8 +1,8 @@
 column_handler := [
  <"geomtype", GeomTypeShort>,
  <"pass_size", PassportSize>,
- <"abc",>,
- <"group",>,
+ <"abc", ABC>,
+ <"group", GroupSt>,
  <"g",>,
  <"maxdegbf",>,
  <"lambdas",>,
