@@ -22,7 +22,7 @@ intrinsic BelyiDB_label(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) 
   return Sprintf("%o-%o", Name(s), letter);
 end intrinsic;
 
-intrinsic GalmapLabel(s::BelyiDB) -> MonStgElt
+intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
   spl = Split(BelyiDB_label(s), '-');
   return "{}-{}_{}_{}-{}".format(spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]),spl[7])

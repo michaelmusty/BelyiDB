@@ -81,7 +81,7 @@ column_handler := [
 */
 
 // list of search cols
-column_handler := [
+galmap_column_handler := [
 // <name, type, function, needs inds and index>
   <"geomtype", "text", GeomTypeShort, false>,
   <"map", "text", BelyiMap, true>,
@@ -93,7 +93,7 @@ column_handler := [
   <"g", "smallint">,
   <"curve", Curve, true>,
   <"orbit_size", OrbitSize, true>,
-  <"label", >, // see new_labels.py in lmfdb/scripts/belyi
+  <"label", GalmapLabel, true>,
   <"a_s", >,
   <"pass_size", >,
   <"c_s", >
@@ -106,8 +106,8 @@ column_handler := [
   <"lambdas", >,
   <"friends", >,
   <"curve_label", >,
-  <"BelyiDB_label", >,
-  <"BelyiDB_plabel", >,
+  <"BelyiDB_label", BelyiDB_label, true>,
+  <"BelyiDB_plabel", BelyiDB_plabel, false>,
   <"specializations", >,
   <"models", >,
   <"moduli_field", >,
@@ -118,5 +118,45 @@ column_handler := [
 ];
 
 intrinsic BelyiDBToLMFDB(s::BelyiDB) -> MonStgElt
-  {}
+  {return string containing one row of data}
+  return Join([fn[3](s): for fn in galmap_column_handler], '|');
 end intrinsic;
+
+
+
+passports_column_handler := [
+// <name, type, function>
+ <"geomtype", "text", GeomTypeShort>,
+ <"pass_size", "smallint", PassportSize>,
+ <"abc", "smallint[]", ABC>,
+ <"group", "text", GroupSt>,
+ <"g", "smallint", GenusSt>,
+ <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
+ <"lambdas", "jsonb", LambdaSt>,
+ <"plabel", "test", PassportLabel>,
+ <"num_orbits", "smallint", NumOrbits>,
+ <"deg", "smallint", DegreegSt>,
+ <"BelyiDB_plabel", "text", BelyiDB_plabel>,
+ <"a_s", "smallint", a_s>,
+ <"b_s", "smallint", b_s>,
+ <"c_s", "smallint", c_s>,
+ <"triples", "jsonb", PointedPassportSt>,
+ <"aut_group", "jsonb", AutGroupStr>
+];
+
+
+intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {return string containing one row of data}
+  return Join([fn[3](s): for fn in passports_column_handler], '|');
+end intrinsic;
+
+
+intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgElt
+  {return string containing one row of data per map}
+  headers := [[col[1] : col in passports_column_handler]];
+  headers cat:= [[col[2] : col in passports_column_handler]];
+  headers cat:= [[]]
+  putrecs(filename, headers cat [[col[3](s) : col in passports_column_handler] : s in seq]);
+end intrinsic;
+
+
