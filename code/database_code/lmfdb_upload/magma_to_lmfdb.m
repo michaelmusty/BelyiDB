@@ -47,7 +47,7 @@ intrinsic passports_column_handler() -> List
  <"g", "smallint", GenusSt>,
  <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
  <"lambdas", "jsonb", LambdaSt>,
- <"plabel", "test", PassportLabel>,
+ <"plabel", "text", PassportLabel>,
  <"num_orbits", "smallint", NumOrbits>,
  <"deg", "smallint", DegreeSt>,
  <"BelyiDB_plabel", "text", BelyiDB_plabel>,

@@ -34,7 +34,7 @@ end intrinsic;
 
 intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
-  spl := Split(BelyiDB_label(s), "-");
+  spl := Split(BelyiDB_label(s, inds, index), "-");
   return Sprintf("%o-%o_%o_%o-%o", spl[1], add_dot_seps(spl[3]), add_dot_seps(spl[4]), add_dot_seps(spl[5]), spl[7]);
 end intrinsic;
 
@@ -282,21 +282,22 @@ intrinsic LambdaSt(s::BelyiDB) -> MonStgElt //lambdas (partitions)
   end for;
   lambdas_str *:= sprint(PermutationToPartition(sigma[3]));
   lambdas_str *:= "]";
+  return lambdas_str;
 end intrinsic;
 
 intrinsic OrbitSize(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
-  return Sprint(#s`BelyiDBGaloisOrbits[index]);
+  return sprint(#s`BelyiDBGaloisOrbits[index]);
 end intrinsic;
 
 intrinsic Curve(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
-  return Sprint(s`BelyiDBBelyiCurves[inds[1]]);
+  return sprint(s`BelyiDBBelyiCurves[inds[1]]);
 end intrinsic;
 
 intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
-  return Sprint(s`BelyiDBBelyiMaps[inds[1]]);
+  return sprint(s`BelyiDBBelyiMaps[inds[1]]);
 end intrinsic;
 
 
@@ -308,7 +309,7 @@ intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> M
   assert #SequenceToSet(minpolys) eq 1;
   coeffs := Coefficients(minpolys[1]);
   assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
-  return Sprint(coeffs);
+  return sprint(coeffs);
 end intrinsic;
 
 
@@ -320,32 +321,30 @@ intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> 
   assert #SequenceToSet(minpolys) eq 1;
   coeffs := Coefficients(minpolys[1]);
   assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
-  str *:= Sprintf("\"base_field\":%o,\n", coeffs);
   // embeddings
   orbit_embeddings := [];
   for i in inds do
     K := base_field_data[i][1];
-    // assert DefiningPolynomial(K) eq DefiningPolynomial(Polredabs_db(K));
     v := base_field_data[i][2];
     conj := base_field_data[i][3];
     z := Eval(K.1, v, conj : prec := 16);
     Append(~orbit_embeddings, [Re(z), Im(z)]);
   end for;
-  return Sprint(orbit_embeddings);
+  return sprint(orbit_embeddings);
 end intrinsic;
 
 intrinsic OrbitTriples(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
   triples := [PointedPassport(s)[i] : i in inds];
   triples := ConvertToOneLine(triples);
-  return Sprint(triples);
+  return sprint(triples);
 end intrinsic;
 
 intrinsic OrbitTriplesCyc(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
   triples := [PointedPassport(s)[i] : i in inds];
   triples := ConvertToCycles(triples);
-  return Sprint(triples);
+  return sprint(triples);
 end intrinsic;
 
 intrinsic Base26Encode(n::RngIntElt) -> MonStgElt
