@@ -1,63 +1,41 @@
 column_handler := [
- <"geomtype", GeomTypeShort>,
- <"pass_size", PassportSize>,
- <"abc", ABC>,
- <"group", GroupSt>,
- <"g", GenusSt>,
- <"maxdegbf", MaximumBaseFieldDegree>,
- <"lambdas", LambdaSt>,
- <"plabel",>,
- <"num_orbits", NumOrbits>,
- <"deg", DegreegSt>,
- <"BelyiDB_plabel", BelyiDB_plabel>,
- <"a_s", a_s>,
- <"b_s", b_s>,
- <"c_s", c_s>,
- <"triples", PointedPassportSt>,
- <"aut_group", AutGroupStr>
+// <name, type, function>
+ <"geomtype", "text", GeomTypeShort>,
+ <"pass_size", "smallint", PassportSize>,
+ <"abc", "smallint[]", ABC>,
+ <"group", "text", GroupSt>,
+ <"g", "smallint", GenusSt>,
+ <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
+ <"lambdas", "jsonb", LambdaSt>,
+ <"plabel", "test", PassportLabel>,
+ <"num_orbits", "smallint", NumOrbits>,
+ <"deg", "smallint", DegreegSt>,
+ <"BelyiDB_plabel", "text", BelyiDB_plabel>,
+ <"a_s", "smallint", a_s>,
+ <"b_s", "smallint", b_s>,
+ <"c_s", "smallint", c_s>,
+ <"triples", "jsonb", PointedPassportSt>,
+ <"aut_group", "jsonb", AutGroupStr>
 ];
 
 
-intrinsic PermutationToCycleStructure(sigma::GrpPermElt) -> MonStgElt
-  {}
-  s := "";
-  struc := CycleStructure(sigma);
-  for pair in struc do
-    len, m := Explode(pair);
-    for i := 1 to m do
-      s *:= Sprintf("%o.", len);
-    end for;
-  end for;
-  s := s[1..#s-1]; // remove last dot
-  return s;
+intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
+  {return string containing one row of data}
+  return Join([fn[3](s): for fn in column_handler], '|');
+end intrinsic;
+
+
+intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> MonStgElt
+  {return string containing one row of data per map}
+  headers := [[col[1] : col in column_handler]];
+  headers cat:= [[col[2] : col in column_handler]];
+  headers cat:= [[]]
+  putrecs(filename, headers cat [[col[3](s) : col in column_handler] : s in seq]);
 end intrinsic;
 
 
 
-intrinsic SortPermutations(sigma::SeqEnum[GrpPermElt]) -> SeqEnum
-  {}
-  assert #sigma eq 3;
-  decs := [CycleDecomposition(el) : el in sigma];
-  lens := [];
-  for s in decs do
-    s_lens := [];
-    for cyc in s do
-      Append(~s_lens, #cyc);
-    end for;
-    Append(~lens, s_lens);
-  end for;
-  //Sort(~lens);
-  ParallelSort(~lens, ~sigma);
-  swap := [2,1,3];
-  ParallelSort(~swap, ~sigma);
-  return sigma;
-end intrinsic;
 
-// procedure version
-intrinsic SortPermutations(~sigma::SeqEnum[GrpPermElt])
-  {}
-  sigma := SortPermutations(sigma);
-end intrinsic;
 
 // TODO: doesn't work for 2-digit ramification indices
 intrinsic LMFDBLabelToBelyiDBLabel(label::MonStgElt : dot_m := false) -> MonStgElt
@@ -95,35 +73,9 @@ intrinsic LMFDBLabelToBelyiDBLabel(label::MonStgElt : dot_m := false) -> MonStgE
   return label_new;
 end intrinsic;
 
-intrinsic ShortGeometryType(s::BelyiDB) -> MonStgElt
-  {}
-  return TriangleType(s)[1];
-end intrinsic;
-
-intrinsic PermutationToPartition(perm::GrpPermElt) -> SeqEnum[RngIntElt]
-  {}
-  cs := CycleStructure(perm);
-  part := [];
-  for i in {1..#cs} do
-    for j in {1..cs[i][2]} do
-      Append(~part, cs[i][1]);
-    end for;
-  end for;
-  return part;
-end intrinsic;
 
 
-
-intrinsic SortedPointedPassport(s::BelyiDB) -> SeqEnum
-  {}
-  ppass := s`BelyiDBPointedPassport;
-  ppass_sort := [];
-  for sigma in ppass do
-    Append(~ppass_sort, SortPermutations(sigma));
-  end for;
-  return ppass_sort;
-end intrinsic;
-
+/* OLD VERSIONS
 intrinsic PassportFileHeaders() -> MonStgElt
   {}
   return "geomtype|pass_size|abc|group|g|maxdegbf|lambdas|plabel|BelyiDB_plabel|num_orbits|deg|a_s|b_s|c_s|aut_group";
@@ -186,7 +138,7 @@ intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
 end intrinsic;
 
 // unsorted version
-/*
+
 intrinsic BelyiDBPassportToLMFDB(s::BelyiDB) -> MonStgElt
   {return string containing one row of data}
   row := "";
