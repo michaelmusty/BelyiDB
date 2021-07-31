@@ -1,10 +1,31 @@
+intrinsic BelyiDB_plabel(s::BelyiDB) -> MonStgElt
+  {}
+  return Name(s);
+end intrinsic;
+
+function add_dot_seps(string):
+  return Join([string[i] : i in [1..#string]], ".");
+end function;
+
+
 intrinsic PassportLabel(s::BelyiDB) -> MonStgElt
   {return Passport label}
-  function add_dot_seps(string):
-    return Join([string[i] : i in [1..#string]], ".");
-  end function;
-  spl = Split(BelyiDB_plabel(s));
+  spl = Split(BelyiDB_plabel(s), '-');
   return "%o-%o_%o_%o".format(spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]))
+end intrinsic;
+
+
+intrinsic BelyiDB_label(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {return BelyiDB label}
+  letter := Base26Encode(index - 1);
+  // label
+  return Sprintf("%o-%o", Name(s), letter);
+end intrinsic;
+
+intrinsic GalmapLabel(s::BelyiDB) -> MonStgElt
+  {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
+  spl = Split(BelyiDB_label(s), '-');
+  return "{}-{}_{}_{}-{}".format(spl[1],add_dot_seps(spl[3]),add_dot_seps(spl[4]),add_dot_seps(spl[5]),spl[7])
 end intrinsic;
 
 intrinsic PermutationTripleToLMFDBLabel(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
@@ -124,7 +145,7 @@ end;
 
 intrisic GroupSt(s::BelyiDB) -> MongStgElt
   {}
-  return Split(s`BelyiDBFilename,"-")[1];
+  return Split(Name(s), "-")[1];
 end intrinsic;
 
 intrinsic GenusSt(s::BelyiDB) -> MonStgElt
@@ -142,10 +163,7 @@ intrinsic MaximumBaseFieldDegree(s::BelyiDB) -> MonStgElt
   return sprint(Maximum([#el : el in s`BelyiDBGaloisOrbits]));
 end intrinsic;
 
-intrinsic BelyiDB_plabel(s::BelyiDB) -> MonStgElt
-  {}
-  return Split(s`BelyiDBFilename,".")[1];
-end intrinsic;
+
 
 intrinsic NumOrbits(s::BelyiDB) -> MonStgElt
   {}
