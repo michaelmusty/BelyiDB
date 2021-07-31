@@ -92,9 +92,15 @@ intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> 
     conj := base_field_data[i][3];
     z := Eval(K.1, v, conj : prec := 16);
     Append(~orbit_embeddings, [Re(z), Im(z)]);
-    return Sprint(orbit_embeddings);
   end for;
+  return Sprint(orbit_embeddings);
+end intrinsic;
 
+intrinsic OrbitTriples(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
+  triples := [PointedPassport(s)[i] : i in inds];
+  return Sprint(triples);
+end intrinsic;
 
 intrinsic Base26Encode(n::RngIntElt) -> MonStgElt
 { Given a nonnegative integer n, returns its encoding in base-26 (a=0,..., z=25, ba=26,...). }
