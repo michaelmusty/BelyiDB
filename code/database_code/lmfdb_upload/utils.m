@@ -145,6 +145,48 @@ intrinsic ConvertToOneLine(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
   return str;
 end intrinsic;
 
+intrinsic ConvertToCycles(tau::GrpPermElt) -> MonStgElt
+  {}
+  if tau eq Identity(Parent(tau)) then
+    return "()";
+  else
+    return Sprintf("%o", tau);
+  end if;
+end intrinsic;
+
+intrinsic ConvertToCycles(sigma::SeqEnum[GrpPermElt]) -> MonStgElt
+  {}
+  assert #sigma eq 3;
+  str := "[";
+  str *:= "\'";
+  str *:= ConvertToCycles(sigma[1]);
+  str *:= "\'";
+  str *:= ",";
+  str *:= "\'";
+  str *:= ConvertToCycles(sigma[2]);
+  str *:= "\'";
+  str *:= ",";
+  str *:= "\'";
+  str *:= ConvertToCycles(sigma[3]);
+  str *:= "\'";
+  str *:= "]";
+  return str;
+end intrinsic;
+
+intrinsic ConvertToCycles(triples::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
+  {}
+  str := "";
+  str *:= "[";
+  for i := 1 to #triples-1 do
+    str *:= Sprintf("%o", ConvertToCycles(triples[i]));
+    str *:= ",";
+  end for;
+  str *:= Sprintf("%o", ConvertToCycles(triples[#triples]));
+  str *:= "]";
+  return str;
+end intrinsic;
+
+
 intrinsic PointedPassportSt(s::BelyiDB) -> MonStgElt // aka triples
   {}
   return sprint(ConvertToOneLine(PointedPassport(s)));
@@ -212,6 +254,14 @@ end intrinsic;
 intrinsic OrbitTriples(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
   {}
   triples := [PointedPassport(s)[i] : i in inds];
+  triples := ConvertToOneLine(triples);
+  return Sprint(triples);
+end intrinsic;
+
+intrinsic OrbitTriplesCyc(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+  {}
+  triples := [PointedPassport(s)[i] : i in inds];
+  triples := ConvertToCycles(triples);
   return Sprint(triples);
 end intrinsic;
 
