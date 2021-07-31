@@ -21,6 +21,7 @@
     {
     magma_to_lmfdb.m
     passports_to_lmfdb.m
+    utils.m
     }
   }
 }
