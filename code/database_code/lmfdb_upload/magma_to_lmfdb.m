@@ -57,26 +57,49 @@ intrinsic S3Action(tau::GrpPermElt, l::List) -> List
   return [* S3Action(tau, x) : x in l *];
 end intrinsic;
 
+/*
+column_handler := [
+// <name, type, function>
+<"geomtype", "text", GeomTypeShort>,
+<"pass_size", "smallint", PassportSize>,
+<"abc", "smallint[]", ABC>,
+<"group", "text", GroupSt>,
+<"g", "smallint", GenusSt>,
+<"maxdegbf", "smallint", MaximumBaseFieldDegree>,
+<"lambdas", "jsonb", LambdaSt>,
+<"plabel", "test", PassportLabel>,
+<"num_orbits", "smallint", NumOrbits>,
+<"deg", "smallint", DegreegSt>,
+<"BelyiDB_plabel", "text", BelyiDB_plabel>,
+<"a_s", "smallint", a_s>,
+<"b_s", "smallint", b_s>,
+<"c_s", "smallint", c_s>,
+<"triples", "jsonb", PointedPassportSt>,
+<"aut_group", "jsonb", AutGroupStr>
+];
 
+*/
 
 // list of search cols
 column_handler := [
-  <"geomtype", GeomTypeShort>,
-  <"map", BelyiMap>,
-  <"abc", ABC>,
-  <"base_field", BaseField>,
-  <"triples", OrbitTriples>,
-  <"triples_cyc", OrbitTriplesCyc>,
-  <"g", >,
-  <"curve", Curve>,
-  <"orbit_size", OrbitSize>,
+// <name, type, function, needs inds and index>
+  <"geomtype", "text", GeomTypeShort, false>,
+  <"map", "text", BelyiMap, true>,
+  <"abc", "smallint[]", ABC, false>,
+  <"base_field", "numeric[]", BaseField, true>,
+  <"triples", "jsonb", OrbitTriples, true>,
+  <"triples_cyc", "jsonb", OrbitTriplesCyc, true>,
+  <"group", "text", GroupSt>,
+  <"g", "smallint">,
+  <"curve", Curve, true>,
+  <"orbit_size", OrbitSize, true>,
   <"label", >, // see new_labels.py in lmfdb/scripts/belyi
   <"a_s", >,
   <"pass_size", >,
   <"c_s", >
   <"aut_group", >,
   <"deg", >,
-  <"embeddings", Embeddings>,
+  <"embeddings", Embeddings, true>,
   <"group", >,
   <"b_s", >,
   <"plabel", >,
