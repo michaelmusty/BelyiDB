@@ -85,7 +85,10 @@ end intrinsic;
 
 
 intrinsic GalmapsDictionary(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
-  {return a dictionary with the attributes of the galois orbit map}
+  {Return a dictionary with the attributes of the galois orbit map.
+    inds is the indices of the triples belonging to the orbit in the pointed passport (which contains all triples of the passport).
+    index is the index of the Galois orbit in the list of Galois orbits.
+  }
   str := "";
   letter := IntegerToLetter(index);
   // label
