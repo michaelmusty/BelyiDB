@@ -3,18 +3,18 @@ column_handler := [
  <"pass_size", PassportSize>,
  <"abc", ABC>,
  <"group", GroupSt>,
- <"g",>,
- <"maxdegbf",>,
- <"lambdas",>,
+ <"g", GenusSt>,
+ <"maxdegbf", MaximumBaseFieldDegree>,
+ <"lambdas", LambdaSt>,
  <"plabel",>,
- <"num_orbits",>,
- <"deg",>,
- <"BelyiDB_plabel",>,
- <"a_s",>,
- <"b_s",>,
- <"c_s",>,
- <"triples",>,
- <"aut_group",>
+ <"num_orbits", NumOrbits>,
+ <"deg", DegreegSt>,
+ <"BelyiDB_plabel", BelyiDB_plabel>,
+ <"a_s", a_s>,
+ <"b_s", b_s>,
+ <"c_s", c_s>,
+ <"triples", PointedPassportSt>,
+ <"aut_group", AutGroupStr>
 ];
 
 
@@ -112,38 +112,7 @@ intrinsic PermutationToPartition(perm::GrpPermElt) -> SeqEnum[RngIntElt]
   return part;
 end intrinsic;
 
-// for permutation triples
-intrinsic ConvertToOneLine(l::SeqEnum[GrpPermElt]) -> MonStgElt
-  {}
-  str := "[";
-  if #l eq 0 then
-    str *:= "[]";
-  else
-    for i := 1 to #l-1 do
-      str *:= Sprintf("%m, ", l[i]);
-    end for;
-    str *:= Sprintf("%m", l[#l]);
-  end if;
-  str *:= "]";
-  return str;
-end intrinsic;
 
-// For SeqEnums of permutation triples
-intrinsic ConvertToOneLine(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
-  {}
-  str := "[";
-  if #l eq 0 then
-    str *:= "[]";
-  else
-    for i := 1 to #l-1 do
-      str *:= ConvertToOneLine(l[i]);
-      str *:= ",";
-    end for;
-    str *:= ConvertToOneLine(l[#l]);
-  end if;
-  str *:= "]";
-  return str;
-end intrinsic;
 
 intrinsic SortedPointedPassport(s::BelyiDB) -> SeqEnum
   {}

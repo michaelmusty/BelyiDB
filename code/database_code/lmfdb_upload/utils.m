@@ -27,14 +27,34 @@ end intrinsic;
 
 
 intrinsic PassportSize(s::BelyiDB) -> MongStgElt
- {return the size of the passport}
- return Sprintf("%o", #(s`BelyiDBPassport));
+  {return the size of the passport}
+  return sprint(s`BelyiDBPassport);
 end intrinsic;
 
 
 intrinsic ABC(s::BelyiDB) -> MonStgElt
+  {}
+  sprint([Order(el) : el in sigma]);
+end;
+
+intrinsic ABC_sorted(s::BelyiDB, i::RngIntElt) -> MonStgElt
  {}
-    Sprintf("%o", [Order(el) : el in sigma]);
+  return sprint(Sort([Order(el) : el in sigma])[i]);
+end;
+
+intrinsic a_s(s::BelyiDB) -> MonStgElt
+ {}
+  return ABC_sorted(s, 1);
+end;
+
+intrinsic b_s(s::BelyiDB) -> MonStgElt
+  {}
+  return ABC_sorted(s, 2);
+end;
+
+intrinsic c_s(s::BelyiDB) -> MonStgElt
+  {}
+  return ABC_sorted(s, 3);
 end;
 
 intrisic GroupSt(s::BelyiDB) -> MongStgElt
@@ -44,7 +64,91 @@ end intrinsic;
 
 intrinsic GenusSt(s::BelyiDB) -> MonStgElt
   {}
-  return Sprintf("%o", s`BelyiDBGenus);
+  return sprint(s`BelyiDBGenus);
+end intrinsic;
+
+intrinsic DegreegSt(s::BelyiDB) -> MonStgElt
+  {}
+  return sprint(s`BelyiDBDegree);
+end intrinsic;
+
+intrinsic MaximumBaseFieldDegree(s::BelyiDB) -> MonStgElt
+  {}
+  return sprint(Maximum([#el : el in s`BelyiDBGaloisOrbits]));
+end intrinsic;
+
+intrinsic BelyiDB_plabel(s::BelyiDB) -> MonStgElt
+  {}
+  return Split(s`BelyiDBFilename,".")[1];
+end intrinsic;
+
+intrinsic NumOrbits(s::BelyiDB) -> MonStgElt
+  {}
+  return sprint(#s`BelyiDBGaloisOrbits);
+end intrinsic;
+
+intrinsic AutGroupStr(s::BelyiDB) -> MonStgElt
+  {}
+  aut := AutomorphismGroup(ppass[1]);
+  for el in ppass do
+    assert aut eq AutomorphismGroup(el);
+  end for;
+  if #aut eq 1 then
+    aut_group_str := Sprintf("[%m]", Identity(aut));
+  else
+    gens := SetToSequence(Generators(aut));
+    aut_group_str := ConvertToOneLine(gens);
+  end if;
+  return sprint(aut_group_str);
+end intrinsic;
+
+
+// for permutation triples
+intrinsic ConvertToOneLine(l::SeqEnum[GrpPermElt]) -> MonStgElt
+  {}
+  str := "[";
+  if #l eq 0 then
+    str *:= "[]";
+  else
+    for i := 1 to #l-1 do
+      str *:= Sprintf("%m, ", l[i]);
+    end for;
+    str *:= Sprintf("%m", l[#l]);
+  end if;
+  str *:= "]";
+  return str;
+end intrinsic;
+
+// For SeqEnums of permutation triples
+intrinsic ConvertToOneLine(l::SeqEnum[SeqEnum[GrpPermElt]]) -> MonStgElt
+  {}
+  str := "[";
+  if #l eq 0 then
+    str *:= "[]";
+  else
+    for i := 1 to #l-1 do
+      str *:= ConvertToOneLine(l[i]);
+      str *:= ",";
+    end for;
+    str *:= ConvertToOneLine(l[#l]);
+  end if;
+  str *:= "]";
+  return str;
+end intrinsic;
+
+intrinsic PointedPassportSt(s::BelyiDB) -> MonStgElt // aka triples
+  {}
+  return sprint(ConvertToOneLine(PointedPassport(s)));
+end intrinsic;
+
+intrinsic LambdaSt(s::BelyiDB) -> MonStgElt //lambdas (partitions)
+  {}
+  lambdas_str := "[";
+  for i := 1 to 2 do
+    lambdas_str *:= sprint(PermutationToPartition(sigma[i]));
+  end for;
+  lambdas_str *:= sprint(PermutationToPartition(sigma[3]));
+  lambdas_str *:= "]";
 end intrinsic;
 
 
@@ -135,99 +239,3 @@ intrinsic sprint(X::.) -> MonStgElt
     if Type(X) eq Assoc then return Join(Sort([ $$(k) cat "=" cat $$(X[k]) : k in Keys(X)]),":"); end if;
     return strip(Sprintf("%o",X));
 end intrinsic;
-
-intrinsic atoi(s::MonStgElt) -> RngIntElt
-{ Converts a string to an integer (alias for StringToInteger). }
-    return #s gt 0 select StringToInteger(s) else 0;
-end intrinsic;
-
-intrinsic StringToReal(s::MonStgElt) -> RngIntElt
-{ Converts a decimal string (like 123.456 or 1.23456e40 or 1.23456e-10) to a real number at default precision. }
-    if #s eq 0 then return 0.0; end if;
-    if "e" in s then
-        t := Split(s,"e");
-        require #t eq 2: "Input should have the form 123.456e20 or 1.23456e-10";
-        return StringToReal(t[1])*10.0^StringToInteger(t[2]);
-    end if;
-    t := Split(s,".");
-    require #t le 2: "Input should have the form 123 or 123.456 or 1.23456e-10";
-    n := StringToInteger(t[1]);  s := t[1][1] eq "-" select -1 else 1;
-    return #t eq 1 select RealField()!n else RealField()!n + s*RealField()!StringToInteger(t[2])/10^#t[2];
-end intrinsic;
-
-intrinsic atof (s::MonStgElt) -> RngIntElt
-{ Converts a decimal string (like "123.456") to a real number at default precision. }
-    return StringToReal(s);
-end intrinsic;
-
-intrinsic StringsToAssociativeArray(s::SeqEnum[MonStgElt]) -> Assoc
-{ Converts a list of strings "a=b" to an associative array A with string keys and values such that A[a]=b. Ignores strings not of the form "a=b". }
-    A := AssociativeArray(Universe(["string"]));
-    for a in s do t:=Split(a,"="); if #t eq 2 then A[t[1]]:=t[2]; end if; end for;
-    return A;
-end intrinsic;
-
-intrinsic atod(s::SeqEnum[MonStgElt]) -> Assoc
-{ Converts a list of strings "a=b" to an associative array A with string keys and values such that A[a]=b (alias for StringsToAssociativeArray). }
-    return StringsToAssociativeArray(s);
-end intrinsic;
-
-intrinsic StringToIntegerArray(s::MonStgElt) -> SeqEnum[RngIntElt]
-{ Given string representing a sequence of integers, returns the sequence (faster and safer than eval). }
-    t := strip(s);
-    if t eq "[]" then return [Integers()|]; end if;
-    assert #t ge 2 and t[1] eq "[" and t[#t] eq "]";
-    return [Integers()|StringToInteger(n):n in Split(t[2..#t-1],",")];
-end intrinsic;
-
-intrinsic atoii(s::MonStgElt) -> SeqEnum[RngIntElt]
-{ Converts a string to a sequence of integers (alias for StringToIntegerArray). }
-    return StringToIntegerArray(s);
-end intrinsic;
-
-intrinsic atoiii(s::MonStgElt) -> SeqEnum[RngIntElt]
-{ Converts a string to a sequence of sequences of integers. }
-    t := strip(s);
-    if t eq "[]" then return []; end if;
-    if t eq "[[]]" then return [[Integers()|]]; end if;
-    assert #t gt 4 and t[1..2] eq "[[" and t[#t-1..#t] eq "]]";
-    r := Split(t[2..#t-1],"[");
-    return [[Integers()|StringToInteger(n):n in Split(a[1] eq "]" select "" else Split(a,"]")[1],",")]:a in r];
-end intrinsic;
-
-intrinsic StringToRationalArray(s::MonStgElt) -> SeqEnum[RatFldElt]
-{ Given string representing a sequence of rational numbers, returns the sequence (faster and safer than eval). }
-    if s eq "[]" then return []; end if;
-    t := strip(s);
-    assert #t ge 2 and t[1] eq "[" and t[#t] eq "]";
-    return [StringToRational(n):n in Split(t[2..#t-1],",")];
-end intrinsic;
-
-intrinsic StringToRealArray(s::MonStgElt) -> SeqEnum[RatFldElt]
-{ Given string representing a sequence of real numbers, returns the sequence (faster and safer than eval). }
-    if s eq "[]" then return []; end if;
-    t := strip(s);
-    assert #t ge 2 and t[1] eq "[" and t[#t] eq "]";
-    return [atof(n):n in Split(t[2..#t-1],",")];
-end intrinsic;
-
-intrinsic atoff(s::MonStgElt) -> SeqEnum[RngIntElt]
-{ Converts a string to a sequence of reals (alias for StringToRealArray). }
-    return StringToRealArray(s);
-end intrinsic;
-
-intrinsic atofff(s::MonStgElt) -> SeqEnum[RngIntElt]
-{ Converts a string to a sequence of sequences of real numbers. }
-    t := strip(s);
-    if t eq "[]" then return []; end if;
-    if t eq "[[]]" then return [[RealField()|]]; end if;
-    assert #t gt 4 and t[1..2] eq "[[" and t[#t-1..#t] eq "]]";
-    r := Split(t[2..#t-1],"[");
-    return [[RealField()|StringToReal(n):n in Split(a[1] eq "]" select "" else Split(a,"]")[1],",")]:a in r];
-end intrinsic;
-
-
-
-
-
-
