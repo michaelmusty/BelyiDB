@@ -9,6 +9,7 @@ intrinsic galmap_column_handler() -> List
   <"triples", "jsonb", OrbitTriples, true>,
   <"triples_cyc", "jsonb", OrbitTriplesCyc, true>,
   <"group", "text", GroupSt, false>,
+  <"group_num", "text", GroupNumSt, false>,
   <"g", "smallint", GenusSt, false>,
   <"curve", "text", Curve, true>,
   <"orbit_size", "smallint", OrbitSize, true>,
@@ -20,7 +21,7 @@ intrinsic galmap_column_handler() -> List
   <"aut_group", "jsonb", AutGroupStr, false>,
   <"deg", "smallint", DegreeSt, false>,
   <"embeddings", "jsonb", Embeddings, true>,
-  <"plabel", "test", PassportLabel, false>,
+  <"plabel", "text", PassportLabel, false>,
   <"lambdas", "jsonb", LambdaSt, false>,
   <"friends", "text[]", NULL, true>,
   <"curve_label", "text", NULL, true>,
@@ -32,7 +33,7 @@ intrinsic galmap_column_handler() -> List
   <"moduli_field_label", "text", NULL, true>,
   <"base_field_label", "text", NULL, true>,
   <"primitivization", "text", NULL, true>,
-  <"is_primitive", "bool", NULL, true>
+  <"is_primitive", "boolean", NULL, true>
 *];
 end intrinsic;
 

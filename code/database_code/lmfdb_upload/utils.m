@@ -157,6 +157,11 @@ intrinsic GroupSt(s::BelyiDB) -> MonStgElt
   return Split(Name(s), "-")[1];
 end intrinsic;
 
+intrinsic GroupNumSt(s::BelyiDB) -> MonStgElt
+  {}
+  return Split(GroupSt(s), "T")[2];
+end intrinsic;
+
 intrinsic GenusSt(s::BelyiDB) -> MonStgElt
   {}
   return sprint(s`BelyiDBGenus);
