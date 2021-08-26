@@ -9,7 +9,7 @@ intrinsic galmap_column_handler() -> List
   <"triples", "jsonb", OrbitTriples, true>,
   <"triples_cyc", "jsonb", OrbitTriplesCyc, true>,
   <"group", "text", GroupSt, false>,
-  <"group_num", "text", GroupNumSt, false>,
+  <"group_num", "smallint", GroupNumSt, false>,
   <"g", "smallint", GenusSt, false>,
   <"curve", "text", Curve, true>,
   <"orbit_size", "smallint", OrbitSize, true>,
@@ -40,23 +40,23 @@ end intrinsic;
 // <name, type, function>
 intrinsic passports_column_handler() -> List
   {}
-  return [*
- <"geomtype", "text", GeomTypeShort>,
- <"pass_size", "smallint", PassportSize>,
- <"abc", "smallint[]", ABC>,
- <"group", "text", GroupSt>,
- <"g", "smallint", GenusSt>,
- <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
- <"lambdas", "jsonb", LambdaSt>,
- <"plabel", "text", PassportLabel>,
- <"num_orbits", "smallint", NumOrbits>,
- <"deg", "smallint", DegreeSt>,
- <"BelyiDB_plabel", "text", BelyiDB_plabel>,
- <"a_s", "smallint", a_s>,
- <"b_s", "smallint", b_s>,
- <"c_s", "smallint", c_s>,
- <"triples", "jsonb", PointedPassportSt>,
- <"aut_group", "jsonb", AutGroupStr>
+return [*
+  <"geomtype", "text", GeomTypeShort>,
+  <"pass_size", "smallint", PassportSize>,
+  <"abc", "smallint[]", ABC>,
+  <"group", "text", GroupSt>,
+  <"g", "smallint", GenusSt>,
+  <"maxdegbf", "smallint", MaximumBaseFieldDegree>,
+  <"lambdas", "jsonb", LambdaSt>,
+  <"plabel", "text", PassportLabel>,
+  <"num_orbits", "smallint", NumOrbits>,
+  <"deg", "smallint", DegreeSt>,
+  <"BelyiDB_plabel", "text", BelyiDB_plabel>,
+  <"a_s", "smallint", a_s>,
+  <"b_s", "smallint", b_s>,
+  <"c_s", "smallint", c_s>,
+  <"triples", "jsonb", PointedPassportSt>,
+  <"aut_group", "jsonb", AutGroupStr>
 *];
 end intrinsic;
 
