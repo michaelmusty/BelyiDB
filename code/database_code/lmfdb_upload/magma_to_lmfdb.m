@@ -106,10 +106,16 @@ intrinsic GenerateBelyiData(galmaps_filename::MonStgElt, passports_filename : De
   for d := 1 to DegreeBound do
     names cat:= BelyiDBFilenames(d);
   end for;
-  printf "%o BelyiDB files found\n", #names;
+  printf "%o BelyiDB filenames found\n", #names;
   print "Loading Belyi maps...";
   t0 := Cputime();
-  db := [BelyiDBRead(name) : name in names];
+  db := [];
+  for name in names do
+    s := BelyiDBRead(name);
+    if BelyiMapIsComputed(s) then // only BelyiDBs with all data computed
+      Append(~db, s);
+    end if;
+  end for;
   t1 := Cputime();
   printf "...done. That took %o seconds.\n", t1 - t0;
   BelyiDBToLMFDB(galmaps_filename, db);

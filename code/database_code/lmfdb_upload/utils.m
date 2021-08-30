@@ -1,5 +1,4 @@
-intrinsic NULL(s::BelyiDB) -> MonStgElt
-  {}
+intrinsic NULL(s::BelyiDB) -> MonStgElt {}
   return "NULL";
 end intrinsic;
 
@@ -128,7 +127,7 @@ end intrinsic;
 intrinsic ABC(s::BelyiDB) -> MonStgElt
   {}
   sigma := PermutationTriple(s);
-  return ReplaceString(sprint([Order(el) : el in sigma]), ['[',']'], ['{','}']);
+  return ReplaceString(sprint([Order(el) : el in sigma]), ["[","]"], ["{","}"]);
 end intrinsic;
 
 intrinsic ABC_sorted(s::BelyiDB, i::RngIntElt) -> MonStgElt
@@ -383,7 +382,7 @@ intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> M
   assert #SequenceToSet(minpolys) eq 1;
   coeffs := Coefficients(minpolys[1]);
   assert Parent(coeffs[1]) eq Rationals() or Parent(coeffs[1]) eq Integers();
-  return ReplaceString(sprint(coeffs), ['[',']'], ['{','}']);
+  return ReplaceString(sprint(coeffs), ["[","]"], ["{","}"]);
 end intrinsic;
 
 intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
