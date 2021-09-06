@@ -63,3 +63,21 @@ intrinsic ReplaceString(~s::MonStgElt, fs::[MonStgElt], ts::[MonStgElt])
     ReplaceString(~s,fs[i],ts[i]);
   end for;
 end intrinsic;
+
+intrinsic MoebiusTransformation3Points(PP1::Crv, pts_from::SeqEnum) -> Map
+  {Given 3 points in PP^1, return the Moebius transformation taking these points to 0, 1, oo}
+
+  S<X,Y> := Ambient(PP1);
+  Xs := [];
+  Ys := [];
+  pts_from_seq := [Eltseq(pt) : pt in pts_from];
+  for pt in pts_from_seq do
+    Append(~Xs, pt[1]);
+    Append(~Ys, pt[2]);
+  end for;
+  return map< PP1 -> PP1 | [(Xs[2]*Ys[3] - Ys[2]*Xs[3])*(X*Ys[1] - Xs[1]*Y), (Ys[1]*Xs[2] - Xs[1]*Ys[2])*(X*Ys[3] - Xs[3]*Y)] >;
+end intrinsic;
+
+intrinsic MoebiusTransformation3Points(S::Rng, pts_from::SeqEnum, pts_to::SeqEnum) -> Map
+  {}
+end intrinsic;
