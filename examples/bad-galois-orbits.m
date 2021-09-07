@@ -58,6 +58,6 @@ g_test := Evaluate(fmob_eqns[1], [x,1])/Evaluate(fmob_eqns[2], [x,1]);
 print "Did we get it? mob o f = g?";
 KX!g_test eq KX!g;
 
-mob_eqns := DefiningEquations(mob);
+mob_eqns := DefiningEquations(mob^-1);
 chg := Evaluate(mob_eqns[1], [x,1])/Evaluate(mob_eqns[2], [x,1]);
 printf "the change of variables is x |-> %o\n", chg;
