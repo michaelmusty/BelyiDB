@@ -1,5 +1,5 @@
 // list of search cols
-// <name, type, function, needs inds and index>
+// <name, type, function, needs inds and lmfdb_index>
 galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
   <"map", "text", BelyiMap, true>,
   <"abc", "smallint[]", ABC, false>,
@@ -55,18 +55,18 @@ passports_column_handler := [*
 *];
 
 
-intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {return string containing one row of data}
-  bar := BelyiDBToLMFDBSeq(s, inds, index);
+  bar := BelyiDBToLMFDBSeq(s, inds, lmfdb_index);
   return Join(bar, "|");
 end intrinsic;
 
-intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> SeqEnum[MonStgElt]
+intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> SeqEnum[MonStgElt]
   {return string containing one row of data}
   res := [];
   for fn in galmap_column_handler do
     if fn[4] then
-      Append(~res, fn[3](s, inds, index));
+      Append(~res, fn[3](s, inds, lmfdb_index));
     else
       Append(~res, fn[3](s));
     end if;
