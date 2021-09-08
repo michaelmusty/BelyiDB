@@ -2,7 +2,7 @@ intrinsic NULL(s::BelyiDB) -> MonStgElt {}
   return "NULL";
 end intrinsic;
 
-intrinsic NULL(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic NULL(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   return "NULL";
 end intrinsic;
@@ -24,16 +24,16 @@ intrinsic PassportLabel(s::BelyiDB) -> MonStgElt
 end intrinsic;
 
 
-intrinsic BelyiDB_label(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic BelyiDB_label(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {return BelyiDB label}
-  letter := Base26Encode(index - 1);
+  letter := Base26Encode(lmfdb_index - 1);
   // label
   return Sprintf("%o-%o", Name(s), letter);
 end intrinsic;
 
-intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic GalmapLabel(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {return LMFDB label, by converting BelyiDB labels (with square brackets) to new shorter labels}
-  spl := Split(BelyiDB_label(s, inds, index), "-");
+  spl := Split(BelyiDB_label(s, inds, lmfdb_index), "-");
   return Sprintf("%o-%o_%o_%o-%o", spl[1], add_dot_seps(spl[3]), add_dot_seps(spl[4]), add_dot_seps(spl[5]), spl[7]);
 end intrinsic;
 
@@ -290,13 +290,13 @@ intrinsic LambdaSt(s::BelyiDB) -> MonStgElt //lambdas (partitions)
   return lambdas_str;
 end intrinsic;
 
-intrinsic OrbitSize(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic OrbitSize(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
-  return sprint(#s`BelyiDBGaloisOrbits[index]);
+  return sprint(#inds);
 end intrinsic;
 
 // TODO: needs to give equation, or PP1
-intrinsic Curve(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic Curve(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   // curve and map
   X := BelyiCurves(s)[inds[1]];
@@ -344,7 +344,7 @@ intrinsic Curve(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonSt
   //return sprint(s`BelyiDBBelyiCurves[inds[1]]);
 end intrinsic;
 
-intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   // curve and map
   X := BelyiCurves(s)[inds[1]];
@@ -374,7 +374,7 @@ intrinsic BelyiMap(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> Mo
   return map_str;
 end intrinsic;
 
-intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   base_field_data := s`BelyiDBBaseFieldData;
   orbit_base_field_data := [base_field_data[i] : i in inds];
@@ -385,7 +385,7 @@ intrinsic BaseField(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> M
   return ReplaceString(sprint(coeffs), ["[","]"], ["{","}"]);
 end intrinsic;
 
-intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   base_field_data := s`BelyiDBBaseFieldData;
   orbit_base_field_data := [base_field_data[i] : i in inds];
@@ -405,14 +405,14 @@ intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> 
   return sprint(orbit_embeddings);
 end intrinsic;
 
-intrinsic OrbitTriples(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic OrbitTriples(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   triples := [PointedPassport(s)[i] : i in inds];
   triples := ConvertToOneLine(triples);
   return sprint(triples);
 end intrinsic;
 
-intrinsic OrbitTriplesCyc(s::BelyiDB, inds::SeqEnum[RngIntElt], index::RngIntElt) -> MonStgElt
+intrinsic OrbitTriplesCyc(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
   triples := [PointedPassport(s)[i] : i in inds];
   triples := ConvertToCycles(triples);
