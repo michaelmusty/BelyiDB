@@ -1,10 +1,11 @@
+// FIXME: \N not NULL is what Postgres uses
 intrinsic NULL(s::BelyiDB) -> MonStgElt {}
-  return "NULL";
+  return "\\N";
 end intrinsic;
 
 intrinsic NULL(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
-  return "NULL";
+  return "//N";
 end intrinsic;
 
 intrinsic BelyiDB_plabel(s::BelyiDB) -> MonStgElt
