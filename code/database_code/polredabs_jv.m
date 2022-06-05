@@ -1,5 +1,6 @@
 /* jv polredabs  */
 
+/*
 intrinsic Polredabs(f::RngUPolElt : Best := true) -> RngUPolElt
   { A smallest generating polynomial of the number field, using pari. }
   if Best then
@@ -31,3 +32,4 @@ intrinsic Polredabs(K::FldNum) -> FldNum
     return Kredabs, iotaredabs;
   end if;
 end intrinsic;
+*/
