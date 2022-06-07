@@ -23,7 +23,7 @@ maps := [* *];
 K1<nu1> := K1;
 X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
 KX1<x> := FunctionField(X1);
-phi1 := KX1!((-27/16*x^2 + 27/8)/(x^6 - 9/2*x^4 + 81/16*x^2));
+phi1 := KX1!((-27*x^2 + 54)/(16*x^6 - 72*x^4 + 81*x^2));
 Append(~curves, X1);
 Append(~maps, phi1);
 s`BelyiDBBelyiCurves := curves;
@@ -113,7 +113,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<6 |
 ]
 ];
 s`BelyiDBSanityCheckTiming := 0.0100000000000000p15;
-s`BelyiDBLocalSanityCheckTiming := 0.010p15;
+s`BelyiDBLocalSanityCheckTiming := 0.0100000000000000p15;
 s`BelyiDBLocalSanityCheckPrime := 101;
 
 /*

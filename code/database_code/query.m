@@ -62,24 +62,18 @@ intrinsic BelyiDBAdhoc(s::BelyiDB) -> Any
   {internal use for size 1 nonhyperbolic.}
   assert s`BelyiDBType ne "Hyperbolic";
   pass := s`BelyiDBPointedPassport;
-  assert #pass eq 1;
   sigma := pass[1];
   if s`BelyiDBType eq "Spherical" then
     X, phi := SphericalBelyiMap(sigma);
   else
     X, phi := EuclideanBelyiMap(sigma);
   end if;
-  for tau in Sym(3) do
-    phi_tau := S3Action(tau, phi);
-    if BelyiMapSanityCheck(sigma, X, phi_tau) then
-      phi := phi_tau;
-    end if;
-  end for;
   assert BelyiMapSanityCheck(sigma, X, phi);
+  assert #pass eq Degree(BaseField(X));  // make sure only one orbit, descended
   bfd := MakeBaseFieldData(sigma, X, phi);
-  s`BelyiDBBaseFieldData := [* bfd *];
-  s`BelyiDBBelyiCurves := [* X *];
-  s`BelyiDBBelyiMaps := [* phi *];
+  s`BelyiDBBaseFieldData := [* bfd : i in [1..#pass] *];
+  s`BelyiDBBelyiCurves := [* X : i in [1..#pass] *];
+  s`BelyiDBBelyiMaps := [* phi : i in [1..#pass] *];
   BelyiDBWrite(s);
   t := BelyiDBRead(s`BelyiDBFilename);
   assert BelyiMapSanityCheck(t);

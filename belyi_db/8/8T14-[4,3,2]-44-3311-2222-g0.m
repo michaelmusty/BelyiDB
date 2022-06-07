@@ -23,7 +23,7 @@ maps := [* *];
 K1<nu1> := K1;
 X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
 KX1<x> := FunctionField(X1);
-phi1 := KX1!(27/16*x^4/(x^8 + 4*x^7 + 4*x^6 + 1/2*x^5 + 31/32*x^4 - 1/16*x^3 + 1/16*x^2 - 1/128*x + 1/4096));
+phi1 := KX1!(6912*x^4/(4096*x^8 + 16384*x^7 + 16384*x^6 + 2048*x^5 + 3968*x^4 - 256*x^3 + 256*x^2 - 32*x + 1));
 Append(~curves, X1);
 Append(~maps, phi1);
 s`BelyiDBBelyiCurves := curves;
