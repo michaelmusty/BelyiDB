@@ -7,7 +7,7 @@ Base Field Data
 base_field_data := [* *];
 K1<nu1> := NumberField(Polynomial([RationalField() | 1, 0, 1]));
 place1 := InfinitePlaces(K1)[1];
-conj1 := true;
+conj1 := false;
 CC<I> := ComplexField(20);
 z1 := 0.00000000000000000000p20;
 base_field_data_1 := [* K1, place1, conj1, z1 *];
@@ -30,13 +30,13 @@ maps := [* *];
 K1<nu1> := K1;
 X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
 KX1<x> := FunctionField(X1);
-phi1 := KX1!((1/4107*(136*nu1 + 4623)*x^5 + 1/37*(136*nu1 + 4623)*x^4)/(x^5 + (-40*nu1 + 55)*x^4 + (-13236*nu1 - 12048)*x^3 + (-1006992*nu1 - 709956)*x^2 + (67346586*nu1 - 36186777)*x + (7475471046*nu1 - 4016732247)));
+phi1 := KX1!((-625*x^4 + (19000*nu1 + 20500)*x^3 + (-467400*nu1 - 35550)*x^2 + (2735240*nu1 - 2173820)*x - 1476984*nu1 + 9653287)/(x^5 + (-40*nu1 - 405)*x^4 + (12400*nu1 + 38050)*x^3 + (-826400*nu1 + 563950)*x^2 + (-3699760*nu1 + 5171805)*x - 1476984*nu1 + 9653287));
 Append(~curves, X1);
 Append(~maps, phi1);
 K2<nu2> := K2;
 X2 := Curve(ProjectiveSpace(PolynomialRing(K2, 2)));
 KX2<x> := FunctionField(X2);
-phi2 := KX2!((1/4107*(136*nu2 + 4623)*x^5 + 1/37*(136*nu2 + 4623)*x^4)/(x^5 + (-40*nu2 + 55)*x^4 + (-13236*nu2 - 12048)*x^3 + (-1006992*nu2 - 709956)*x^2 + (67346586*nu2 - 36186777)*x + (7475471046*nu2 - 4016732247)));
+phi2 := KX2!((-625*x^4 + (19000*nu2 + 20500)*x^3 + (-467400*nu2 - 35550)*x^2 + (2735240*nu2 - 2173820)*x - 1476984*nu2 + 9653287)/(x^5 + (-40*nu2 - 405)*x^4 + (12400*nu2 + 38050)*x^3 + (-826400*nu2 + 563950)*x^2 + (-3699760*nu2 + 5171805)*x - 1476984*nu2 + 9653287));
 Append(~curves, X2);
 Append(~maps, phi2);
 s`BelyiDBBelyiCurves := curves;
@@ -141,7 +141,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<5 |
 ]
 ];
 s`BelyiDBSanityCheckTiming := 0.0200000000000000p15;
-s`BelyiDBLocalSanityCheckTiming := 0.010p15;
+s`BelyiDBLocalSanityCheckTiming := 0.0100000000000000p15;
 s`BelyiDBLocalSanityCheckPrime := 101;
 
 /*

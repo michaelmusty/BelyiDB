@@ -226,8 +226,8 @@ intrinsic BelyiDBText(s::BelyiDB) -> MonStgElt
     str *:= "\n/*\nBelyi Maps\n*/\n\n";
     if assigned s`BelyiDBBelyiMaps then
       assert assigned s`BelyiDBBaseFieldData and assigned s`BelyiDBBelyiCurves;
-      assert #s`BelyiDBBelyiMaps eq #s`BelyiDBPointedPassport;
-      assert #s`BelyiDBBelyiCurves eq #s`BelyiDBPointedPassport;
+      // assert #s`BelyiDBBelyiMaps eq #s`BelyiDBPointedPassport;
+      // assert #s`BelyiDBBelyiCurves eq #s`BelyiDBPointedPassport;
       // curves list will contain Xi
       str *:= "curves := [* *];\n";
       // maps list will contain phii

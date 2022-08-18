@@ -8,8 +8,8 @@ base_field_data := [* *];
 K1<nu1> := RationalsAsNumberField();
 place1 := InfinitePlaces(K1)[1];
 conj1 := false;
-CC<I> := ComplexField(16);
-z1 := 1.000000000000000p16;
+CC<I> := ComplexField(20);
+z1 := 0.00000000000000000000p20;
 base_field_data_1 := [* K1, place1, conj1, z1 *];
 Append(~base_field_data, base_field_data_1);
 s`BelyiDBBaseFieldData := base_field_data;
@@ -23,7 +23,7 @@ maps := [* *];
 K1<nu1> := K1;
 X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
 KX1<x> := FunctionField(X1);
-phi1 := KX1!(x);
+phi1 := KX1!(-x + 1);
 Append(~curves, X1);
 Append(~maps, phi1);
 s`BelyiDBBelyiCurves := curves;
@@ -108,7 +108,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<1 |
 ]
 ];
 s`BelyiDBSanityCheckTiming := 0.000000000000000p15;
-s`BelyiDBLocalSanityCheckTiming := 0.000p15;
+s`BelyiDBLocalSanityCheckTiming := 0.000000000000000p15;
 s`BelyiDBLocalSanityCheckPrime := 101;
 
 /*

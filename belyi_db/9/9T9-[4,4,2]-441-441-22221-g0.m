@@ -5,7 +5,7 @@ Base Field Data
 */
 
 base_field_data := [* *];
-K1<nu1> := NumberField(Polynomial([RationalField() | 1, 0, 1]));
+K1<nu1> := RationalsAsNumberField();
 place1 := InfinitePlaces(K1)[1];
 conj1 := false;
 CC<I> := ComplexField(20);
@@ -23,7 +23,7 @@ maps := [* *];
 K1<nu1> := K1;
 X1 := Curve(ProjectiveSpace(PolynomialRing(K1, 2)));
 KX1<x> := FunctionField(X1);
-phi1 := KX1!((x^9 + 24*x^8 + 204*x^7 + 648*x^6 + 54*x^5 - 1944*x^4 + 1836*x^3 - 648*x^2 + 81*x)/(x^9 - 57*x^8 + 852*x^7 - 1188*x^6 + 1998*x^5 - 1998*x^4 + 1188*x^3 - 852*x^2 + 57*x - 1));
+phi1 := KX1!((-6561*x^8 + 4251528*x^7 - 975725676*x^6 + 83682825624*x^5 - 188286357654*x^4 - 183014339639688*x^3 - 4666865660812044*x^2 - 44472484532444184*x - 150094635296999121)/(x^9 - 4617*x^8 + 5589972*x^7 - 631351908*x^6 + 86007348558*x^5 - 6966595233198*x^4 + 335526289339428*x^3 - 19491027171626772*x^2 + 105622150764554937*x - 150094635296999121));
 Append(~curves, X1);
 Append(~maps, phi1);
 s`BelyiDBBelyiCurves := curves;
