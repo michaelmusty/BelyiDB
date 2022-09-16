@@ -564,3 +564,40 @@ intrinsic S3Action(tau::GrpPermElt, l::List) -> List
   {}
   return [* S3Action(tau, x) : x in l *];
 end intrinsic;
+
+// TODO: doesn't work for 2-digit ramification indices
+intrinsic LMFDBLabelToBelyiDBLabel(label::MonStgElt : dot_m := false) -> MonStgElt
+  {Given a LMFDB Belyi passport label, e.g., "7T7-7_4.3_4.3", return the corresponding BelyiDB passports
+    label, e.g., "7T7-[7,12,12]-7-43-43-g2". If dot_m, then include .m in the output.}
+  slabel := Split(label, "-");
+  label_new := "";
+  label_new *:= slabel[1];
+  label_new *:= "-";
+  rams := Split(slabel[2], "_");
+  tail := "";
+  ram_inds := [];
+  for ram in rams do
+    sram := Split(ram, ".");
+    tail *:= Join(sram, "")*"-";
+    Append(~ram_inds, [eval el : el in sram]);
+  end for;
+  tail := tail[1..#tail-1];
+  lcms := [Lcm(el) : el in ram_inds];
+  label_new *:= ReplaceString(Sprint(lcms), " ", "")*"-";
+  label_new *:= tail*"-";
+  // compute genus
+  d := eval Split(slabel[1],"T")[1];
+  degK := -2*d;
+  for inds in ram_inds do
+    for e in inds do
+      degK +:= (e-1);
+    end for;
+  end for;
+  assert degK mod 2 eq 0;
+  label_new *:= "g"*Sprint((degK+2) div 2);
+  if dot_m then
+    label_new *:= ".m";
+  end if;
+  return label_new;
+end intrinsic;
+
