@@ -99,6 +99,7 @@ intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntEl
   return putrecs(filename, headers cat data);
 end intrinsic;
 
+// this is the top-level function
 intrinsic GenerateBelyiData(galmaps_filename::MonStgElt, passports_filename : DegreeBound := 9) -> Any
   {Given a filename, generate a text file of the data of all Galois orbits Belyi maps of degree up to DegreeBound.}
 
@@ -135,7 +136,6 @@ intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
   return Join(BelyiDBPassportToLMFDBseq(s), "|");
 end intrinsic;
 
-// this is the top-level function
 intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
   headers := [[col[1] : col in passports_column_handler]];
