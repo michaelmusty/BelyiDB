@@ -74,7 +74,7 @@ intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::R
   return res;
 end intrinsic;
 
-// this is the top-level function
+// this is the top-level function for galmaps
 intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
   headers := [[col[1] : col in galmap_column_handler]];
@@ -136,6 +136,7 @@ intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
   return Join(BelyiDBPassportToLMFDBseq(s), "|");
 end intrinsic;
 
+// this is the top-level function for passports 
 intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
   headers := [[col[1] : col in passports_column_handler]];
