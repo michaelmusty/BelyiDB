@@ -54,7 +54,6 @@ passports_column_handler := [*
   <"aut_group", "jsonb", AutGroupStr>
 *];
 
-
 intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {return string containing one row of data}
   bar := BelyiDBToLMFDBSeq(s, inds, lmfdb_index);
@@ -100,7 +99,7 @@ intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntEl
 end intrinsic;
 
 // this is the top-level function
-intrinsic GenerateBelyiData(galmaps_filename::MonStgElt, passports_filename : DegreeBound := 9) -> Any
+intrinsic GenerateBelyiData(galmaps_filename::MonStgElt, passports_filename::MonStgElt : DegreeBound := 9) -> Any
   {Given a filename, generate a text file of the data of all Galois orbits Belyi maps of degree up to DegreeBound.}
 
   names := [];
