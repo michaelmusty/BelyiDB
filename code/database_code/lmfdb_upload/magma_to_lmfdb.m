@@ -32,6 +32,10 @@ galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
   <"base_field_label", "text", NULL, true>,
   <"primitivization", "text", NULL, true>,
   <"is_primitive", "boolean", NULL, true>
+  <"plane_model", "text", NULL, true>
+  <"plane_constant", "text", NULL, true>
+  <"plane_model_latex", "text", NULL, true>
+  <"plane_map_constant_factored", "text", NULL, true>
 *];
 
 // <name, type, function>

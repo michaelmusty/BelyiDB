@@ -5,7 +5,7 @@ end intrinsic;
 
 intrinsic NULL(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {}
-  return "//N";
+  return "\\N";
 end intrinsic;
 
 intrinsic BelyiDB_plabel(s::BelyiDB) -> MonStgElt
