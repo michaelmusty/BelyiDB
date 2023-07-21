@@ -1,0 +1,8 @@
+
+In file "r_g0_9.m", line 9, column 10:
+>>   sIn := BelyiDBRead(filenames[asg]);
+            ^
+User error: Identifier 'BelyiDBRead' has not been declared or assigned
+> quit;
+
+Total time: 0.040 seconds, Total memory usage: 32.09MB
