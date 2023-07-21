@@ -264,6 +264,36 @@ intrinsic GammasToBelyiDB(Gammas::SeqEnum[GrpPSL2Tri]) -> BelyiDB
     return s;
 end intrinsic;
 
+
+
+intrinsic BelyiDBAdhoc(sigma::SeqEnum[GrpPermElt]) -> Any
+  {internal use for size 1 nonhyperbolic.}
+  //ppass:=PassportRepresentatives(sigma : Pointed:=false);
+  s := BelyiDBExample(sigma);
+  assert s`BelyiDBType ne "Hyperbolic";
+  pass := s`BelyiDBPointedPassport;
+
+  s`BelyiDBBaseFieldData:= [* *];
+  s`BelyiDBBelyiCurves := [* *];
+  s`BelyiDBBelyiMaps := [* *];
+  for sig in pass do 
+    X,phi:=EuclideanBelyiMap(sig);
+    bfd := MakeBaseFieldData(sig, X, phi);
+
+    Append(~s`BelyiDBBaseFieldData,bfd);
+    Append(~s`BelyiDBBelyiCurves,X);
+    Append(~s`BelyiDBBelyiMaps,phi);
+  end for;
+
+  BelyiDBWrite(s);
+  t := BelyiDBRead(s`BelyiDBFilename);
+  assert BelyiMapSanityCheck(t);
+  return t;
+end intrinsic;
+
+
+
+
 intrinsic BelyiDBCompareBelyiMaps(f::FldFunFracSchElt, g::FldFunFracSchElt) -> BoolElt
   {True is f and g are the same "up to base field".}
   // TODO assert base fields equal
