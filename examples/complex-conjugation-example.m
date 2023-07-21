@@ -14,7 +14,7 @@ for rho in Sym(7) do
 end for;
 
 conjs_1 := [];
-for rho in Sym(7) do
+for rho in conjs_0 do
   if sigma1[2]^rho eq sigma2[2]^-1 then
     Append(~conjs_1, rho);
   end if;

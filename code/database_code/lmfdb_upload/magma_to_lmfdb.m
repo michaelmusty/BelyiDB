@@ -31,7 +31,11 @@ galmap_column_handler := [*<"geomtype", "text", GeomTypeShort, false>,
   <"moduli_field_label", "text", NULL, true>,
   <"base_field_label", "text", NULL, true>,
   <"primitivization", "text", NULL, true>,
-  <"is_primitive", "boolean", NULL, true>
+  <"is_primitive", "boolean", NULL, true>,
+  <"plane_model", "text", NULL, true>,
+  <"plane_constant", "text", NULL, true>,
+  <"plane_model_latex", "text", NULL, true>,
+  <"plane_map_constant_factored", "text", NULL, true>
 *];
 
 // <name, type, function>
@@ -54,7 +58,6 @@ passports_column_handler := [*
   <"aut_group", "jsonb", AutGroupStr>
 *];
 
-
 intrinsic BelyiDBToLMFDB(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntElt) -> MonStgElt
   {return string containing one row of data}
   bar := BelyiDBToLMFDBSeq(s, inds, lmfdb_index);
@@ -74,7 +77,7 @@ intrinsic BelyiDBToLMFDBSeq(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::R
   return res;
 end intrinsic;
 
-// this is the top-level function
+// this is the top-level function for galmaps
 intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
   headers := [[col[1] : col in galmap_column_handler]];
@@ -99,7 +102,8 @@ intrinsic BelyiDBToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntEl
   return putrecs(filename, headers cat data);
 end intrinsic;
 
-intrinsic GenerateBelyiData(galmaps_filename::MonStgElt, passports_filename : DegreeBound := 9) -> Any
+// this is the top-level function
+intrinsic GenerateBelyiData(galmaps_filename::MonStgElt, passports_filename::MonStgElt : DegreeBound := 9) -> Any
   {Given a filename, generate a text file of the data of all Galois orbits Belyi maps of degree up to DegreeBound.}
 
   names := [];
@@ -135,7 +139,7 @@ intrinsic BelyiDBPassportToLMFDBrow(s::BelyiDB) -> MonStgElt
   return Join(BelyiDBPassportToLMFDBseq(s), "|");
 end intrinsic;
 
-// this is the top-level function
+// this is the top-level function for passports 
 intrinsic BelyiDBPassportToLMFDB(filename::MonStgElt, seq::SeqEnum[BelyiDB]) -> RngIntElt
   {return string containing one row of data per map}
   headers := [[col[1] : col in passports_column_handler]];
