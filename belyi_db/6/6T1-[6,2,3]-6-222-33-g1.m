@@ -21,11 +21,11 @@ Belyi Maps
 curves := [* *];
 maps := [* *];
 K1<nu1> := K1;
-aInvs1 := [0,0,0,0,-1];
+aInvs1 := [ 0, 0, 0, 0, 1 ];
 E1 := EllipticCurve(aInvs1);
 X1 := BaseChange(E1, K1);
 KX1<x,y> := FunctionField(X1);
-phi1 := KX1!(1/x^3);
+phi1 := KX1!(-1/x^3);
 Append(~curves, X1);
 Append(~maps, phi1);
 s`BelyiDBBelyiCurves := curves;
@@ -103,7 +103,7 @@ s`BelyiDBGaloisOrbits := [ PowerSequence(PowerSequence(PermutationGroup<6 |
 ]
 ];
 s`BelyiDBSanityCheckTiming := 0.0100000000000000p15;
-s`BelyiDBLocalSanityCheckTiming := 0.010p15;
+s`BelyiDBLocalSanityCheckTiming := 0.0100000000000000p15;
 s`BelyiDBLocalSanityCheckPrime := 101;
 
 /*
