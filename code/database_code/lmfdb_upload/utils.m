@@ -400,7 +400,7 @@ intrinsic Embeddings(s::BelyiDB, inds::SeqEnum[RngIntElt], lmfdb_index::RngIntEl
     K := base_field_data[i][1];
     v := base_field_data[i][2];
     conj := base_field_data[i][3];
-    z := Eval(K.1, v, conj : prec := 16);
+    z := Evaluate(K.1, v, conj : prec := 16);
     Append(~orbit_embeddings, [Re(z), Im(z)]);
   end for;
   return sprint(orbit_embeddings);

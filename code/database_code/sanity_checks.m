@@ -272,7 +272,7 @@ intrinsic EmbeddingsSanityCheck(s, inds : prec := 20) -> BoolElt
   for i := 1 to #inds do
     for j := i to #inds do
       if i ne j then
-        if Abs(Eval(l[inds[i]]) - Eval(l[inds[j]])) le eps then
+        if Abs(Evaluate(l[inds[i]]) - Evaluate(l[inds[j]])) le eps then
           return false;
         end if;
       end if;
